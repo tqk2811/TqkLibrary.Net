@@ -8,7 +8,7 @@ namespace TqkLibrary.Net
   {
     protected readonly string ApiKey;
 
-    //internal BaseApi() { }
+    internal BaseApi() { }
 
     internal BaseApi(string ApiKey)
     {
