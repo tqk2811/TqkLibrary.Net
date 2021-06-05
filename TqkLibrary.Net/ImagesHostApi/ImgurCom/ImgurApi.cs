@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
@@ -15,9 +16,9 @@ namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
     {
     }
 
-    public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap)
+    public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap,CancellationToken cancellationToken = default)
     {
-      using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/Upload");
+      //using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/Upload");
       //httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
       //httpRequestMessage.Headers.Add("Authorization", $"Client-ID {ApiKey}");
 
@@ -26,9 +27,9 @@ namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
       imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
       requestContent.Add(imageContent_instructions, "image");
       requestContent.Add(new StringContent("file"), "type");
-      httpRequestMessage.Content = requestContent;
+      //httpRequestMessage.Content = requestContent;
 
-      return RequestPost<ImgurResponse<ImgurImage>>(httpRequestMessage);
+      return RequestPost<ImgurResponse<ImgurImage>>($"{EndPoint}/Upload", requestContent, cancellationToken);
     }
   }
 }

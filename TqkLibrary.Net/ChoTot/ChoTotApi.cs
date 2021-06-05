@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -26,7 +27,7 @@ namespace TqkLibrary.Net.ChoTot
     }
 
     #region static
-    public static async Task<OauthResponse> Login(AccountChoTot accountChoTot)
+    public static async Task<OauthResponse> Login(AccountChoTot accountChoTot, CancellationToken cancellationToken = default)
     {
       if (accountChoTot == null) throw new ArgumentNullException(nameof(accountChoTot));
       if (string.IsNullOrEmpty(accountChoTot.Phone)) throw new ArgumentNullException(nameof(accountChoTot.Phone));
@@ -34,44 +35,44 @@ namespace TqkLibrary.Net.ChoTot
 
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/v1/public/auth/login");
       httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(new { phone = accountChoTot.Phone, password = accountChoTot.Pass }), Encoding.UTF8, "application/json");
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync()); 
       return JsonConvert.DeserializeObject<OauthResponse>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }
 
-    public static async Task<List<Region>> Regions()
+    public static async Task<List<Region>> Regions(CancellationToken cancellationToken = default)
     {
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{EndPoint}/v2/public/chapy-pro/regions");
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync()); 
       return DynamicJsonConverter.ConvertRegion(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }
 
-    public static async Task<Wards> Wards(string areaId)
+    public static async Task<Wards> Wards(string areaId, CancellationToken cancellationToken = default)
     {
       if (string.IsNullOrEmpty(areaId)) throw new ArgumentNullException(nameof(areaId));
 
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{EndPoint}/v2/public/chapy-pro/wards?area={areaId}");
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync());
       return JsonConvert.DeserializeObject<Wards>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }
     #endregion
 
-    public async Task RefreshToken()
+    public async Task RefreshToken(CancellationToken cancellationToken = default)
     {
       if (oauthResponse == null) throw new ArgumentNullException(nameof(oauthResponse));
       if (string.IsNullOrEmpty(oauthResponse.refresh_token)) throw new ArgumentNullException(nameof(oauthResponse.refresh_token));
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/v1/public/auth/token");
       httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(new { refresh_token = oauthResponse.refresh_token }), Encoding.UTF8, "application/json");
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync());
       OauthResponse newOauth = JsonConvert.DeserializeObject<OauthResponse>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
       oauthResponse.refresh_token = newOauth.refresh_token;
       oauthResponse.access_token = newOauth.access_token;
     }
 
-    public async Task<FlashAdResponse> FlashAd(FlashAd flashAd)
+    public async Task<FlashAdResponse> FlashAd(FlashAd flashAd, CancellationToken cancellationToken = default)
     {
       if (flashAd == null) throw new ArgumentNullException(nameof(flashAd));
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/v2/private/flashad/new");
@@ -81,12 +82,12 @@ namespace TqkLibrary.Net.ChoTot
       string json = JsonConvert.SerializeObject(flashAd, NetExtensions.JsonSerializerSettings);
       Console.WriteLine(json);
       httpRequestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync());
       return JsonConvert.DeserializeObject<FlashAdResponse>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }
 
-    public async Task<ImageResponse> UploadImage(byte[] image)
+    public async Task<ImageResponse> UploadImage(byte[] image, CancellationToken cancellationToken = default)
     {
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://cloudgw.chotot.com/v1/private/images/upload");
       httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", oauthResponse.access_token);
@@ -94,7 +95,7 @@ namespace TqkLibrary.Net.ChoTot
       using ByteArrayContent byteArrayContent = new ByteArrayContent(image);
       multipartFormDataContent.Add(byteArrayContent, "image", "image.png");
       httpRequestMessage.Content = multipartFormDataContent;
-      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+      HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync());
       return JsonConvert.DeserializeObject<ImageResponse>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }

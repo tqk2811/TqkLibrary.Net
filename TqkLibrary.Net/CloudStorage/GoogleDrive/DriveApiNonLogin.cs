@@ -14,23 +14,14 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     /// </summary>
     /// <param name="fileId"></param>
     /// <param name="save"></param>
-    /// <exception cref="HttpRequestException"></exception>
-    /// <returns></returns>
-    public static async Task Download(string fileId, Dictionary<string, string> cookies, Stream save) => await Download(fileId, cookies, save, CancellationToken.None).ConfigureAwait(false);
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fileId"></param>
-    /// <param name="save"></param>
     /// <param name="cancellationToken"></param>
     /// <exception cref="HttpRequestException"></exception>
     /// <returns></returns>
-    public static async Task Download(string fileId, Dictionary<string, string> cookies, Stream save, CancellationToken cancellationToken)
+    public static async Task Download(string fileId, Dictionary<string, string> cookies, Stream save, CancellationToken cancellationToken = default)
     {
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?id={fileId}");
       httpRequestMessage.Headers.Add("Cookie", cookies.GetCookiesString());
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       if (httpResponseMessage.EnsureSuccessStatusCode().Content.Headers.ContentType.MediaType.Contains("application"))
       {
         await (await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(save, 81920, cancellationToken).ConfigureAwait(false);
@@ -39,7 +30,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 
       using HttpRequestMessage httpRequestMessage2 = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?confirm=abeQ?id={fileId}");
       httpRequestMessage2.Headers.Add("Cookie", cookies.GetCookiesString());
-      using HttpResponseMessage httpResponseMessage2 = await NetExtensions.httpClient.SendAsync(httpRequestMessage2, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage2 = await NetExtensions.httpClient.SendAsync(httpRequestMessage2, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       if (httpResponseMessage2.EnsureSuccessStatusCode().Content.Headers.ContentType.MediaType.Equals("application/octet-stream"))
       {
         await (await httpResponseMessage2.Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(save, 81920, cancellationToken).ConfigureAwait(false);
@@ -61,7 +52,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     /// <param name="folderId"></param>
     /// <exception cref="HttpRequestException"></exception>
     /// <returns></returns>
-    public static async Task<string> ListPublicFolder(string folderId)
+    public static async Task<string> ListPublicFolder(string folderId, CancellationToken cancellationToken = default)
     {
       string urlRequest = "https://clients6.google.com/drive/v2beta/files?openDrive=false&reason=102&syncType=0&errorRecovery=false" +
         "&appDataFilter=NO_APP_DATA&spaces=drive&maxResults=1000&supportsTeamDrives=true" +
@@ -71,7 +62,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, urlRequest);
       httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com");
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
       return await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 
@@ -82,25 +73,14 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     /// <param name="format">xlsx, ods, csv, tsv, zip (html zip)</param>
     /// <exception cref="HttpRequestException"></exception>
     /// <returns></returns>
-    public static async Task ExportExcel(string fileId, Stream copy, CancellationToken cancellationToken, ExportExcelType format = ExportExcelType.xlsx)
+    public static async Task ExportExcel(string fileId, Stream copy, ExportExcelType format = ExportExcelType.xlsx, CancellationToken cancellationToken = default)
     {
       string url = $"https://docs.google.com/spreadsheets/d/{fileId}/export?format={format}&id={fileId}";
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
       httpRequestMessage.Headers.Referrer = new Uri("https://docs.google.com");
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       await (await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(copy, 81920, cancellationToken).ConfigureAwait(false);
     }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fileId"></param>
-    /// <param name="copy"></param>
-    /// <param name="format"></param>
-    /// <exception cref="HttpRequestException"></exception>
-    /// <returns></returns>
-    public static async Task ExportExcel(string fileId, Stream copy, ExportExcelType format = ExportExcelType.xlsx)
-      => await ExportExcel(fileId, copy, CancellationToken.None, format).ConfigureAwait(false);
 
     public enum ExportExcelType
     {
