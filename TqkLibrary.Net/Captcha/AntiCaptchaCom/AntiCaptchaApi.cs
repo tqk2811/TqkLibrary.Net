@@ -4,10 +4,34 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Captcha.AntiCaptchaCom
+namespace TqkLibrary.Net.Captcha
 {
   public sealed partial class AntiCaptchaApi : BaseApi
   {
+    private class CreateTaskJson
+    {
+      [JsonProperty("clientKey")]
+      public string ClientKey { get; set; }
+
+      [JsonProperty("task")]
+      public AntiCaptchaTask Task { get; set; }
+
+      [JsonProperty("softId")]
+      public int SoftId { get; set; } = 0;
+
+      [JsonProperty("languagePool")]
+      public string LanguagePool { get; set; } = "en";
+    }
+    private class TaskResultJson
+    {
+      [JsonProperty("clientKey")]
+      public string ClientKey { get; set; }
+
+      [JsonProperty("taskId")]
+      public int TaskId { get; set; }
+    }
+
+
     private const string EndPoint = "https://api.anti-captcha.com";
 
     /// <summary>
@@ -15,27 +39,33 @@ namespace TqkLibrary.Net.Captcha.AntiCaptchaCom
     /// </summary>
     /// <exception cref="System.ArgumentNullException"></exception>
     /// <param name="ApiKey">ApiKey</param>
-    public AntiCaptchaApi(string ApiKey) : base(ApiKey)
+    public AntiCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
     {
     }
 
-    public Task<AntiCaptchaTaskResponse> CreateTask(AntiCaptchaTask antiCaptchaTask, string languagePool = "en", CancellationToken cancellationToken = default)
+    public Task<AntiCaptchaTaskResponse> CreateTask(AntiCaptchaTask antiCaptchaTask, string languagePool = "en")
     {
       CreateTaskJson createTaskJson = new CreateTaskJson();
       createTaskJson.ClientKey = ApiKey;
       createTaskJson.Task = antiCaptchaTask;
       createTaskJson.LanguagePool = languagePool;
 
-      return RequestPost<AntiCaptchaTaskResponse>(EndPoint + "/createTask", new StringContent(JsonConvert.SerializeObject(createTaskJson, NetExtensions.JsonSerializerSettings), Encoding.UTF8, "application/json"), cancellationToken);
+      return RequestPost<AntiCaptchaTaskResponse>(
+        EndPoint + "/createTask",
+        null, 
+        new StringContent(JsonConvert.SerializeObject(createTaskJson, NetExtensions.JsonSerializerSettings), Encoding.UTF8, "application/json"));
     }
 
-    public Task<AntiCaptchaTaskResultResponse> GetTaskResult(int taskId, CancellationToken cancellationToken = default)
+    public Task<AntiCaptchaTaskResultResponse> GetTaskResult(int taskId)
     {
       TaskResultJson taskResultJson = new TaskResultJson();
       taskResultJson.ClientKey = ApiKey;
       taskResultJson.TaskId = taskId;
 
-      return RequestPost<AntiCaptchaTaskResultResponse>(EndPoint + "/createTask", new StringContent(JsonConvert.SerializeObject(taskResultJson, NetExtensions.JsonSerializerSettings), Encoding.UTF8, "application/json"), cancellationToken);
+      return RequestPost<AntiCaptchaTaskResultResponse>(
+        EndPoint + "/createTask", 
+        null, 
+        new StringContent(JsonConvert.SerializeObject(taskResultJson, NetExtensions.JsonSerializerSettings), Encoding.UTF8, "application/json"));
     }
   }
 }

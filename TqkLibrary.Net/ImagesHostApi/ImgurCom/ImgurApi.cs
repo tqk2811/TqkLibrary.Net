@@ -1,22 +1,25 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
+namespace TqkLibrary.Net.ImagesHostApi
 {
   public class ImgurApi : BaseApi
   {
     private const string EndPoint = "https://api.imgur.com/3";
 
-    public ImgurApi(string ApiKey) : base(ApiKey)
+    public ImgurApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey,cancellationToken)
     {
     }
+    public Task<ImgurResponse<ImgurImage>> UploadImage(Bitmap bitmap)
+      => UploadImage(bitmap.BitmapToBuffer());
 
-    public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap,CancellationToken cancellationToken = default)
+    public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap)
     {
       //using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/Upload");
       //httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -29,7 +32,7 @@ namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
       requestContent.Add(new StringContent("file"), "type");
       //httpRequestMessage.Content = requestContent;
 
-      return RequestPost<ImgurResponse<ImgurImage>>($"{EndPoint}/Upload", requestContent, cancellationToken);
+      return RequestPost<ImgurResponse<ImgurImage>>($"{EndPoint}/Upload", null, requestContent);
     }
   }
 }

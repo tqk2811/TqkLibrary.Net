@@ -1,10 +1,12 @@
-﻿namespace TqkLibrary.Net.Captcha.CapMonsterCloud
+﻿using System.Threading;
+
+namespace TqkLibrary.Net.Captcha
 {
   internal class CapMonsterApi : BaseApi
   {
     private const string EndPoint = "";
 
-    public CapMonsterApi(string ApiKey) : base(ApiKey)
+    public CapMonsterApi(string ApiKey,CancellationToken cancellationToken = default) : base(ApiKey,cancellationToken)
     {
     }
   }

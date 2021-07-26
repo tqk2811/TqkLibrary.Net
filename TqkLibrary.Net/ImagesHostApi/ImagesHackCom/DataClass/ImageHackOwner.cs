@@ -1,4 +1,4 @@
-﻿namespace TqkLibrary.Net.ImagesHostApi.ImagesHackCom
+﻿namespace TqkLibrary.Net.ImagesHostApi
 {
   public class ImageHackOwner
   {

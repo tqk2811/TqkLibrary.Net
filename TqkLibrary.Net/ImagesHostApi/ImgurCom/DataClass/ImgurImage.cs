@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TqkLibrary.Net.ImagesHostApi.ImgurCom
+namespace TqkLibrary.Net.ImagesHostApi
 {
   public class ImgurImage
   {

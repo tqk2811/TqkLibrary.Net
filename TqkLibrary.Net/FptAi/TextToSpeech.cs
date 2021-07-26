@@ -12,23 +12,25 @@ namespace TqkLibrary.Net.FptAi
   {
     const string EndPoint = "https://api.fpt.ai/hmi/tts";
     readonly string version = "/v5";
-    public TextToSpeech(string ApiKey) : base(ApiKey)
+    public TextToSpeech(string ApiKey,CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
     {
 
     }
 
-    public async Task<TTSResponse> TTS(string text, Voice voice = Voice.BanMai, Speed speed = Speed.Normal, Format format = Format.mp3, CancellationToken cancellationToken = default)
+    public async Task<TTSResponse> TTS(string text, Voice voice = Voice.BanMai, Speed speed = Speed.Normal, Format format = Format.mp3)
     {
       if (string.IsNullOrWhiteSpace(text)) throw new ArgumentNullException(nameof(text));
 
-      using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, EndPoint + version);
-      httpRequestMessage.Headers.Add("api-key", ApiKey);
-      httpRequestMessage.Headers.Add("speed", ((int)speed).ToString());
-      httpRequestMessage.Headers.Add("voice", voice.ToString().ToLower());
-      httpRequestMessage.Headers.Add("format", format.ToString().ToLower());
-      using StringContent stringContent = new StringContent(text, Encoding.UTF8, "text/html");
-      httpRequestMessage.Content = stringContent;
-      return await RequestPost<TTSResponse>(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+      Dictionary<string, string> dict = new Dictionary<string, string>();
+      dict.Add("api-key", ApiKey);
+      dict.Add("speed", ((int)speed).ToString());
+      dict.Add("voice", voice.ToString().ToLower());
+      dict.Add("format", format.ToString().ToLower());
+
+      return await RequestPost<TTSResponse>(
+        EndPoint + version, 
+        dict, 
+        new StringContent(text, Encoding.UTF8, "text/html")).ConfigureAwait(false);
     }
   }
 }

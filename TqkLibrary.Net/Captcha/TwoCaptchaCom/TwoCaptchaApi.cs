@@ -9,13 +9,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
+namespace TqkLibrary.Net.Captcha
 {
   public sealed class TwoCaptchaApi : BaseApi
   {
     private const string EndPoint = "https://2captcha.com";
 
-    public TwoCaptchaApi(string ApiKey) : base(ApiKey)
+    public TwoCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
     {
     }
 
@@ -28,8 +28,8 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="HttpRequestException"></exception>
     /// <exception cref="JsonException"></exception>
-    public Task<TwoCaptchaResponse> GetResponseJson(string id, CancellationToken cancellationToken = default)
-      => RequestGet<TwoCaptchaResponse>(EndPoint + string.Format("/res.php?key={0}&id={1}&action=get&json=1", ApiKey, id), cancellationToken);
+    public Task<TwoCaptchaResponse> GetResponseJson(string id)
+      => RequestGet<TwoCaptchaResponse>(EndPoint + string.Format("/res.php?key={0}&id={1}&action=get&json=1", ApiKey, id));
 
     /// <summary>
     ///
@@ -44,7 +44,7 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
     /// <exception cref="HttpRequestException"></exception>
     /// <exception cref="JsonException"></exception>
     /// <exception cref="OperationCanceledException"></exception>
-    public async Task<TwoCaptchaResponse> WaitResponseJsonCompleted(string id, int delay = 5000, CancellationToken cancellationToken = default)
+    public async Task<TwoCaptchaResponse> WaitResponseJsonCompleted(string id, int delay = 5000)
     {
       while (true)
       {
@@ -62,28 +62,10 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
     }
 
     //https://2captcha.com/2captcha-api#solving_recaptchav2_old
-    public Task<TwoCaptchaResponse> ReCaptchaV2_old(Bitmap bitmap, Bitmap imginstructions, int? recaptcharows = null, int? recaptchacols = null, CancellationToken cancellationToken = default)
+    public Task<TwoCaptchaResponse> ReCaptchaV2_old(Bitmap bitmap, Bitmap imginstructions, int? recaptcharows = null, int? recaptchacols = null)
     {
       if (null == bitmap) throw new ArgumentNullException(nameof(bitmap));
       if (null == imginstructions) throw new ArgumentNullException(nameof(imginstructions));
-
-      byte[] buffer_bitmap = null;
-      using (MemoryStream memoryStream = new MemoryStream())
-      {
-        bitmap.Save(memoryStream, ImageFormat.Jpeg);//hoac png
-        memoryStream.Position = 0;
-        buffer_bitmap = new byte[memoryStream.Length];
-        memoryStream.Read(buffer_bitmap, 0, (int)memoryStream.Length);
-      }
-
-      byte[] buffer_instructions = null;
-      using (MemoryStream memoryStream = new MemoryStream())
-      {
-        imginstructions.Save(memoryStream, ImageFormat.Jpeg);//hoac png
-        memoryStream.Position = 0;
-        buffer_instructions = new byte[memoryStream.Length];
-        memoryStream.Read(buffer_instructions, 0, (int)memoryStream.Length);
-      }
 
       var parameters = HttpUtility.ParseQueryString(string.Empty);
       parameters["key"] = ApiKey;
@@ -96,26 +78,18 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
       Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
 
       MultipartFormDataContent requestContent = new MultipartFormDataContent();
-      ByteArrayContent imageContent_bitmap = new ByteArrayContent(buffer_bitmap);
+      ByteArrayContent imageContent_bitmap = new ByteArrayContent(bitmap.BitmapToBuffer());
       imageContent_bitmap.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
       requestContent.Add(imageContent_bitmap, "file", "file.jpg");
-      ByteArrayContent imageContent_instructions = new ByteArrayContent(buffer_instructions);
+      ByteArrayContent imageContent_instructions = new ByteArrayContent(imginstructions.BitmapToBuffer());
       imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
       requestContent.Add(imageContent_instructions, "imginstructions", "imginstructions.jpg");
 
-      return RequestPost<TwoCaptchaResponse>(uri, requestContent, cancellationToken);
+      return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
     }
 
-    public Task<TwoCaptchaResponse> Nomal(Bitmap bitmap, CancellationToken cancellationToken = default)
+    public Task<TwoCaptchaResponse> Nomal(byte[] bitmap)
     {
-      byte[] buffer_bitmap = null;
-      using (MemoryStream memoryStream = new MemoryStream())
-      {
-        bitmap.Save(memoryStream, ImageFormat.Jpeg);//hoac png
-        memoryStream.Position = 0;
-        buffer_bitmap = new byte[memoryStream.Length];
-        memoryStream.Read(buffer_bitmap, 0, (int)memoryStream.Length);
-      }
       var parameters = HttpUtility.ParseQueryString(string.Empty);
       parameters["key"] = ApiKey;
       parameters["method"] = "post";
@@ -123,15 +97,18 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
       Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
 
       MultipartFormDataContent requestContent = new MultipartFormDataContent();
-      ByteArrayContent imageContent_bitmap = new ByteArrayContent(buffer_bitmap);
+      ByteArrayContent imageContent_bitmap = new ByteArrayContent(bitmap);
       imageContent_bitmap.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
       requestContent.Add(imageContent_bitmap, "file", "file.jpg");
 
-      return RequestPost<TwoCaptchaResponse>(uri, requestContent, cancellationToken);
+      return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
     }
 
+    public Task<TwoCaptchaResponse> Nomal(Bitmap bitmap)
+      => Nomal(bitmap.BitmapToBuffer());
+
     //https://2captcha.com/2captcha-api#recaptchav2new_proxy
-    public Task<TwoCaptchaResponse> RecaptchaV2(string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null, CancellationToken cancellationToken = default)
+    public Task<TwoCaptchaResponse> RecaptchaV2(string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null)
     {
       var parameters = HttpUtility.ParseQueryString(string.Empty);
       parameters["key"] = ApiKey;
@@ -144,7 +121,7 @@ namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
       if (!string.IsNullOrEmpty(proxytype)) parameters["proxytype"] = proxytype;
       Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
 
-      return RequestGet<TwoCaptchaResponse>(uri, cancellationToken);
+      return RequestGet<TwoCaptchaResponse>(uri);
     }
   }
 }

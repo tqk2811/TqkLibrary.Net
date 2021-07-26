@@ -1,4 +1,4 @@
-﻿namespace TqkLibrary.Net.Captcha.TwoCaptchaCom
+﻿namespace TqkLibrary.Net.Captcha
 {
   public sealed class TwoCaptchaResponse
   {

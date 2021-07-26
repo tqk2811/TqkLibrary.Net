@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
@@ -20,10 +21,12 @@ namespace TqkLibrary.Net.ChoTot
     const string EndPoint = "https://gateway.chotot.com";
     static HttpClient httpClient { get { return NetExtensions.httpClient; } }
 
+    readonly CancellationToken cancellationToken;
     readonly OauthResponse oauthResponse;
-    public ChoTotApi(OauthResponse oauthResponse)
+    public ChoTotApi(OauthResponse oauthResponse, CancellationToken cancellationToken = default)
     {
       this.oauthResponse = oauthResponse;
+      this.cancellationToken = cancellationToken;
     }
 
     #region static
@@ -59,7 +62,7 @@ namespace TqkLibrary.Net.ChoTot
     }
     #endregion
 
-    public async Task RefreshToken(CancellationToken cancellationToken = default)
+    public async Task RefreshToken()
     {
       if (oauthResponse == null) throw new ArgumentNullException(nameof(oauthResponse));
       if (string.IsNullOrEmpty(oauthResponse.refresh_token)) throw new ArgumentNullException(nameof(oauthResponse.refresh_token));
@@ -72,7 +75,7 @@ namespace TqkLibrary.Net.ChoTot
       oauthResponse.access_token = newOauth.access_token;
     }
 
-    public async Task<FlashAdResponse> FlashAd(FlashAd flashAd, CancellationToken cancellationToken = default)
+    public async Task<FlashAdResponse> FlashAd(FlashAd flashAd)
     {
       if (flashAd == null) throw new ArgumentNullException(nameof(flashAd));
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/v2/private/flashad/new");
@@ -86,8 +89,10 @@ namespace TqkLibrary.Net.ChoTot
       if (!httpResponseMessage.IsSuccessStatusCode) throw new HttpException((int)httpResponseMessage.StatusCode, await httpResponseMessage.Content.ReadAsStringAsync());
       return JsonConvert.DeserializeObject<FlashAdResponse>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
     }
+    public Task<ImageResponse> UploadImage(Bitmap image)
+      => UploadImage(image.BitmapToBuffer());
 
-    public async Task<ImageResponse> UploadImage(byte[] image, CancellationToken cancellationToken = default)
+    public async Task<ImageResponse> UploadImage(byte[] image)
     {
       HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://cloudgw.chotot.com/v1/private/images/upload");
       httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", oauthResponse.access_token);

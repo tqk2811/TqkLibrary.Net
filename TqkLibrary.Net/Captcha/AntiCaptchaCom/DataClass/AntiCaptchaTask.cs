@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TqkLibrary.Net.Captcha.AntiCaptchaCom
+namespace TqkLibrary.Net.Captcha
 {
   /// <summary>
   /// https://anti-captcha.com/apidoc/image
