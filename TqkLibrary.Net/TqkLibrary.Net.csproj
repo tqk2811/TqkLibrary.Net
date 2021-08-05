@@ -20,8 +20,4 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Captcha\CapMonsterCloud\DataClass\" />
-  </ItemGroup>
-
 </Project>

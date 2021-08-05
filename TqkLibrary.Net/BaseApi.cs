@@ -24,7 +24,7 @@ namespace TqkLibrary.Net
     static readonly Type typeBuffer = typeof(byte[]);
 
     protected readonly string ApiKey;
-    protected readonly CancellationToken cancellationToken;
+    public readonly CancellationToken cancellationToken;
     internal BaseApi(CancellationToken cancellationToken = default)
     {
       this.cancellationToken = cancellationToken;
@@ -39,30 +39,26 @@ namespace TqkLibrary.Net
 
     protected Task<TResult> RequestGet<TResult>(
       string url,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null)
+      Dictionary<string, string> headers = null)
       where TResult : class
-      => Request<TResult, string>(HttpMethod.Get, new Uri(url), headers, httpContent);
+      => Request<TResult, string>(HttpMethod.Get, new Uri(url), headers);
     protected Task<TResult> RequestGet<TResult>(
      Uri uri,
-     Dictionary<string, string> headers = null,
-     HttpContent httpContent = null)
+     Dictionary<string, string> headers = null)
      where TResult : class
-     => Request<TResult, string>(HttpMethod.Get, uri, headers, httpContent);
+     => Request<TResult, string>(HttpMethod.Get, uri, headers);
     protected Task<TResult> RequestGet<TResult, TException>(
       string url,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null)
+      Dictionary<string, string> headers = null)
       where TResult : class
       where TException : class
-      => Request<TResult, TException>(HttpMethod.Get, new Uri(url), headers, httpContent);
+      => Request<TResult, TException>(HttpMethod.Get, new Uri(url), headers);
     protected Task<TResult> RequestGet<TResult, TException>(
       Uri uri,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null)
+      Dictionary<string, string> headers = null)
       where TResult : class
       where TException : class
-      => Request<TResult, TException>(HttpMethod.Get, uri, headers, httpContent);
+      => Request<TResult, TException>(HttpMethod.Get, uri, headers);
 
 
     protected Task<TResult> RequestPost<TResult>(
@@ -102,8 +98,9 @@ namespace TqkLibrary.Net
       where TException: class
     {
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
-      foreach (var pair in headers) httpRequestMessage.Headers.Add(pair.Key, pair.Value);
-      if(headers != null) httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+      if (headers != null) foreach (var pair in headers) httpRequestMessage.Headers.Add(pair.Key, pair.Value);
+      if(httpRequestMessage.Headers.Accept.Count == 0) httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
       if (httpContent != null) httpRequestMessage.Content = httpContent;
       using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       

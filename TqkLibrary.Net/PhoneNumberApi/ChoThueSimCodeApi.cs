@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -91,15 +92,15 @@ namespace TqkLibrary.Net.PhoneNumberApi
     public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>> GetAccountInfo()
       => RequestGet<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>>(string.Format(EndPoint + "act=account&apik={0}", ApiKey));
 
-    public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAppInfo>> GetAppRunning()
-      => RequestGet<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAppInfo>>(string.Format(EndPoint + "act=app&apik={0}", ApiKey));
+    public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>> GetAppRunning()
+      => RequestGet<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>>(string.Format(EndPoint + "act=app&apik={0}", ApiKey));
 
-    public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(int appId, ChoThueSimCarrier carrier = ChoThueSimCarrier.None)
+    public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(ChoThueSimAppInfo app, ChoThueSimCarrier carrier = ChoThueSimCarrier.None)
     {
       var parameters = HttpUtility.ParseQueryString(string.Empty);
       parameters["act"] = "number";
       parameters["apik"] = ApiKey;
-      parameters["appId"] = appId.ToString();
+      parameters["appId"] = app.Id.ToString();
       if (carrier != ChoThueSimCarrier.None) parameters["carrier"] = carrier.ToString();
       return RequestGet<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>>(EndPoint + parameters.ToString());
     }

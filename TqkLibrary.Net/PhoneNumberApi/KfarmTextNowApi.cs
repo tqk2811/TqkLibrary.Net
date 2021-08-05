@@ -19,12 +19,12 @@ namespace TqkLibrary.Net.PhoneNumberApi
     }
     public Task<KfarmTextNowResponse<KfarmTextNowPhone>> GetAccTextNow()
     {
-      return RequestGet<KfarmTextNowResponse<KfarmTextNowPhone>>($"{EndPoint}GetOrderTextNow", headers);
+      return RequestGet<KfarmTextNowResponse<KfarmTextNowPhone>>($"{EndPoint}GetAccTextNow", headers);
     }
 
     public Task<KfarmTextNowResponse<KfarmTextNowOrder>> GetOrderTextNow(KfarmTextNowPhone phone)
     {
-      return RequestGet<KfarmTextNowResponse<KfarmTextNowOrder>>(
+      return RequestPost<KfarmTextNowResponse<KfarmTextNowOrder>>(
         $"{EndPoint}GetOrderTextNow", 
         headers,
         new StringContent(JsonConvert.SerializeObject(phone),Encoding.UTF8,"application/json"));
@@ -34,8 +34,8 @@ namespace TqkLibrary.Net.PhoneNumberApi
 
     public Task<KfarmTextNowResponse<KfarmTextNowCode>> GetCode(KfarmTextNowOrder orderId)
     {
-      return RequestGet<KfarmTextNowResponse<KfarmTextNowCode>>(
-        $"{EndPoint}GetOrderTextNow",
+      return RequestPost<KfarmTextNowResponse<KfarmTextNowCode>>(
+        $"{EndPoint}GetCode",
         headers,
         new StringContent(JsonConvert.SerializeObject(orderId), Encoding.UTF8, "application/json"));
     }
