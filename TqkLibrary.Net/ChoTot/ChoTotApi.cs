@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿#if NET462_OR_GREATER
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -106,3 +107,4 @@ namespace TqkLibrary.Net.ChoTot
     }
   }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if NET462_OR_GREATER
+using System.Collections.Generic;
 
 namespace TqkLibrary.Net.ChoTot
 {
@@ -7,3 +8,4 @@ namespace TqkLibrary.Net.ChoTot
     public List<Zone> Zone { get; set; }
   }
 }
+#endif

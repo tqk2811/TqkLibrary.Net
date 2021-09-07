@@ -17,19 +17,25 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     /// <param name="cancellationToken"></param>
     /// <exception cref="HttpRequestException"></exception>
     /// <returns></returns>
-    public static async Task Download(string fileId, Dictionary<string, string> cookies, Stream save, CancellationToken cancellationToken = default)
+    public static async Task Download(string fileId, Stream save, CancellationToken cancellationToken = default)
     {
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?id={fileId}");
-      httpRequestMessage.Headers.Add("Cookie", cookies.GetCookiesString());
       using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-      if (httpResponseMessage.EnsureSuccessStatusCode().Content.Headers.ContentType.MediaType.Contains("application"))
+      if(httpResponseMessage.IsSuccessStatusCode)
       {
-        await (await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(save, 81920, cancellationToken).ConfigureAwait(false);
-        return;
+        if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
+        {
+          await (await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(save, 81920, cancellationToken).ConfigureAwait(false);
+          return;
+        }
       }
+      else
+      {
+        string content = await httpResponseMessage.Content.ReadAsStringAsync();
+      }
+      
 
       using HttpRequestMessage httpRequestMessage2 = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?confirm=abeQ?id={fileId}");
-      httpRequestMessage2.Headers.Add("Cookie", cookies.GetCookiesString());
       using HttpResponseMessage httpResponseMessage2 = await NetExtensions.httpClient.SendAsync(httpRequestMessage2, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       if (httpResponseMessage2.EnsureSuccessStatusCode().Content.Headers.ContentType.MediaType.Equals("application/octet-stream"))
       {

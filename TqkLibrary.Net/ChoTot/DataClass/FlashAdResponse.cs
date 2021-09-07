@@ -1,4 +1,5 @@
-﻿namespace TqkLibrary.Net.ChoTot
+﻿#if NET462_OR_GREATER
+namespace TqkLibrary.Net.ChoTot
 {
   public class FlashAdResponse
   {
@@ -7,3 +8,4 @@
     public string status { get; set; }
   }
 }
+#endif

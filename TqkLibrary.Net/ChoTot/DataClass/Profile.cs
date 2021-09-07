@@ -1,4 +1,5 @@
-﻿namespace TqkLibrary.Net.ChoTot
+﻿#if NET462_OR_GREATER
+namespace TqkLibrary.Net.ChoTot
 {
   public class Profile
   {
@@ -23,3 +24,4 @@
     public long update_time { get; set; }
   }
 }
+#endif

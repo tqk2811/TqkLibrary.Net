@@ -1,4 +1,5 @@
-﻿namespace TqkLibrary.Net.ChoTot
+﻿#if NET462_OR_GREATER
+namespace TqkLibrary.Net.ChoTot
 {
   public class FlashAd
   {
@@ -73,3 +74,4 @@
 #pragma warning restore IDE1006 // Naming Styles
   }
 }
+#endif

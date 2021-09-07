@@ -1,4 +1,5 @@
-﻿namespace TqkLibrary.Net.ChoTot
+﻿#if NET462_OR_GREATER
+namespace TqkLibrary.Net.ChoTot
 {
   public class OauthResponse
   {
@@ -9,3 +10,4 @@
     public Profile profile { get; set; }
   }
 }
+#endif

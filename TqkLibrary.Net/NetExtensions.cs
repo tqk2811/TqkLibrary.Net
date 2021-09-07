@@ -12,7 +12,15 @@ namespace TqkLibrary.Net
 {
   public static class NetExtensions
   {
-    internal static HttpClient httpClient = new HttpClient();
+    internal static HttpClientHandler clientHandler = new HttpClientHandler()
+    {
+      UseCookies = true,
+      CookieContainer = new System.Net.CookieContainer(),
+      AllowAutoRedirect = true,
+      AutomaticDecompression = System.Net.DecompressionMethods.GZip
+    };
+    internal static HttpClient httpClient = new HttpClient(clientHandler);
+
 
     internal static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {

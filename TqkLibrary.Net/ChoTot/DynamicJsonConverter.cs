@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET462_OR_GREATER
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace TqkLibrary.Net.ChoTot
 {
+
   public sealed class DynamicJsonConverter : JavaScriptConverter
   {
     internal DynamicJsonConverter() { }
@@ -189,3 +191,4 @@ namespace TqkLibrary.Net.ChoTot
     }
   }
 }
+#endif
