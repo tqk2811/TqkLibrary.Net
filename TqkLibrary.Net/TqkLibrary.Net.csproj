@@ -2,11 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net462;net5.0-windows;net6.0-windows</TargetFrameworks>
-		<LangVersion Condition="!$(TargetFramework.StartsWith('net6'))">8.0</LangVersion>
-		<LangVersion Condition="$(TargetFramework.StartsWith('net6'))">10.0</LangVersion>
+		<LangVersion >8.0</LangVersion>
 		<Platforms>AnyCPU</Platforms>
-		<SignAssembly>false</SignAssembly>
-		<AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
