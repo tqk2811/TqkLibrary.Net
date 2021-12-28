@@ -1,12 +1,9 @@
 ﻿$dirInfo= New-Object -Typename System.IO.DirectoryInfo -ArgumentList ([System.IO.Directory]::GetCurrentDirectory())
 $projectName= $dirInfo.Name;
-Set-Location $dirInfo.Parent.FullName
 $key=$env:nugetKey
-$commit=($(git log --format="%H" -n 1) | Out-String).Trim()
-$branch=($(git rev-parse --abbrev-ref HEAD) | Out-String).Trim()
 $buildDay=[DateTime]::Now.ToString("yyyyMMdd")
 $buildIndex="00"
-$p="branch=$($branch);commit=$($commit);buildDay=$($buildDay);buildIndex=$($buildIndex)".Trim()
+$p="buildDay=$($buildDay);buildIndex=$($buildIndex)".Trim()
 
 function RunCommand
 {
@@ -14,7 +11,7 @@ function RunCommand
     for ($i=0; $i -lt $numOfArgs; $i++)
     {
         iex $args[$i]
-        if($LASTEXITCODE -eq 0) {
+        if($LASTEXITCODE -eq 0 -or $i -eq 0) {
             Write-Host "$($args[$i]) success"
         }
         else{
@@ -32,9 +29,9 @@ function NugetPack
     {
         Write-Host "NugetPack $($args[$i])"
 
-        $result = RunCommand "Remove-Item -Recurse -Force .\$($args[$i])\bin\Release\**" `
-            "dotnet build $($args[$i])\$($args[$i]).csproj -c Release" `
-            "nuget pack $($args[$i])\$($args[$i]).nuspec -OutputDirectory .\$($args[$i])\bin\Release -p 'id=$($args[$i]);$($p)'"
+        $result = RunCommand "Remove-Item -Recurse -Force .\bin\Release\**" `
+            "dotnet build .\$($args[$i]).csproj -c Release" `
+            "nuget pack .\$($args[$i]).nuspec -OutputDirectory .\bin\Release -p 'id=$($args[$i]);$($p)'"
 
         if($result) {
             Write-Host "$($args[$i]) success"
@@ -54,7 +51,7 @@ function NugetPush
     {
         Write-Host "NugetPush $($args[$i])"
 
-        iex "dotnet nuget push $($args[$i])\bin\Release\*.nupkg --api-key $($key) --source https://api.nuget.org/v3/index.json"
+        iex "dotnet nuget push .\bin\Release\*.nupkg --api-key $($key) --source https://api.nuget.org/v3/index.json"
     }
 }
 

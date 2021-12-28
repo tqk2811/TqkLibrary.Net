@@ -7,7 +7,7 @@
 		<description>my private lib</description>
 		<authors>tqk2811</authors>
 		<projectUrl>https://github.com/tqk2811/TqkLibrary.Net</projectUrl>
-		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Net.git" branch="$branch$" commit="$commit$"/>
+		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Net.git"/>
 		<dependencies>
 			<dependency id="Newtonsoft.Json" version="13.0.1" />
 			<dependency id="System.Drawing.Common" version="6.0.0" />
