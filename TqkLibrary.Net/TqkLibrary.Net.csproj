@@ -5,6 +5,10 @@
 		<LangVersion >8.0</LangVersion>
 		<Platforms>AnyCPU</Platforms>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PreserveCompilationContext>false</PreserveCompilationContext>
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

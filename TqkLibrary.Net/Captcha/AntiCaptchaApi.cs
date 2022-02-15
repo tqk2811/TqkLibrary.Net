@@ -69,7 +69,34 @@ namespace TqkLibrary.Net.Captcha
         [JsonProperty("isInvisible")]
         public bool? IsInvisible { get; set; }
     }
-    public class AntiCaptchaTaskResponse
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IAntiCaptchaTaskResponse
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        string ErrorCode { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        string ErrorDescription { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        int ErrorId { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        long? TaskId { get; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    internal class AntiCaptchaTaskResponse : IAntiCaptchaTaskResponse
     {
         [JsonProperty("errorId")]
         public int ErrorId { get; set; }
@@ -81,8 +108,11 @@ namespace TqkLibrary.Net.Captcha
         public string ErrorDescription { get; set; }
 
         [JsonProperty("taskId")]
-        public int? TaskId { get; set; }
+        public long? TaskId { get; set; }
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public class AntiCaptchaTaskResultResponse
     {
         [JsonProperty("errorId")]
@@ -120,6 +150,9 @@ namespace TqkLibrary.Net.Captcha
             return Status == null || Status.Equals("ready");
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public class AntiCaptchaTaskSolutionResultResponse
     {
         [JsonProperty("text")]
@@ -136,27 +169,59 @@ namespace TqkLibrary.Net.Captcha
     /// </summary>
     public enum AntiCaptchaType
     {
+        /// <summary>
+        /// 
+        /// </summary>
         ImageToTextTask,
-
+        /// <summary>
+        /// 
+        /// </summary>
         RecaptchaV2Task,
+        /// <summary>
+        /// 
+        /// </summary>
         RecaptchaV2TaskProxyless,
-
+        /// <summary>
+        /// 
+        /// </summary>
         RecaptchaV3TaskProxyless,
-
+        /// <summary>
+        /// 
+        /// </summary>
         RecaptchaV2EnterpriseTask,
+        /// <summary>
+        /// 
+        /// </summary>
         RecaptchaV2EnterpriseTaskProxyless,
-
+        /// <summary>
+        /// 
+        /// </summary>
         FunCaptchaTask,
+        /// <summary>
+        /// 
+        /// </summary>
         FunCaptchaTaskProxyless,
-
+        /// <summary>
+        /// 
+        /// </summary>
         GeeTestTask,
+        /// <summary>
+        /// 
+        /// </summary>
         GeeTestTaskProxyless,
-
+        /// <summary>
+        /// 
+        /// </summary>
         HCaptchaTask,
+        /// <summary>
+        /// 
+        /// </summary>
         HCaptchaTaskProxyless
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class AntiCaptchaApi : BaseApi
     {
         private class CreateTaskJson
@@ -182,7 +247,7 @@ namespace TqkLibrary.Net.Captcha
             public string ClientKey { get; set; }
 
             [JsonProperty("taskId")]
-            public int TaskId { get; set; }
+            public long TaskId { get; set; }
         }
 
 
@@ -193,25 +258,38 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <param name="ApiKey">ApiKey</param>
+        /// <param name="cancellationToken"></param>
         public AntiCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
         {
         }
-
-        public Task<AntiCaptchaTaskResponse> CreateTask(AntiCaptchaTask antiCaptchaTask, string languagePool = "en")
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="antiCaptchaTask"></param>
+        /// <param name="languagePool"></param>
+        /// <returns></returns>
+        public async Task<IAntiCaptchaTaskResponse> CreateTask(AntiCaptchaTask antiCaptchaTask, string languagePool = "en")
         {
-            CreateTaskJson createTaskJson = new CreateTaskJson();
-            createTaskJson.ClientKey = ApiKey;
-            createTaskJson.Task = antiCaptchaTask;
-            createTaskJson.LanguagePool = languagePool;
+            CreateTaskJson createTaskJson = new CreateTaskJson
+            {
+                ClientKey = ApiKey,
+                Task = antiCaptchaTask,
+                LanguagePool = languagePool
+            };
 
             string json = JsonConvert.SerializeObject(createTaskJson, NetExtensions.JsonSerializerSettings);
-            return RequestPost<AntiCaptchaTaskResponse>(
+            return await RequestPost<AntiCaptchaTaskResponse>(
               EndPoint + "/createTask",
               null,
               new StringContent(json, Encoding.UTF8, "application/json"));
         }
 
-        public Task<AntiCaptchaTaskResultResponse> GetTaskResult(AntiCaptchaTaskResponse task)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        public Task<AntiCaptchaTaskResultResponse> GetTaskResult(IAntiCaptchaTaskResponse task)
         {
             TaskResultJson taskResultJson = new TaskResultJson();
             taskResultJson.ClientKey = ApiKey;
@@ -224,9 +302,17 @@ namespace TqkLibrary.Net.Captcha
               new StringContent(json, Encoding.UTF8, "application/json"));
         }
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public static class AntiCaptchaHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
         public static AntiCaptchaTask AntiCaptchaImageToTextTask(this Bitmap bitmap)
         {
             AntiCaptchaTask task = new AntiCaptchaTask();
