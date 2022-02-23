@@ -6,109 +6,223 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.ProxysApi
 {
-  
-
-  public class TinsoftProxyUserKeyDataInfo : TinsoftProxyBaseResult
-  {
-    [JsonProperty("key")]
-    public string Key { get; set; }
-
-    [JsonProperty("date_expired")]
-    public DateTime DateExpired { get; set; }
-
-    [JsonProperty("isVip")]
-    public int IsVip { get; set; }
-  }
- 
-  public enum TinsoftProxyVip
-  {
     /// <summary>
-    /// key thường
+    /// 
     /// </summary>
-    Nomal = 0,
-
-    /// <summary>
-    /// key vip ko timeout
-    /// </summary>
-    NonTimeout = 1,
-
-    /// <summary>
-    /// key vip dùng nhanh (1phút được đổi ip)
-    /// </summary>
-    Fast = 2
-  }
-  public class TinsoftProxyProxyResult : TinsoftProxyBaseResult
-  {
-    [JsonProperty("proxy")]
-    public string Proxy { get; set; }
-
-    [JsonProperty("next_change")]
-    public int? NextChange { get; set; }
-
-    [JsonProperty("timeout")]
-    public int? Timeout { get; set; }
-  }
-  
-
-  public class TinsoftProxyTinsoftOrderDataResult : TinsoftProxyBaseResult
-  {
-    [JsonProperty("key")]
-    public string Key { get; set; }
-
-    [JsonProperty("date_expired")]
-    public DateTime DateExpired { get; set; }
-
-    [JsonProperty("isVip")]
-    public int? IsVip { get; set; }
-  }
-  public class TinsoftProxyLocationResult : TinsoftProxyBaseResult
-  {
-    public List<TinsoftProxyLocation> data { get; set; }
-  }
-  public class TinsoftProxyLocation
-  {
-    public int? location { get; set; }
-    public string name { get; set; }
-
-    public override string ToString() => $"location: {location}, name: {name}";
-  }
-  public class TinsoftProxyKeyInfo : TinsoftProxyBaseResult
-  {
-    [JsonProperty("date_expired")]
-    public DateTime DateExpired { get; set; }
-
-    [JsonProperty("isVip")]
-    public int IsVip { get; set; }
-  }
-  public class TinsoftProxyBaseResult
-  {
-    [JsonProperty("success")]
-    public bool Success { get; set; }
-
-    [JsonProperty("description")]
-    public string Description { get; set; }
-  }
-  /// <summary>
-  /// http://proxy.tinsoftsv.com/api/document_vi.php
-  /// </summary>
-  public sealed class TinsoftProxyApi : BaseApi
-  {
-    internal const string EndPoint = "http://proxy.tinsoftsv.com/api";
-
-    public TinsoftProxyApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey,cancellationToken)
+    public class TinsoftProxyUserKeyDataInfo : TinsoftProxyBaseResult
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("key")]
+        public string Key { get; set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("date_expired")]
+        public DateTime DateExpired { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("isVip")]
+        public int IsVip { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum TinsoftProxyVip
+    {
+        /// <summary>
+        /// key thường
+        /// </summary>
+        Nomal = 0,
+
+        /// <summary>
+        /// key vip ko timeout
+        /// </summary>
+        NonTimeout = 1,
+
+        /// <summary>
+        /// key vip dùng nhanh (1phút được đổi ip)
+        /// </summary>
+        Fast = 2
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyProxyResult : TinsoftProxyBaseResult
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("proxy")]
+        public string Proxy { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("next_change")]
+        public int NextChange { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("timeout")]
+        public int Timeout { get; set; }
     }
 
-    public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0)
-      => RequestGet<TinsoftProxyProxyResult>(string.Format(EndPoint + "/changeProxy.php?key={0}&location={1}", ApiKey, location));
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyTinsoftOrderDataResult : TinsoftProxyBaseResult
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("key")]
+        public string Key { get; set; }
 
-    public Task<TinsoftProxyKeyInfo> GetKeyInfo()
-      => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/getKeyInfo.php?key={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("date_expired")]
+        public DateTime DateExpired { get; set; }
 
-    public Task<TinsoftProxyKeyInfo> DeleteKey()
-      => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/deleteKey.php?key={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("isVip")]
+        public int IsVip { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyLocationResult : TinsoftProxyBaseResult
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("data")]
+        public List<TinsoftProxyLocation> Data { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyLocation
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? location { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string name { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 
-    public Task<TinsoftProxyLocationResult> GetLocations()
-      => RequestGet<TinsoftProxyLocationResult>(EndPoint + "/getLocations.php");
-  }
+        public override string ToString() => $"location: {location}, name: {name}";
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyKeyInfo : TinsoftProxyBaseResult
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("date_expired")]
+        public DateTime DateExpired { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("isVip")]
+        public int IsVip { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TinsoftProxyBaseResult
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+    }
+    /// <summary>
+    /// http://proxy.tinsoftsv.com/api/document_vi.php
+    /// </summary>
+    public sealed class TinsoftProxyApi : BaseApi, IProxyApi
+    {
+        internal const string EndPoint = "http://proxy.tinsoftsv.com/api";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        /// <param name="cancellationToken"></param>
+        public TinsoftProxyApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        {
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0)
+          => RequestGet<TinsoftProxyProxyResult>(string.Format(EndPoint + "/changeProxy.php?key={0}&location={1}", ApiKey, location));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<TinsoftProxyKeyInfo> GetKeyInfo()
+          => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/getKeyInfo.php?key={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<TinsoftProxyKeyInfo> DeleteKey()
+          => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/deleteKey.php?key={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<TinsoftProxyLocationResult> GetLocations()
+          => RequestGet<TinsoftProxyLocationResult>(EndPoint + "/getLocations.php");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IProxyApiResponse> GetProxy()
+        {
+            TinsoftProxyProxyResult result = await ChangeProxy();
+            if (result.Success)
+            {
+                return new ProxyApiResponse()
+                {
+                    Proxy = result.Proxy,
+                    NextRequest = DateTime.Now.AddSeconds(result.NextChange)
+                };
+            }
+            return null;
+        }
+    }
 }
