@@ -1,4 +1,5 @@
-﻿$dirInfo= New-Object -Typename System.IO.DirectoryInfo -ArgumentList ([System.IO.Directory]::GetCurrentDirectory())
+﻿$dirInfo= New-Object -Typename System.IO.DirectoryInfo -ArgumentList ($PSScriptRoot)
+Set-Location $PSScriptRoot
 $projectName= $dirInfo.Name;
 $key=$env:nugetKey
 $buildDay=[DateTime]::Now.ToString("yyyyMMdd")

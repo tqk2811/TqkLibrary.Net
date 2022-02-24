@@ -88,6 +88,15 @@ namespace TqkLibrary.Net.Captcha
         }
 
         //https://2captcha.com/2captcha-api#solving_recaptchav2_old
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="imginstructions"></param>
+        /// <param name="recaptcharows"></param>
+        /// <param name="recaptchacols"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public Task<TwoCaptchaResponse> ReCaptchaV2_old(Bitmap bitmap, Bitmap imginstructions, int? recaptcharows = null, int? recaptchacols = null)
         {
             if (null == bitmap) throw new ArgumentNullException(nameof(bitmap));
@@ -113,7 +122,11 @@ namespace TqkLibrary.Net.Captcha
 
             return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
         public Task<TwoCaptchaResponse> Nomal(byte[] bitmap)
         {
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -129,11 +142,24 @@ namespace TqkLibrary.Net.Captcha
 
             return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
         public Task<TwoCaptchaResponse> Nomal(Bitmap bitmap)
           => Nomal(bitmap.BitmapToBuffer());
 
         //https://2captcha.com/2captcha-api#recaptchav2new_proxy
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="googleKey"></param>
+        /// <param name="pageUrl"></param>
+        /// <param name="cookies"></param>
+        /// <param name="proxy"></param>
+        /// <param name="proxytype"></param>
+        /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV2(string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null)
         {
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -150,7 +176,13 @@ namespace TqkLibrary.Net.Captcha
             return RequestGet<TwoCaptchaResponse>(uri);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="googleKey"></param>
+        /// <param name="pageUrl"></param>
+        /// <param name="minScore"></param>
+        /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV3(string googleKey, string pageUrl,float minScore = 0.3f)
         {
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -165,5 +197,21 @@ namespace TqkLibrary.Net.Captcha
             Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
             return RequestGet<TwoCaptchaResponse>(uri);
         }
+
+
+        //public Task<TwoCaptchaResponse> RecaptchaEnterprise(string googleKey, string pageUrl, float minScore = 0.3f)
+        //{
+        //    var parameters = HttpUtility.ParseQueryString(string.Empty);
+        //    parameters["json"] = "1";
+        //    parameters["key"] = ApiKey;
+        //    parameters["method"] = "userrecaptcha";
+        //    parameters["version"] = "v3";
+        //    parameters["action"] = "verify";
+        //    parameters["min_score"] = minScore.ToString();
+        //    parameters["googlekey"] = googleKey;
+        //    parameters["pageurl"] = pageUrl;
+        //    Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
+        //    return RequestGet<TwoCaptchaResponse>(uri);
+        //}
     }
 }
