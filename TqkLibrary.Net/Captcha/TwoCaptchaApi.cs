@@ -11,12 +11,14 @@ using System.Web;
 
 namespace TqkLibrary.Net.Captcha
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public enum TwoCaptchaState
     {
         NotReady,
         Error,
         Success
     }
+
 
     public class TwoCaptchaResponse
     {
@@ -36,11 +38,19 @@ namespace TqkLibrary.Net.Captcha
         }
     }
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class TwoCaptchaApi : BaseApi
     {
         private const string EndPoint = "https://2captcha.com";
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        /// <param name="cancellationToken"></param>
         public TwoCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
         {
         }
@@ -61,9 +71,7 @@ namespace TqkLibrary.Net.Captcha
         ///
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
         /// <param name="delay"></param>
-        /// <param name="step"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
@@ -183,7 +191,7 @@ namespace TqkLibrary.Net.Captcha
         /// <param name="pageUrl"></param>
         /// <param name="minScore"></param>
         /// <returns></returns>
-        public Task<TwoCaptchaResponse> RecaptchaV3(string googleKey, string pageUrl,float minScore = 0.3f)
+        public Task<TwoCaptchaResponse> RecaptchaV3(string googleKey, string pageUrl, float minScore = 0.3f)
         {
             var parameters = HttpUtility.ParseQueryString(string.Empty);
             parameters["json"] = "1";
@@ -213,5 +221,25 @@ namespace TqkLibrary.Net.Captcha
         //    Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
         //    return RequestGet<TwoCaptchaResponse>(uri);
         //}
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public async Task<TwoCaptchaResponse> Coordinates(byte[] bitmap)
+        {
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["json"] = "1";
+            parameters["key"] = ApiKey;
+            parameters["method"] = "post";
+            parameters["coordinatescaptcha"] = "1";
+            Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
+            using MultipartFormDataContent multipartFormDataContent = new MultipartFormDataContent();
+            using ByteArrayContent byteArrayContent = new ByteArrayContent(bitmap);
+            multipartFormDataContent.Add(byteArrayContent, "file");
+            return await RequestPost<TwoCaptchaResponse>(uri, httpContent: multipartFormDataContent);
+        }
     }
 }
