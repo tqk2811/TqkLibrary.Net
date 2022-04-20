@@ -45,6 +45,13 @@ namespace TqkLibrary.Net.Others
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
+
+
+        public static implicit operator AllAccOrderItem(int id)
+        {
+            return new AllAccOrderItem { Id = id };
+        }
+
     }
     public class AllAccOrderResponse<T> : AllAccData<T>
     {
@@ -81,6 +88,9 @@ namespace TqkLibrary.Net.Others
 
         [JsonProperty("icon")]
         public string Icon { get; set; }
+
+        [JsonProperty("list_product")]
+        public List<AllAccProduct> Products { get; set; }
 
         public static implicit operator AllAccCategory(int id)
         {
