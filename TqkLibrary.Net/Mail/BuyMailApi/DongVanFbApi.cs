@@ -17,8 +17,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        /// <param name="cancellationToken"></param>
-        public DongVanFbApi(string apiKey, CancellationToken cancellationToken = default) : base(apiKey, cancellationToken)
+        public DongVanFbApi(string apiKey) : base(apiKey)
         {
 
         }
@@ -26,7 +25,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<DongVanFbInfo> Info() => RequestGet<DongVanFbInfo>($"{EndPoint}info.php?apiKey={ApiKey}");
+        public Task<DongVanFbInfo> Info() => RequestGetAsync<DongVanFbInfo>($"{EndPoint}info.php?apiKey={ApiKey}");
         /// <summary>
         /// 
         /// </summary>
@@ -34,21 +33,21 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <param name="amount"></param>
         /// <returns></returns>
         public Task<DongVanFbBuyAccount> BuyAccount(DongVanFbProduct product, int amount)
-          => RequestGet<DongVanFbBuyAccount>($"{EndPoint}buyaccount.php?apiKey={ApiKey}&type={product.type}&amount={amount}");
+          => RequestGetAsync<DongVanFbBuyAccount>($"{EndPoint}buyaccount.php?apiKey={ApiKey}&type={product.type}&amount={amount}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
         public Task<DongVanFbOrderCode> OrderCode(DongVanFbAccount account)
-          => RequestGet<DongVanFbOrderCode>($"{EndPoint}ordercode.php?apiKey={ApiKey}&type={account.type}&user={account.user}&pass={account.pass}");
+          => RequestGetAsync<DongVanFbOrderCode>($"{EndPoint}ordercode.php?apiKey={ApiKey}&type={account.type}&user={account.user}&pass={account.pass}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
         public Task<DongVanFbGetCode> GetCode(DongVanFbOrder order)
-          => RequestGet<DongVanFbGetCode>($"{EndPoint}getcode.php?apiKey={ApiKey}&id={order.id}");
+          => RequestGetAsync<DongVanFbGetCode>($"{EndPoint}getcode.php?apiKey={ApiKey}&id={order.id}");
     }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

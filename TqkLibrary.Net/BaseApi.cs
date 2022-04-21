@@ -4,145 +4,295 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 namespace TqkLibrary.Net
 {
-  public class ApiException<T> : Exception
-  {
-    public ApiException()
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ApiException : Exception
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public HttpStatusCode StatusCode { get; internal set; }
     }
-
-    public HttpStatusCode StatusCode { get; internal set; }
-    public T Body { get; internal set; }
-  }
-  public abstract class BaseApi
-  {
-    static readonly Type typeString = typeof(string);
-    static readonly Type typeBuffer = typeof(byte[]);
-
-    protected readonly string ApiKey;
-    public readonly CancellationToken cancellationToken;
-    internal BaseApi(CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ApiException<T> : ApiException
     {
-      this.cancellationToken = cancellationToken;
-    }
-
-    internal BaseApi(string ApiKey, CancellationToken cancellationToken = default)
-    {
-      if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
-      this.ApiKey = ApiKey;
-      this.cancellationToken = cancellationToken;
-    }
-
-    protected Task<TResult> RequestGet<TResult>(
-      string url,
-      Dictionary<string, string> headers = null)
-      where TResult : class
-      => Request<TResult, string>(HttpMethod.Get, new Uri(url), headers);
-    protected Task<TResult> RequestGet<TResult>(
-     Uri uri,
-     Dictionary<string, string> headers = null)
-     where TResult : class
-     => Request<TResult, string>(HttpMethod.Get, uri, headers);
-    protected Task<TResult> RequestGet<TResult, TException>(
-      string url,
-      Dictionary<string, string> headers = null)
-      where TResult : class
-      where TException : class
-      => Request<TResult, TException>(HttpMethod.Get, new Uri(url), headers);
-    protected Task<TResult> RequestGet<TResult, TException>(
-      Uri uri,
-      Dictionary<string, string> headers = null)
-      where TResult : class
-      where TException : class
-      => Request<TResult, TException>(HttpMethod.Get, uri, headers);
-
-
-    protected Task<TResult> RequestPost<TResult>(
-      string url,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null)
-      where TResult : class
-      => Request<TResult, string>(HttpMethod.Post, new Uri(url), headers, httpContent);
-    protected Task<TResult> RequestPost<TResult>(
-     Uri uri,
-     Dictionary<string, string> headers = null,
-     HttpContent httpContent = null)
-     where TResult : class
-     => Request<TResult, string>(HttpMethod.Post, uri, headers, httpContent);
-    protected Task<TResult> RequestPost<TResult, TException>(
-      string url,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null)
-      where TResult : class
-      where TException : class
-      => Request<TResult, TException>(HttpMethod.Post, new Uri(url), headers, httpContent);
-    protected Task<TResult> RequestPost<TResult, TException>(
-     Uri uri,
-     Dictionary<string, string> headers = null,
-     HttpContent httpContent = null)
-     where TResult : class
-     where TException : class
-     => Request<TResult, TException>(HttpMethod.Post, uri, headers, httpContent);
-
-
-    protected async Task<TResult> Request<TResult, TException>(
-      HttpMethod method,
-      Uri uri,
-      Dictionary<string, string> headers = null,
-      HttpContent httpContent = null) 
-      where TResult : class 
-      where TException: class
-    {
-      using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
-      if (headers != null) foreach (var pair in headers) httpRequestMessage.Headers.Add(pair.Key, pair.Value);
-      if(httpRequestMessage.Headers.Accept.Count == 0) httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-      if (httpContent != null) httpRequestMessage.Content = httpContent;
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-      
-      if (httpResponseMessage.IsSuccessStatusCode)
-      {
-        if (typeof(TResult).Equals(typeBuffer))
+        /// <summary>
+        /// 
+        /// </summary>
+        public ApiException()
         {
-          return (await httpResponseMessage.Content.ReadAsByteArrayAsync()) as TResult;
+
         }
-        else
-        {
-          string content_res = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-          if (typeof(TResult).Equals(typeString))
-          {
-            return content_res as TResult;
-          }
-          //else if(typeof(TResult).IsSubclassOf(typeStream))
-          //{
-          //  return (await httpResponseMessage.Content.ReadAsStreamAsync()) as TResult;
-          //}
-          else
-            return JsonConvert.DeserializeObject<TResult>(content_res);
-        }
-      }
-      else
-      {
-        string content_res = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        if (typeof(TException).Equals(typeString))
-        {
-          throw new ApiException<string>()
-          {
-            Body = content_res,
-            StatusCode = httpResponseMessage.StatusCode
-          };
-        }
-        else throw new ApiException<TException>()
-        {
-          Body = JsonConvert.DeserializeObject<TException>(content_res),
-          StatusCode = httpResponseMessage.StatusCode
-        };
-      }
-    }
 
-  }
+        /// <summary>
+        /// 
+        /// </summary>
+        public T Body { get; internal set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class BaseApi
+    {
+        static readonly Type typeString = typeof(string);
+        static readonly Type typeBuffer = typeof(byte[]);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected readonly string ApiKey;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected BaseApi()
+        {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(string ApiKey)
+        {
+            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            this.ApiKey = ApiKey;
+        }
+
+
+        protected RequestBuilder Build() => new RequestBuilder(this);
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestGetAsync<TResult>(
+          string url,
+          Dictionary<string, string> headers = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          => RequestAsync<TResult, string>(HttpMethod.Get, new Uri(url), headers, cancellationToken: cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestGetAsync<TResult>(
+         Uri uri,
+         Dictionary<string, string> headers = null,
+         CancellationToken cancellationToken = default)
+         where TResult : class
+         => RequestAsync<TResult, string>(HttpMethod.Get, uri, headers, cancellationToken: cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestGetAsync<TResult, TException>(
+          string url,
+          Dictionary<string, string> headers = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          where TException : class
+          => RequestAsync<TResult, TException>(HttpMethod.Get, new Uri(url), headers, cancellationToken: cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestGetAsync<TResult, TException>(
+          Uri uri,
+          Dictionary<string, string> headers = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          where TException : class
+          => RequestAsync<TResult, TException>(HttpMethod.Get, uri, headers, cancellationToken: cancellationToken);
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestPostAsync<TResult>(
+          string url,
+          Dictionary<string, string> headers = null,
+          HttpContent httpContent = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          => RequestAsync<TResult, string>(HttpMethod.Post, new Uri(url), headers, httpContent, cancellationToken: cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestPostAsync<TResult>(
+         Uri uri,
+         Dictionary<string, string> headers = null,
+         HttpContent httpContent = null,
+          CancellationToken cancellationToken = default)
+         where TResult : class
+         => RequestAsync<TResult, string>(HttpMethod.Post, uri, headers, httpContent, cancellationToken: cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestPostAsync<TResult, TException>(
+          string url,
+          Dictionary<string, string> headers = null,
+          HttpContent httpContent = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          where TException : class
+          => RequestAsync<TResult, TException>(HttpMethod.Post, new Uri(url), headers, httpContent, cancellationToken: cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected Task<TResult> RequestPostAsync<TResult, TException>(
+         Uri uri,
+         Dictionary<string, string> headers = null,
+         HttpContent httpContent = null,
+         CancellationToken cancellationToken = default)
+         where TResult : class
+         where TException : class
+         => RequestAsync<TResult, TException>(HttpMethod.Post, uri, headers, httpContent, cancellationToken: cancellationToken);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="method"></param>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ApiException"></exception>
+        protected async Task<TResult> RequestAsync<TResult, TException>(
+          HttpMethod method,
+          Uri uri,
+          Dictionary<string, string> headers = null,
+          HttpContent httpContent = null,
+          CancellationToken cancellationToken = default)
+          where TResult : class
+          where TException : class
+        {
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+            if (headers != null) foreach (var pair in headers) httpRequestMessage.Headers.Add(pair.Key, pair.Value);
+            if (httpRequestMessage.Headers.Accept.Count == 0) httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (httpContent != null) httpRequestMessage.Content = httpContent;
+            return await RequestAsync<TResult, TException>(httpRequestMessage, cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TException"></typeparam>
+        /// <param name="req"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ApiException"></exception>
+        protected async Task<TResult> RequestAsync<TResult, TException>(HttpRequestMessage req, CancellationToken cancellationToken = default)
+            where TResult : class
+            where TException : class
+        {
+            using HttpResponseMessage rep = await NetExtensions.httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            if (rep.IsSuccessStatusCode)
+            {
+                if (typeof(TResult).Equals(typeBuffer))
+                {
+                    return (await rep.Content.ReadAsByteArrayAsync()) as TResult;
+                }
+                else
+                {
+                    string content_res = await rep.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    if (typeof(TResult).Equals(typeString))
+                    {
+                        return content_res as TResult;
+                    }
+                    else
+                        return JsonConvert.DeserializeObject<TResult>(content_res);
+                }
+            }
+            else
+            {
+                string content_res = await rep.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (typeof(TException).Equals(typeString))
+                {
+                    throw new ApiException<string>()
+                    {
+                        Body = content_res,
+                        StatusCode = rep.StatusCode
+                    };
+                }
+                else throw new ApiException<TException>()
+                {
+                    Body = JsonConvert.DeserializeObject<TException>(content_res),
+                    StatusCode = rep.StatusCode
+                };
+            }
+        }
+    }
 }

@@ -149,8 +149,7 @@ namespace TqkLibrary.Net.Others
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        /// <param name="cancellationToken"></param>
-        public AllAccApi(string apiKey, CancellationToken cancellationToken = default) : base(apiKey, cancellationToken)
+        public AllAccApi(string apiKey) : base(apiKey)
         {
 
         }
@@ -168,7 +167,7 @@ namespace TqkLibrary.Net.Others
             ApiPost balancePost = new ApiPost();
             balancePost.api_key = ApiKey;
             using StringContent stringContent = new StringContent(JsonConvert.SerializeObject(balancePost), Encoding.UTF8, "application/json");
-            return await RequestPost<AllAccApiBalanceResponse>(EndPoint + "v1/balance", httpContent: stringContent).ConfigureAwait(false);
+            return await RequestPostAsync<AllAccApiBalanceResponse>(EndPoint + "v1/balance", httpContent: stringContent).ConfigureAwait(false);
         }
         /// <summary>
         /// 
@@ -176,7 +175,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccData<AllAccCategory>> Categories()
         {
-            return RequestGet<AllAccData<AllAccCategory>>(EndPoint + "v1/categories");
+            return RequestGetAsync<AllAccData<AllAccCategory>>(EndPoint + "v1/categories");
         }
         /// <summary>
         /// 
@@ -185,7 +184,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccData<AllAccProduct>> Product(AllAccCategory category)
         {
-            return RequestGet<AllAccData<AllAccProduct>>(EndPoint + $"v1/category/{category.Id}");
+            return RequestGetAsync<AllAccData<AllAccProduct>>(EndPoint + $"v1/category/{category.Id}");
         }
 
         class BuyPost : ApiPost
@@ -207,7 +206,7 @@ namespace TqkLibrary.Net.Others
             buyPost.id_product = product.Id;
             buyPost.quantity = buyCount;
             using StringContent stringContent = new StringContent(JsonConvert.SerializeObject(buyPost), Encoding.UTF8, "application/json");
-            return await RequestPost<AllAccApiBuyResponse>(EndPoint + "v1/buy", httpContent: stringContent).ConfigureAwait(false);
+            return await RequestPostAsync<AllAccApiBuyResponse>(EndPoint + "v1/buy", httpContent: stringContent).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -219,7 +218,7 @@ namespace TqkLibrary.Net.Others
             ApiPost ordersPost = new ApiPost();
             ordersPost.api_key = ApiKey;
             using StringContent stringContent = new StringContent(JsonConvert.SerializeObject(ordersPost), Encoding.UTF8, "application/json");
-            return await RequestPost<AllAccData<AllAccOrderItem>>(EndPoint + "v1/orders", httpContent: stringContent).ConfigureAwait(false);
+            return await RequestPostAsync<AllAccData<AllAccOrderItem>>(EndPoint + "v1/orders", httpContent: stringContent).ConfigureAwait(false);
         }
 
         class OrderPost : ApiPost
@@ -238,7 +237,7 @@ namespace TqkLibrary.Net.Others
             orderPost.api_key = ApiKey;
             orderPost.order_id = order.Id;
             using StringContent stringContent = new StringContent(JsonConvert.SerializeObject(orderPost), Encoding.UTF8, "application/json");
-            return await RequestPost<AllAccOrderResponse<T>>(EndPoint + "v1/order", httpContent: stringContent).ConfigureAwait(false);
+            return await RequestPostAsync<AllAccOrderResponse<T>>(EndPoint + "v1/order", httpContent: stringContent).ConfigureAwait(false);
         }
     }
 

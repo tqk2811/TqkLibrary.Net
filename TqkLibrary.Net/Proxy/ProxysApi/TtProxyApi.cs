@@ -126,9 +126,8 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// </summary>
         /// <param name="license"></param>
         /// <param name="secret"></param>
-        /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public TtProxyApi(string license, string secret, CancellationToken cancellationToken = default) : base(license, cancellationToken)
+        public TtProxyApi(string license, string secret) : base(license)
         {
             if (string.IsNullOrEmpty(secret)) throw new ArgumentNullException(nameof(secret));
             this.secret = secret;
@@ -151,102 +150,102 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxyObtainResult>> Obtain()
-          => RequestGet<TtProxyResult<TtProxyObtainResult>>($"{EndPoint}obtain?{GenerateParameters()}");
+        public Task<TtProxyResult<TtProxyObtainResult>> Obtain(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxyObtainResult>>($"{EndPoint}obtain?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxyObtainResult>> Obtain(int count)
-          => RequestGet<TtProxyResult<TtProxyObtainResult>>($"{EndPoint}obtain?{GenerateParameters()}&cnt={count}");
+        public Task<TtProxyResult<TtProxyObtainResult>> Obtain(int count, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxyObtainResult>>($"{EndPoint}obtain?{GenerateParameters()}&cnt={count}");
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> WhiteListQuery()
-          => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}whitelist/query?{GenerateParameters()}");
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ip"></param>
-        /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> WhiteListExists(string ip)
-          => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}whitelist/exists?{GenerateParameters()}&ip={ip}");
+        public Task<TtProxyResult<List<string>>> WhiteListQuery(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}whitelist/query?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> WhiteListAdd(string ip)
-          => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}whitelist/add?{GenerateParameters()}&ip={ip}");
+        public Task<TtProxyResult<List<string>>> WhiteListExists(string ip, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}whitelist/exists?{GenerateParameters()}&ip={ip}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> WhiteListDelete(string ip)
-          => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}whitelist/del?{GenerateParameters()}&ip={ip}");
+        public Task<TtProxyResult<List<string>>> WhiteListAdd(string ip, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}whitelist/add?{GenerateParameters()}&ip={ip}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> WhiteListClear(string ip)
-          => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}whitelist/clear?{GenerateParameters()}&ip={ip}");
+        public Task<TtProxyResult<List<string>>> WhiteListDelete(string ip, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}whitelist/del?{GenerateParameters()}&ip={ip}");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
+        public Task<TtProxyResult<List<string>>> WhiteListClear(string ip, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}whitelist/clear?{GenerateParameters()}&ip={ip}");
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<List<string>>> SubLicenseList()
-         => RequestGet<TtProxyResult<List<string>>>($"{EndPoint}subLicense/list?{GenerateParameters()}");
+        public Task<TtProxyResult<List<string>>> SubLicenseList(CancellationToken cancellationToken = default)
+         => RequestGetAsync<TtProxyResult<List<string>>>($"{EndPoint}subLicense/list?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="page"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseResult>> SubLicenseList(int page)
-          => RequestGet<TtProxyResult<TtProxySubLicenseResult>>($"{EndPoint}subLicense/list?{GenerateParameters()}&page={page}");
+        public Task<TtProxyResult<TtProxySubLicenseResult>> SubLicenseList(int page, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxySubLicenseResult>>($"{EndPoint}subLicense/list?{GenerateParameters()}&page={page}");
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseCreateResult>> SubLicenseCreate()
-          => RequestGet<TtProxyResult<TtProxySubLicenseCreateResult>>($"{EndPoint}subLicense/create?{GenerateParameters()}");
+        public Task<TtProxyResult<TtProxySubLicenseCreateResult>> SubLicenseCreate(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxySubLicenseCreateResult>>($"{EndPoint}subLicense/create?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="traffic"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseCreateResult>> SubLicenseCreate(int traffic)
-          => RequestPost<TtProxyResult<TtProxySubLicenseCreateResult>>($"{EndPoint}subLicense/create?{GenerateParameters()}", null, new StringContent($"traffic={traffic}"));
+        public Task<TtProxyResult<TtProxySubLicenseCreateResult>> SubLicenseCreate(int traffic, CancellationToken cancellationToken = default)
+          => RequestPostAsync<TtProxyResult<TtProxySubLicenseCreateResult>>($"{EndPoint}subLicense/create?{GenerateParameters()}", null, new StringContent($"traffic={traffic}"));
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseRenew()
-          => RequestGet<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/renew?{GenerateParameters()}");
+        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseRenew(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/renew?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="traffic"></param>
         /// <param name="subLicenseKey"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseRenew(int traffic, string subLicenseKey)
-          => RequestPost<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/renew?{GenerateParameters()}", null, new StringContent($"traffic={traffic}&key={subLicenseKey}"));
+        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseRenew(int traffic, string subLicenseKey, CancellationToken cancellationToken = default)
+          => RequestPostAsync<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/renew?{GenerateParameters()}", null, new StringContent($"traffic={traffic}&key={subLicenseKey}"));
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseReclaim()
-          => RequestGet<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/reclaim?{GenerateParameters()}");
+        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseReclaim(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/reclaim?{GenerateParameters()}");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseReclaim(string key)
-          => RequestPost<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/reclaim?{GenerateParameters()}", null, new StringContent($"key={key}"));
+        public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseReclaim(string key, CancellationToken cancellationToken = default)
+          => RequestPostAsync<TtProxyResult<TtProxySubLicenseRenewResult>>($"{EndPoint}subLicense/reclaim?{GenerateParameters()}", null, new StringContent($"key={key}"));
 
     }
 }

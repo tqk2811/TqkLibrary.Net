@@ -11,21 +11,29 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
     /// <summary>
     /// 
     /// </summary>
-    public class TmProxyApiManaged : IProxyApi
+    public class AzProxyApiManaged : IProxyApi
     {
-        readonly TmProxyApi tmProxyApi;
+        readonly AzProxyApi azProxyApi;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tmProxyApi"></param>
-        public TmProxyApiManaged(TmProxyApi tmProxyApi)
+        /// <param name="azProxyApi"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public AzProxyApiManaged(AzProxyApi azProxyApi)
         {
-            this.tmProxyApi = tmProxyApi ?? throw new ArgumentNullException(nameof(tmProxyApi));
+            this.azProxyApi = azProxyApi ?? throw new ArgumentNullException(nameof(azProxyApi));
         }
         /// <summary>
         /// 
         /// </summary>
-        public int Location { get; set; } = 0;
+        public AzProxyLocation? Location { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public AzProxyProvider? Provider { get; set; }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,13 +47,13 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         /// <exception cref="NotImplementedException"></exception>
         public async Task<IProxyApiResponse> GetNewProxyAsync(CancellationToken cancellationToken)
         {
-            var result = await tmProxyApi.GetNewProxy(Location).ConfigureAwait(false);
+            var proxy = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken);
             return new ProxyApiResponse()
             {
-                IsSuccess = result.code == 0,
-                Proxy = result?.data.https ?? string.Empty,
-                NextTime = DateTime.Now.AddSeconds(result?.data.next_request ?? 5),
-                ExpiredTime = result?.data.expired_at ?? DateTime.Now
+                Proxy = proxy.Proxy,
+                IsSuccess = proxy.Status.Equals("success"),
+                NextTime = proxy.NextTime,
+                ExpiredTime = DateTime.Now.AddDays(1)
             };
         }
     }

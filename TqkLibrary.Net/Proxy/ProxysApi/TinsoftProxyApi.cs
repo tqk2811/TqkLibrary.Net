@@ -177,34 +177,36 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        /// <param name="cancellationToken"></param>
-        public TinsoftProxyApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        public TinsoftProxyApi(string ApiKey) : base(ApiKey)
         {
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="location"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0)
-          => RequestGet<TinsoftProxyProxyResult>(string.Format(EndPoint + "/changeProxy.php?key={0}&location={1}", ApiKey, location));
+        public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0, CancellationToken cancellationToken = default)
+          => RequestGetAsync<TinsoftProxyProxyResult>(
+              string.Format(EndPoint + "/changeProxy.php?key={0}&location={1}", ApiKey, location),
+              cancellationToken: cancellationToken);
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TinsoftProxyKeyInfo> GetKeyInfo()
-          => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/getKeyInfo.php?key={0}", ApiKey));
+        public Task<TinsoftProxyKeyInfo> GetKeyInfo(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TinsoftProxyKeyInfo>($"{EndPoint}/getKeyInfo.php?key={ApiKey}", cancellationToken: cancellationToken);
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TinsoftProxyKeyInfo> DeleteKey()
-          => RequestGet<TinsoftProxyKeyInfo>(string.Format(EndPoint + "/deleteKey.php?key={0}", ApiKey));
+        public Task<TinsoftProxyKeyInfo> DeleteKey(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TinsoftProxyKeyInfo>($"{EndPoint}/deleteKey.php?key={ApiKey}", cancellationToken: cancellationToken);
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TinsoftProxyLocationResult> GetLocations()
-          => RequestGet<TinsoftProxyLocationResult>(EndPoint + "/getLocations.php");
+        public Task<TinsoftProxyLocationResult> GetLocations(CancellationToken cancellationToken = default)
+          => RequestGetAsync<TinsoftProxyLocationResult>($"{EndPoint}/getLocations.php", cancellationToken: cancellationToken);
     }
 }

@@ -47,8 +47,7 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        /// <param name="cancellationToken"></param>
-        public TmProxyApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        public TmProxyApi(string ApiKey) : base(ApiKey)
         {
 
         }
@@ -56,30 +55,32 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TMProxyResponse<TMProxyStatResponse>> Stats()
-          => RequestPost<TMProxyResponse<TMProxyStatResponse>>(
+        public Task<TMProxyResponse<TMProxyStatResponse>> Stats(CancellationToken cancellationToken = default)
+          => RequestPostAsync<TMProxyResponse<TMProxyStatResponse>>(
             $"{EndPoint}stats",
             null,
-            new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })));
+            new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })),
+            cancellationToken: cancellationToken);
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TMProxyResponse<TMProxyProxyResponse>> GetCurrentProxy()
-         => RequestPost<TMProxyResponse<TMProxyProxyResponse>>(
+        public Task<TMProxyResponse<TMProxyProxyResponse>> GetCurrentProxy(CancellationToken cancellationToken = default)
+         => RequestPostAsync<TMProxyResponse<TMProxyProxyResponse>>(
            $"{EndPoint}get-current-proxy",
            null,
-           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })));
+           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })),
+           cancellationToken: cancellationToken);
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id_location"></param>
         /// <returns></returns>
-        public Task<TMProxyResponse<TMProxyProxyResponse>> GetNewProxy(int id_location = 0)
-         => RequestPost<TMProxyResponse<TMProxyProxyResponse>>(
+        public Task<TMProxyResponse<TMProxyProxyResponse>> GetNewProxy(int id_location = 0, CancellationToken cancellationToken = default)
+         => RequestPostAsync<TMProxyResponse<TMProxyProxyResponse>>(
            $"{EndPoint}get-new-proxy",
            null,
-           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey, id_location = id_location })));
+           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey, id_location = id_location })),
+           cancellationToken: cancellationToken);
 
     }
 }

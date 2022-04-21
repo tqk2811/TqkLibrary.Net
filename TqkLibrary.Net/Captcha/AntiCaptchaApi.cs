@@ -258,8 +258,7 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <param name="ApiKey">ApiKey</param>
-        /// <param name="cancellationToken"></param>
-        public AntiCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        public AntiCaptchaApi(string ApiKey) : base(ApiKey)
         {
         }
         /// <summary>
@@ -278,7 +277,7 @@ namespace TqkLibrary.Net.Captcha
             };
 
             string json = JsonConvert.SerializeObject(createTaskJson, NetExtensions.JsonSerializerSettings);
-            return await RequestPost<AntiCaptchaTaskResponse>(
+            return await RequestPostAsync<AntiCaptchaTaskResponse>(
               EndPoint + "/createTask",
               null,
               new StringContent(json, Encoding.UTF8, "application/json"));
@@ -296,7 +295,7 @@ namespace TqkLibrary.Net.Captcha
             taskResultJson.TaskId = task.TaskId.Value;
 
             string json = JsonConvert.SerializeObject(taskResultJson, NetExtensions.JsonSerializerSettings);
-            return RequestPost<AntiCaptchaTaskResultResponse>(
+            return RequestPostAsync<AntiCaptchaTaskResultResponse>(
               EndPoint + "/getTaskResult",
               null,
               new StringContent(json, Encoding.UTF8, "application/json"));

@@ -50,8 +50,7 @@ namespace TqkLibrary.Net.Captcha
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        /// <param name="cancellationToken"></param>
-        public TwoCaptchaApi(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        public TwoCaptchaApi(string ApiKey) : base(ApiKey)
         {
         }
 
@@ -65,24 +64,25 @@ namespace TqkLibrary.Net.Captcha
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="JsonException"></exception>
         public Task<TwoCaptchaResponse> GetResponseJson(string id)
-          => RequestGet<TwoCaptchaResponse>(EndPoint + string.Format("/res.php?key={0}&id={1}&action=get&json=1", ApiKey, id));
+          => RequestGetAsync<TwoCaptchaResponse>(EndPoint + string.Format("/res.php?key={0}&id={1}&action=get&json=1", ApiKey, id));
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="id"></param>
         /// <param name="delay"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="JsonException"></exception>
         /// <exception cref="OperationCanceledException"></exception>
-        public async Task<TwoCaptchaResponse> WaitResponseJsonCompleted(string id, int delay = 5000)
+        public async Task<TwoCaptchaResponse> WaitResponseJsonCompleted(string id, int delay = 5000, CancellationToken cancellationToken = default)
         {
             while (true)
             {
-                Task.Delay(delay, cancellationToken).Wait();
+                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
                 TwoCaptchaResponse twoCaptchaResponse = await GetResponseJson(id).ConfigureAwait(false);
                 switch (twoCaptchaResponse.CheckState())
                 {
@@ -128,7 +128,7 @@ namespace TqkLibrary.Net.Captcha
             imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_instructions, "imginstructions", "imginstructions.jpg");
 
-            return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
+            return RequestPostAsync<TwoCaptchaResponse>(uri, null, requestContent);
         }
         /// <summary>
         /// 
@@ -148,7 +148,7 @@ namespace TqkLibrary.Net.Captcha
             imageContent_bitmap.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_bitmap, "file", "file.jpg");
 
-            return RequestPost<TwoCaptchaResponse>(uri, null, requestContent);
+            return RequestPostAsync<TwoCaptchaResponse>(uri, null, requestContent);
         }
         /// <summary>
         /// 
@@ -181,7 +181,7 @@ namespace TqkLibrary.Net.Captcha
             if (!string.IsNullOrEmpty(proxytype)) parameters["proxytype"] = proxytype;
             Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
 
-            return RequestGet<TwoCaptchaResponse>(uri);
+            return RequestGetAsync<TwoCaptchaResponse>(uri);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace TqkLibrary.Net.Captcha
             parameters["googlekey"] = googleKey;
             parameters["pageurl"] = pageUrl;
             Uri uri = new Uri(EndPoint + "/in.php?" + parameters.ToString());
-            return RequestGet<TwoCaptchaResponse>(uri);
+            return RequestGetAsync<TwoCaptchaResponse>(uri);
         }
 
 
@@ -239,7 +239,7 @@ namespace TqkLibrary.Net.Captcha
             using MultipartFormDataContent multipartFormDataContent = new MultipartFormDataContent();
             using ByteArrayContent byteArrayContent = new ByteArrayContent(bitmap);
             multipartFormDataContent.Add(byteArrayContent, "file");
-            return await RequestPost<TwoCaptchaResponse>(uri, httpContent: multipartFormDataContent);
+            return await RequestPostAsync<TwoCaptchaResponse>(uri, httpContent: multipartFormDataContent);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TqkLibrary.Net.Others.FptAi
     {
         const string EndPoint = "https://api.fpt.ai/hmi/tts";
         readonly string version = "/v5";
-        public TextToSpeech(string ApiKey, CancellationToken cancellationToken = default) : base(ApiKey, cancellationToken)
+        public TextToSpeech(string ApiKey) : base(ApiKey)
         {
 
         }
@@ -27,7 +27,7 @@ namespace TqkLibrary.Net.Others.FptAi
             dict.Add("voice", voice.ToString().ToLower());
             dict.Add("format", format.ToString().ToLower());
 
-            return await RequestPost<TTSResponse>(
+            return await RequestPostAsync<TTSResponse>(
               EndPoint + version,
               dict,
               new StringContent(text, Encoding.UTF8, "text/html")).ConfigureAwait(false);
