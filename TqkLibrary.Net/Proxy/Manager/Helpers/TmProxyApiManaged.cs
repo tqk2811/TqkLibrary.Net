@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.ProxysApi;
@@ -22,6 +19,15 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         {
             this.tmProxyApi = tmProxyApi ?? throw new ArgumentNullException(nameof(tmProxyApi));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
+        public TmProxyApiManaged(string apiKey)
+        {
+            this.tmProxyApi = new TmProxyApi(apiKey);
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -9,39 +9,55 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class KfarmTextNowApi : BaseApi
     {
         const string EndPoint = "http://kfarm.vn/api/TextNow/";
-        readonly Dictionary<string, string> headers = new Dictionary<string, string>();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
         public KfarmTextNowApi(string token) : base(token)
         {
-            headers.Add("Token", token);
         }
-        public Task<KfarmTextNowResponse<KfarmTextNowPhone>> GetAccTextNow()
-        {
-            return RequestGetAsync<KfarmTextNowResponse<KfarmTextNowPhone>>($"{EndPoint}GetAccTextNow", headers);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<KfarmTextNowResponse<KfarmTextNowPhone>> GetAccTextNow(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(EndPoint + "GetAccTextNow")
+            .WithCancellationToken(cancellationToken)
+            .WithHeader("Token", ApiKey)
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowPhone>>();
 
-        public Task<KfarmTextNowResponse<KfarmTextNowOrder>> GetOrderTextNow(KfarmTextNowPhone phone)
-        {
-            return RequestPostAsync<KfarmTextNowResponse<KfarmTextNowOrder>>(
-              $"{EndPoint}GetOrderTextNow",
-              headers,
-              new StringContent(JsonConvert.SerializeObject(phone), Encoding.UTF8, "application/json"));
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<KfarmTextNowResponse<KfarmTextNowOrder>> GetOrderTextNow(KfarmTextNowPhone phone, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlPostJson(EndPoint + "GetOrderTextNow", phone)
+            .WithCancellationToken(cancellationToken)
+            .WithHeader("Token", ApiKey)
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowOrder>>();
 
-
-
-        public Task<KfarmTextNowResponse<KfarmTextNowCode>> GetCode(KfarmTextNowOrder orderId)
-        {
-            return RequestPostAsync<KfarmTextNowResponse<KfarmTextNowCode>>(
-              $"{EndPoint}GetCode",
-              headers,
-              new StringContent(JsonConvert.SerializeObject(orderId), Encoding.UTF8, "application/json"));
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<KfarmTextNowResponse<KfarmTextNowCode>> GetCode(KfarmTextNowOrder orderId, CancellationToken cancellationToken = default)
+             => Build()
+            .WithUrlPostJson(EndPoint + "GetOrderTextNow", orderId)
+            .WithCancellationToken(cancellationToken)
+            .WithHeader("Token", ApiKey)
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowCode>>();
     }
 
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class KfarmTextNowResponse<T>
     {
         public int status_code { get; set; }
@@ -60,4 +76,5 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     {
         public string code { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

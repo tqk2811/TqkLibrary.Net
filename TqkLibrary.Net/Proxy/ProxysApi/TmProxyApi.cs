@@ -56,31 +56,30 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// </summary>
         /// <returns></returns>
         public Task<TMProxyResponse<TMProxyStatResponse>> Stats(CancellationToken cancellationToken = default)
-          => RequestPostAsync<TMProxyResponse<TMProxyStatResponse>>(
-            $"{EndPoint}stats",
-            null,
-            new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })),
-            cancellationToken: cancellationToken);
+            => Build()
+            .WithUrlPostJson(EndPoint + "stats", new { api_key = ApiKey })
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<TMProxyResponse<TMProxyStatResponse>>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TMProxyResponse<TMProxyProxyResponse>> GetCurrentProxy(CancellationToken cancellationToken = default)
-         => RequestPostAsync<TMProxyResponse<TMProxyProxyResponse>>(
-           $"{EndPoint}get-current-proxy",
-           null,
-           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey })),
-           cancellationToken: cancellationToken);
+             => Build()
+            .WithUrlPostJson(EndPoint + "get-current-proxy", new { api_key = ApiKey })
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TMProxyResponse<TMProxyProxyResponse>> GetNewProxy(int id_location = 0, CancellationToken cancellationToken = default)
-         => RequestPostAsync<TMProxyResponse<TMProxyProxyResponse>>(
-           $"{EndPoint}get-new-proxy",
-           null,
-           new StringContent(JsonConvert.SerializeObject(new { api_key = ApiKey, id_location = id_location })),
-           cancellationToken: cancellationToken);
+            => Build()
+            .WithUrlPostJson(EndPoint + "get-new-proxy", new { api_key = ApiKey, id_location = id_location })
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>();
 
     }
 }

@@ -25,6 +25,14 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         {
             this.tinsoftProxyApi = tinsoftProxyApi ?? throw new ArgumentNullException(nameof(tinsoftProxyApi));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
+        public TinsoftProxyApiManaged(string apiKey)
+        {
+            this.tinsoftProxyApi = new TinsoftProxyApi(apiKey);
+        }
 
 
         /// <summary>

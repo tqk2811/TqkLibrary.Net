@@ -8,6 +8,7 @@ using System.Web;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public enum OtpSimStatusCode
     {
         Success = 200,
@@ -121,61 +122,118 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         [JsonProperty("data")]
         public T Data { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class OtpSimApi : BaseApi
     {
         private const string EndPoint = "http://otpsim.com/api";
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
         public OtpSimApi(string ApiKey) : base(ApiKey)
         {
         }
 
-        public Task<OtpSimBaseResult<List<OtpSimDataNetwork>>> GetNetworks()
-          => RequestGetAsync<OtpSimBaseResult<List<OtpSimDataNetwork>>>(string.Format(EndPoint + "/networks?token={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<List<OtpSimDataNetwork>>> GetNetworks(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/networks").WithParam("token", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<List<OtpSimDataNetwork>>>();
 
-        public Task<OtpSimBaseResult<List<OtpSimDataService>>> GetServices()
-          => RequestGetAsync<OtpSimBaseResult<List<OtpSimDataService>>>(string.Format(EndPoint + "/service/request?token={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<List<OtpSimDataService>>> GetServices(CancellationToken cancellationToken = default)
+             => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/service/request").WithParam("token", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<List<OtpSimDataService>>>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Task<OtpSimBaseResult<OtpSimPhoneRequestResult>> PhonesRequest(
           OtpSimDataService dataService,
           IEnumerable<OtpSimDataNetwork> dataNetworks = null,
           IEnumerable<string> prefixs = null,
-          IEnumerable<string> exceptPrefixs = null)
-        {
-            if (null == dataService) throw new ArgumentNullException(nameof(dataService));
+          IEnumerable<string> exceptPrefixs = null,
+          CancellationToken cancellationToken = default)
+             => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/phones/request")
+                 .WithParam("token", ApiKey)
+                 .WithParam("service", dataService.Id)
+                 .WithParamIfNotNull("network", dataNetworks == null ? string.Join(",", dataNetworks.Select(x => x.Id)) : null)
+                 .WithParamIfNotNull("prefix", prefixs == null ? string.Join(",", prefixs) : null)
+                 .WithParamIfNotNull("exceptPrefix", exceptPrefixs == null ? string.Join(",", exceptPrefixs) : null))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<OtpSimPhoneRequestResult>>();
 
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["token"] = ApiKey;
-            parameters["service"] = dataService.Id.ToString();
-            if (null != dataNetworks) parameters["network"] = string.Join(",", dataNetworks.Select(x => x.Id));
-            if (null != prefixs) parameters["prefix"] = string.Join(",", prefixs);
-            if (null != exceptPrefixs) parameters["exceptPrefix"] = string.Join(",", exceptPrefixs);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<OtpSimPhoneRequestResult>> PhonesRequest(OtpSimDataService dataService, string numberBuyBack, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/phones/request")
+                 .WithParam("token", ApiKey)
+                 .WithParam("service", dataService.Id)
+                 .WithParam("numberBuyBack", numberBuyBack))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<OtpSimPhoneRequestResult>>();
 
-            return RequestGetAsync<OtpSimBaseResult<OtpSimPhoneRequestResult>>(EndPoint + "/phones/request?" + parameters.ToString());
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<OtpSimPhoneData>> GetPhoneMessage(OtpSimPhoneRequestResult phoneRequestResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/sessions/", phoneRequestResult.Session)
+                 .WithParam("token", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<OtpSimPhoneData>>();
 
-        public Task<OtpSimBaseResult<OtpSimPhoneRequestResult>> PhonesRequest(OtpSimDataService dataService, string numberBuyBack)
-        {
-            if (null == dataService) throw new ArgumentNullException(nameof(dataService));
-            if (string.IsNullOrEmpty(numberBuyBack)) throw new ArgumentNullException(nameof(numberBuyBack));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<OtpSimRefundData>> CancelGetPhoneMessage(OtpSimPhoneRequestResult phoneRequestResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/sessions/cancel")
+                .WithParam("token", ApiKey)
+                .WithParam("session", phoneRequestResult.Session))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<OtpSimRefundData>>();
 
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["token"] = ApiKey;
-            parameters["service"] = dataService.Id.ToString();
-            parameters["numberBuyBack"] = numberBuyBack;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<string>> ReportMessage(OtpSimPhoneRequestResult phoneRequestResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/sessions/report")
+                .WithParam("token", ApiKey)
+                .WithParam("session", phoneRequestResult.Session))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<string>>();
 
-            return RequestGetAsync<OtpSimBaseResult<OtpSimPhoneRequestResult>>(EndPoint + "/phones/request?" + parameters.ToString());
-        }
-
-        public Task<OtpSimBaseResult<OtpSimPhoneData>> GetPhoneMessage(OtpSimPhoneRequestResult phoneRequestResult)
-          => RequestGetAsync<OtpSimBaseResult<OtpSimPhoneData>>($"{EndPoint}/sessions/{phoneRequestResult.Session}?token={ApiKey}");
-
-        public Task<OtpSimBaseResult<OtpSimRefundData>> CancelGetPhoneMessage(OtpSimPhoneRequestResult phoneRequestResult)
-          => RequestGetAsync<OtpSimBaseResult<OtpSimRefundData>>($"{EndPoint}/sessions/cancel?session={phoneRequestResult.Session}&token={ApiKey}");
-
-        public Task<OtpSimBaseResult<string>> ReportMessage(OtpSimPhoneRequestResult phoneRequestResult)
-          => RequestGetAsync<OtpSimBaseResult<string>>($"{EndPoint}/sessions/report?session={phoneRequestResult.Session}&token={ApiKey}");
-
-        public Task<OtpSimBaseResult<OtpSimBalanceData>> UserBalance()
-           => RequestGetAsync<OtpSimBaseResult<OtpSimBalanceData>>($"{EndPoint}users/balance?token={ApiKey}");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<OtpSimBaseResult<OtpSimBalanceData>> UserBalance(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "/users/balance")
+                .WithParam("token", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<OtpSimBaseResult<OtpSimBalanceData>>();
     }
 }

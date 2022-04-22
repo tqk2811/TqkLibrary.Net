@@ -42,13 +42,30 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="uri"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlGet(UriBuilder uri)
+        {
+            return WithUrl((Uri)uri, HttpMethod.Get);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
         /// <param name="method"></param>
         /// <returns></returns>
         public RequestBuilder WithUrl(string uri, HttpMethod method)
         {
             return WithUrl(new Uri(uri), method);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlGet(string uri)
+        {
+            return WithUrl(new Uri(uri), HttpMethod.Get);
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -61,7 +78,69 @@ namespace TqkLibrary.Net
             this.method = method ?? throw new ArgumentNullException(nameof(method));
             return this;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="dispose"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPost(string uri, HttpContent httpContent, bool dispose = true)
+        {
+            return WithUrl(new Uri(uri), HttpMethod.Post).WithBody(httpContent, dispose);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="dispose"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPost(Uri uri, HttpContent httpContent, bool dispose = true)
+        {
+            return WithUrl(uri, HttpMethod.Post).WithBody(httpContent, dispose);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="httpContent"></param>
+        /// <param name="dispose"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPost(UriBuilder uri, HttpContent httpContent, bool dispose = true)
+        {
+            return WithUrl((Uri)uri, HttpMethod.Post).WithBody(httpContent, dispose);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPostJson(string uri, object obj)
+        {
+            return WithUrl(new Uri(uri), HttpMethod.Post).WithJsonBody(obj);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPostJson(Uri uri, object obj)
+        {
+            return WithUrl(uri, HttpMethod.Post).WithJsonBody(obj);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrlPostJson(UriBuilder uri, object obj)
+        {
+            return WithUrl((Uri)uri, HttpMethod.Post).WithJsonBody(obj);
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -108,6 +187,7 @@ namespace TqkLibrary.Net
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             this.httpContent = new StringContent(JsonConvert.SerializeObject(obj), encoding, "application/json");
+            this.httpContentDispose = true;
             return this;
         }
 

@@ -50,14 +50,22 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<TinsoftProxyUserKeyInfo> GetUserKeys(CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyUserKeyInfo>($"{TinsoftProxyApi.EndPoint}/getUserKeys.php?key={ApiKey}", cancellationToken: cancellationToken);
+             => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/getUserKeys.php").WithParam("key", ApiKey))
+            .ExecuteAsync<TinsoftProxyUserKeyInfo>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<TinsoftProxyUserInfo> GetUserInfo(CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyUserInfo>($"{TinsoftProxyApi.EndPoint}/getUserInfo.php?key={ApiKey}", cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/getUserInfo.php").WithParam("key", ApiKey))
+            .ExecuteAsync<TinsoftProxyUserInfo>();
+
         /// <summary>
         /// 
         /// </summary>
@@ -67,9 +75,15 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<TinsoftProxyOrderResult> OrderKeys(int quantity, DateTime dateTime, TinsoftProxyVip tinsoftVip, CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyOrderResult>(
-              $"{TinsoftProxyApi.EndPoint}/orderKeys.php?key={ApiKey}&quantity={quantity}&days={dateTime:dd-MM-yyyy HH:mm:ss}&vip={(int)tinsoftVip}",
-              cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/orderKeys.php")
+                .WithParam("key", ApiKey)
+                .WithParam("quantity", quantity)
+                .WithParam("days", $"{dateTime:dd-MM-yyyy HH:mm:ss}")
+                .WithParam("vip", (int)tinsoftVip))
+            .ExecuteAsync<TinsoftProxyOrderResult>();
+
         /// <summary>
         /// 
         /// </summary>
@@ -78,8 +92,12 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<TinsoftProxyBaseResult> ExtendKey(DateTime dateTime, string proxyKey, CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyBaseResult>(
-              $"{TinsoftProxyApi.EndPoint}/extendKey.php?key={ApiKey}&days={dateTime:dd-MM-yyyy HH:mm:ss}&proxy_key={proxyKey}",
-              cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/orderKeys.php")
+                .WithParam("key", ApiKey)
+                .WithParam("days", $"{dateTime:dd-MM-yyyy HH:mm:ss}")
+                .WithParam("proxy_key", proxyKey))
+            .ExecuteAsync<TinsoftProxyBaseResult>();
     }
 }

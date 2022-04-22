@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -180,6 +181,7 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         public TinsoftProxyApi(string ApiKey) : base(ApiKey)
         {
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -187,26 +189,39 @@ namespace TqkLibrary.Net.Proxy.ProxysApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0, CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyProxyResult>(
-              string.Format(EndPoint + "/changeProxy.php?key={0}&location={1}", ApiKey, location),
-              cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(EndPoint + "/changeProxy.php").WithParam("key", ApiKey).WithParam("location", location))
+            .ExecuteAsync<TinsoftProxyProxyResult>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TinsoftProxyKeyInfo> GetKeyInfo(CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyKeyInfo>($"{EndPoint}/getKeyInfo.php?key={ApiKey}", cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(EndPoint + "/getKeyInfo.php").WithParam("key", ApiKey))
+            .ExecuteAsync<TinsoftProxyKeyInfo>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TinsoftProxyKeyInfo> DeleteKey(CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyKeyInfo>($"{EndPoint}/deleteKey.php?key={ApiKey}", cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(EndPoint + "/deleteKey.php").WithParam("key", ApiKey))
+            .ExecuteAsync<TinsoftProxyKeyInfo>();
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TinsoftProxyLocationResult> GetLocations(CancellationToken cancellationToken = default)
-          => RequestGetAsync<TinsoftProxyLocationResult>($"{EndPoint}/getLocations.php", cancellationToken: cancellationToken);
+            => Build()
+            .WithCancellationToken(cancellationToken)
+            .WithUrlGet(new UriBuilder(EndPoint + "/getLocations.php"))
+            .ExecuteAsync<TinsoftProxyLocationResult>();
     }
 }

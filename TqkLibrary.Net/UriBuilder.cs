@@ -23,6 +23,14 @@ namespace TqkLibrary.Net
         {
             nameValueCollection = HttpUtility.ParseQueryString(url);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="urls"></param>
+        public UriBuilder(params string[] urls)
+        {
+            nameValueCollection = HttpUtility.ParseQueryString(string.Join("", urls));
+        }
 
         /// <summary>
         /// 
@@ -38,7 +46,21 @@ namespace TqkLibrary.Net
             nameValueCollection[name] = value;
             return this;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UriBuilder WithParam(string name, object value)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            string v = value?.ToString();
+            if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
+            nameValueCollection[name] = v;
+            return this;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -49,10 +71,10 @@ namespace TqkLibrary.Net
         public UriBuilder WithParamIfNotNull(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if(!string.IsNullOrWhiteSpace(value)) nameValueCollection[name] = value;
+            if (!string.IsNullOrWhiteSpace(value)) nameValueCollection[name] = value;
             return this;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public enum ChoThueSimResponseCode
     {
         Success = 0,
@@ -59,7 +61,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     }
     public enum ChoThueSimCarrier
     {
-        None, Viettel, Mobi, Vina, VNMB
+        Viettel, Mobi, Vina, VNMB
     }
     public class ChoThueSimBaseResult<T1, T2>
     {
@@ -79,62 +81,107 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public string Phone { get; set; }
         public double Balance { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
     /// <summary>
     /// https://chothuesimcode.com/account/api
     /// </summary>
     public sealed class ChoThueSimCodeApi : BaseApi
     {
-        private const string EndPoint = "https://chothuesimcode.com/api?";
-
+        private const string EndPoint = "https://chothuesimcode.com/api";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
         public ChoThueSimCodeApi(string ApiKey) : base(ApiKey)
         {
         }
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>> GetAccountInfo()
-          => RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>>(string.Format(EndPoint + "act=account&apik={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>> GetAccountInfo(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint).WithParam("act", "account").WithParam("apik", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>>();
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>> GetAppRunning()
-          => RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>>(string.Format(EndPoint + "act=app&apik={0}", ApiKey));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>> GetAppRunning(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint).WithParam("act", "app").WithParam("apik", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>>();
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(ChoThueSimAppInfo app, ChoThueSimCarrier carrier = ChoThueSimCarrier.None)
-        {
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["act"] = "number";
-            parameters["apik"] = ApiKey;
-            parameters["appId"] = app.Id.ToString();
-            if (carrier != ChoThueSimCarrier.None) parameters["carrier"] = carrier.ToString();
-            return RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>>(EndPoint + parameters.ToString());
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="carrier"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(
+            ChoThueSimAppInfo app, ChoThueSimCarrier? carrier = null, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("act", "number")
+                .WithParam("apik", ApiKey)
+                .WithParam("appId", app.Id)
+                .WithParamIfNotNull("carrier", carrier))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>>();
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(int appId, string number)
-        {
-            if (string.IsNullOrEmpty(number)) throw new ArgumentNullException(nameof(number));
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["act"] = "number";
-            parameters["apik"] = ApiKey;
-            parameters["appId"] = appId.ToString();
-            parameters["number"] = number;
-            return RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>>(EndPoint + parameters.ToString());
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appId"></param>
+        /// <param name="number"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(int appId, string number, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("act", "number")
+                .WithParam("apik", ApiKey)
+                .WithParam("appId", appId)
+                .WithParam("number", number))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>>();
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult>> GetMessage(ChoThueSimPhoneNumberResult phoneNumberResult)
-        {
-            if (null == phoneNumberResult) throw new ArgumentNullException(nameof(phoneNumberResult));
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["act"] = "code";
-            parameters["apik"] = ApiKey;
-            parameters["id"] = phoneNumberResult.Id.ToString();
-            return RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult>>(EndPoint + parameters.ToString());
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneNumberResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult>> GetMessage(ChoThueSimPhoneNumberResult phoneNumberResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("act", "code")
+                .WithParam("apik", ApiKey)
+                .WithParam("id", phoneNumberResult.Id))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult>>();
 
-        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>> CancelGetMessage(ChoThueSimPhoneNumberResult phoneNumberResult)
-        {
-            if (null == phoneNumberResult) throw new ArgumentNullException(nameof(phoneNumberResult));
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["act"] = "expired";
-            parameters["apik"] = ApiKey;
-            parameters["id"] = phoneNumberResult.Id.ToString();
-            return RequestGetAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>>(EndPoint + parameters.ToString());
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneNumberResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>> CancelGetMessage(ChoThueSimPhoneNumberResult phoneNumberResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("act", "expired")
+                .WithParam("apik", ApiKey)
+                .WithParam("id", phoneNumberResult.Id))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>>();
     }
 }

@@ -26,6 +26,14 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="apiKey"></param>
+        public AzProxyApiManaged(string apiKey)
+        {
+            this.azProxyApi = new AzProxyApi(apiKey);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         public AzProxyLocation? Location { get; set; }
         /// <summary>
         /// 
@@ -47,13 +55,15 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         /// <exception cref="NotImplementedException"></exception>
         public async Task<IProxyApiResponse> GetNewProxyAsync(CancellationToken cancellationToken)
         {
-            var proxy = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken);
+            var proxy = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken).ConfigureAwait(false);
+            var proxy2 = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken).ConfigureAwait(false);
+            DateTime nextTime = DateTime.Now.Add(proxy2.NextTime.HasValue ? proxy2.NextTime.Value : TimeSpan.FromMinutes(1));
             return new ProxyApiResponse()
             {
-                Proxy = proxy.Proxy,
-                IsSuccess = proxy.Status.Equals("success"),
-                NextTime = proxy.NextTime,
-                ExpiredTime = DateTime.Now.AddDays(1)
+                Proxy = proxy.Data?.Proxy,
+                IsSuccess = proxy.IsSuccess,
+                NextTime = nextTime,
+                ExpiredTime = nextTime.AddMinutes(20),
             };
         }
     }

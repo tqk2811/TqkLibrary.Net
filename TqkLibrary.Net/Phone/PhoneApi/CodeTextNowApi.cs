@@ -7,31 +7,63 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CodeTextNowApi : BaseApi
     {
         const string EndPoint = "http://codetextnow.com/api.php";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
         public CodeTextNowApi(string apiKey) : base(apiKey)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<CodeTextNowService>> Services(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("action", "services")
+                .WithParam("apikey", ApiKey))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<List<CodeTextNowService>>();
 
-        public Task<List<CodeTextNowService>> Services()
-          => RequestGetAsync<List<CodeTextNowService>>($"{EndPoint}?apikey={ApiKey}&action=services");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<CodeTextNowCreateRequest> CreateRequest(CodeTextNowService service, int count = 1, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("action", "create-request")
+                .WithParam("apikey", ApiKey)
+                .WithParam("serviceId", service.serviceId)
+                .WithParam("count", count))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<CodeTextNowCreateRequest>();
 
-        public Task<CodeTextNowCreateRequest> CreateRequest(CodeTextNowService service, int count = 1)
-          => RequestGetAsync<CodeTextNowCreateRequest>($"{EndPoint}?apikey={ApiKey}&action=create-request&serviceId={service.serviceId}&count={count}");
-
-        public Task<CodeTextNowDataRequest> DataRequest(CodeTextNowRent rent)
-         => RequestGetAsync<CodeTextNowDataRequest>($"{EndPoint}?apikey={ApiKey}&action=data-request&requestId={rent.requestId}");
-
-        //public void ReNewRequest()
-        //{
-
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<CodeTextNowDataRequest> DataRequest(CodeTextNowRent rent, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint)
+                .WithParam("action", "data-request")
+                .WithParam("apikey", ApiKey)
+                .WithParam("rentId", rent.requestId))
+            .WithCancellationToken(cancellationToken)
+            .ExecuteAsync<CodeTextNowDataRequest>();
 
     }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class CodeTextNowCreateRequest : CodeTextNowResponse<CodeTextNowResultResponse<List<CodeTextNowRent>>> { }
     public class CodeTextNowDataRequest : CodeTextNowResponse2<List<CodeTextNowData>> { }
 
@@ -97,4 +129,5 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public int status { get; set; }
         public string created_time { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
