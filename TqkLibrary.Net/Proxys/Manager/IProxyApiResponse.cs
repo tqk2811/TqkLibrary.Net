@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TqkLibrary.Net.Proxy.Manager
+namespace TqkLibrary.Net.Proxys.Manager
 {
     /// <summary>
     /// 

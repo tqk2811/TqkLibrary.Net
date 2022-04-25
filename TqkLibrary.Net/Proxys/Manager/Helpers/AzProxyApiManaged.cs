@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Proxy.ProxysApi;
+using TqkLibrary.Net.Proxys.ProxysApi;
 
-namespace TqkLibrary.Net.Proxy.Manager.Helpers
+namespace TqkLibrary.Net.Proxys.Manager.Helpers
 {
     /// <summary>
     /// 

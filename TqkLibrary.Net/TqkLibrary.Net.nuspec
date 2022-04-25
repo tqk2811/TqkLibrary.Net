@@ -10,12 +10,10 @@
 		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Net.git"/>
 		<license type="expression">MIT</license>
 		<dependencies>
-			<dependency id="HttpMultipartParser" version="5.1.0" />
 			<dependency id="Newtonsoft.Json" version="13.0.1" />
 			<dependency id="System.Drawing.Common" version="6.0.0" />
 			<dependency id="System.Net.Http" version="4.3.4" />
 			<dependency id="Nito.AsyncEx" version="5.1.2"/>
-			<dependency id="TqkLibrary.Utils" version="1.0.0-build2022041900"/>
 		</dependencies>
 	</metadata>
 	<files>

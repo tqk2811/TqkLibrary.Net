@@ -14,14 +14,16 @@ namespace TqkLibrary.Net
     /// </summary>
     public class UriBuilder
     {
-        readonly NameValueCollection nameValueCollection;
+        string url = string.Empty;
+        readonly NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(string.Empty);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="url"></param>
         public UriBuilder(string url)
         {
-            nameValueCollection = HttpUtility.ParseQueryString(url);
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            this.url = url;
         }
         /// <summary>
         /// 
@@ -29,7 +31,9 @@ namespace TqkLibrary.Net
         /// <param name="urls"></param>
         public UriBuilder(params string[] urls)
         {
-            nameValueCollection = HttpUtility.ParseQueryString(string.Join("", urls));
+            if (urls == null || urls.Length == 0) throw new ArgumentNullException(nameof(urls));
+            this.url = string.Join("", urls);
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
         }
 
         /// <summary>
@@ -97,7 +101,12 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => nameValueCollection.ToString();
+        public override string ToString()
+        {
+            string query = nameValueCollection.ToString();
+            if (string.IsNullOrWhiteSpace(query)) return url;
+            else return $"{url}?{nameValueCollection}";
+        }
 
         /// <summary>
         /// 

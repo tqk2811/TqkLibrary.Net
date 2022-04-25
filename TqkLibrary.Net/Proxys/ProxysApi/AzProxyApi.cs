@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 //https://documenter.getpostman.com/view/11108442/TzecCQHG
-namespace TqkLibrary.Net.Proxy.ProxysApi
+namespace TqkLibrary.Net.Proxys.ProxysApi
 {
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Nito.AsyncEx;
 
-namespace TqkLibrary.Net.Proxy.Manager
+namespace TqkLibrary.Net.Proxys.Manager
 {
     internal class ProxyApiItemData
     {

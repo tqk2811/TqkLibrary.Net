@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Proxy.ProxysApi;
-namespace TqkLibrary.Net.Proxy.Manager.Helpers
+using TqkLibrary.Net.Proxys.ProxysApi;
+namespace TqkLibrary.Net.Proxys.Manager.Helpers
 {
     /// <summary>
     /// 
@@ -49,6 +49,9 @@ namespace TqkLibrary.Net.Proxy.Manager.Helpers
         public async Task<IProxyApiResponse> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             var result = await tinsoftProxyApi.ChangeProxy(Location).ConfigureAwait(false);
+            if (!result.Success && result.Description?.Contains("expired") == true)
+                throw new InvalidOperationException(result.Description);
+            
             return new ProxyApiResponse()
             {
                 IsSuccess = result.Success,

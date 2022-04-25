@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.Manager
+namespace TqkLibrary.Net.Proxys.Manager
 {
     internal class Proxy_ : IProxy
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.Manager
+namespace TqkLibrary.Net.Proxys.Manager
 {
     /// <summary>
     /// 

@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.ProxysApi
+namespace TqkLibrary.Net.Proxys.ProxysApi
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class TMProxyStatResponse

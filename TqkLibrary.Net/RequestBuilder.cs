@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,11 +15,15 @@ namespace TqkLibrary.Net
     /// </summary>
     public class RequestBuilder
     {
-        readonly BaseApi baseApi;
         internal RequestBuilder(BaseApi baseApi)
         {
-            this.baseApi = baseApi;
+            this.HttpClient = baseApi.httpClient;
         }
+        internal RequestBuilder(HttpClient httpClient)
+        {
+            this.HttpClient = httpClient;
+        }
+        HttpClient HttpClient { get; set; }
         CancellationToken cancellationToken = CancellationToken.None;
         HttpContent httpContent = null;
         bool httpContentDispose = true;
@@ -26,7 +31,6 @@ namespace TqkLibrary.Net
         Dictionary<string, string> headers = new Dictionary<string, string>();
         HttpMethod method = null;
         Uri uri = null;
-        ApiException apiException = null;
 
         /// <summary>
         /// 
@@ -51,21 +55,31 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="uri"></param>
-        /// <param name="method"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrl(string uri, HttpMethod method)
+        public RequestBuilder WithUrlGet(string uri)
         {
-            return WithUrl(new Uri(uri), method);
+            return WithUrl(new Uri(uri), HttpMethod.Get);
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrlGet(string uri)
+        public RequestBuilder WithUrlGet(Uri uri)
         {
-            return WithUrl(new Uri(uri), HttpMethod.Get);
+            return WithUrl(uri, HttpMethod.Get);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        public RequestBuilder WithUrl(string uri, HttpMethod method)
+        {
+            return WithUrl(new Uri(uri), method);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -215,8 +229,10 @@ namespace TqkLibrary.Net
             if (method == null || uri == null) throw new InvalidOperationException($"method or uri is null");
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
             foreach (var header in headers) httpRequestMessage.Headers.Add(header.Key, header.Value);
+            if (httpRequestMessage.Headers.Accept.Count == 0 && HttpClient.DefaultRequestHeaders.Accept.Count == 0) 
+                httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (httpContent != null) httpRequestMessage.Content = httpContent;
-            HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+            HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
             if (httpContentDispose) httpContent?.Dispose();
             return httpResponseMessage;
         }

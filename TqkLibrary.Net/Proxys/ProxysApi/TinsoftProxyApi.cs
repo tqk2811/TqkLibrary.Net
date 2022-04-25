@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.ProxysApi
+namespace TqkLibrary.Net.Proxys.ProxysApi
 {
     /// <summary>
     /// 

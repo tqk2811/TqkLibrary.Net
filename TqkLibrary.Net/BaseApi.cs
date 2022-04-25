@@ -42,7 +42,7 @@ namespace TqkLibrary.Net
     /// <summary>
     /// 
     /// </summary>
-    public abstract class BaseApi
+    public abstract class BaseApi : IDisposable
     {
         static readonly Type typeString = typeof(string);
         static readonly Type typeBuffer = typeof(byte[]);
@@ -55,28 +55,68 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        protected BaseApi()
-        {
-
-        }
+        internal protected readonly HttpClient httpClient;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ApiKey"></param>
+        internal protected readonly HttpClientHandler httpClientHandler;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected BaseApi(HttpClientHandler httpClientHandler = null)
+        {
+            if(httpClientHandler == null)
+            {
+                httpClientHandler = new HttpClientHandler();
+                httpClientHandler.CookieContainer = new CookieContainer();
+                httpClientHandler.UseCookies = true;
+                httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+                httpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                httpClientHandler.AllowAutoRedirect = true;
+            }
+            httpClient = new HttpClient(httpClientHandler, true);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string ApiKey)
+        protected BaseApi(string ApiKey, HttpClientHandler httpClientHandler = null) : this(httpClientHandler)
         {
             if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
             this.ApiKey = ApiKey;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        ~BaseApi()
+        {
+            Dispose(false);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        void Dispose(bool disposing)
+        {
+            httpClient.Dispose();
+        }
 
 
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected RequestBuilder Build() => new RequestBuilder(this);
-
-
-
-
-
 
 
 
@@ -258,7 +298,7 @@ namespace TqkLibrary.Net
             where TResult : class
             where TException : class
         {
-            using HttpResponseMessage rep = await NetExtensions.httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            using HttpResponseMessage rep = await httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
             if (rep.IsSuccessStatusCode)
             {
                 if (typeof(TResult).Equals(typeBuffer))
