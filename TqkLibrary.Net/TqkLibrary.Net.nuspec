@@ -10,6 +10,8 @@
 		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Net.git"/>
 		<license type="expression">MIT</license>
 		<dependencies>
+			<dependency id="MailKit" version="3.2.0" />
+			<dependency id="MimeKit" version="3.2.0" />
 			<dependency id="Newtonsoft.Json" version="13.0.1" />
 			<dependency id="System.Drawing.Common" version="6.0.0" />
 			<dependency id="System.Net.Http" version="4.3.4" />

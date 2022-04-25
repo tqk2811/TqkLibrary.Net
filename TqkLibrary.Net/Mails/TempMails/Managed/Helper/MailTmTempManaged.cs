@@ -10,21 +10,21 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
     /// <summary>
     /// 
     /// </summary>
-    public class MailTmTempManaged : ITempMail
+    public class MailTmTempManaged : IMailManaged
     {
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<ITempMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(login)) throw new ArgumentNullException(nameof(login));
-            return Task.FromResult<ITempMailSession>(new MailTmTempManagedSession(login));
+            return Task.FromResult<IMailSession>(new MailTmTempManagedSession(login));
         }
     }
 
 
-    internal class MailTmTempManagedSession : ITempMailSession
+    internal class MailTmTempManagedSession : IMailSession
     {
         static readonly Random random = new Random();
         readonly MailTmApi mailTmApi = new MailTmApi();
@@ -49,7 +49,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         }
         public string Email => mailTmAccount?.Address;
 
-        public async Task<IEnumerable<ITempMailMail>> GetMailsAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default)
         {
             if (token == null) throw new InvalidOperationException();
 
@@ -81,7 +81,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         }
     }
 
-    internal class MailTmTempManagedMail : ITempMailMail
+    internal class MailTmTempManagedMail : IMail
     {
         readonly MailTmMessageData mailTmMessageData;
         public MailTmTempManagedMail(MailTmMessageData mailTmMessageData)

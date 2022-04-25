@@ -10,20 +10,20 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed
     /// <summary>
     /// 
     /// </summary>
-    public interface ITempMail
+    public interface IMailManaged
     {
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<ITempMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default);
+        Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default);
         
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public interface ITempMailSession : IDisposable
+    public interface IMailSession : IDisposable
     {
         /// <summary>
         /// 
@@ -38,7 +38,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<ITempMailMail>> GetMailsAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// some temp maill need delete account
@@ -50,7 +50,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed
     /// <summary>
     /// 
     /// </summary>
-    public interface ITempMailMail
+    public interface IMail
     {
         /// <summary>
         /// 

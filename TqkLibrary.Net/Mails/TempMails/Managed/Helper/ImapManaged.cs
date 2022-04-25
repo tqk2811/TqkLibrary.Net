@@ -30,7 +30,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
     /// <summary>
     /// 
     /// </summary>
-    public class ImapManaged : ITempMail
+    public class ImapManaged : IMailManaged
     {
         readonly string host;
         readonly int port;
@@ -55,7 +55,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ITempMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
         {
             using (await asyncLock.LockAsync(cancellationToken))
             {
@@ -69,7 +69,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
     /// <summary>
     /// 
     /// </summary>
-    public class ImapSession : ITempMailSession
+    public class ImapSession : IMailSession
     {
         readonly string host;
         readonly int port;
@@ -111,10 +111,10 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IEnumerable<ITempMailMail>> GetMailsAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default)
         {
             var uids = await imapClient.Inbox.SearchAsync(SearchQuery.All, cancellationToken).ConfigureAwait(false);
-            var results = new List<ITempMailMail>();
+            var results = new List<IMail>();
             foreach (var uid in uids)
             {
                 var message = await imapClient.Inbox.GetMessageAsync(uid, cancellationToken).ConfigureAwait(false);
@@ -139,7 +139,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
     /// <summary>
     /// 
     /// </summary>
-    public class IMapMail : ITempMailMail
+    public class IMapMail : IMail
     {
         readonly MimeMessage mimeMessage;
         internal IMapMail(MimeMessage mimeMessage)
