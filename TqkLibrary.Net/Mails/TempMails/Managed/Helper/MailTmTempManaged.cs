@@ -49,6 +49,8 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         }
         public string Email => mailTmAccount?.Address;
 
+        public string Password => mailTmAccount?.Password;
+
         public async Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default)
         {
             if (token == null) throw new InvalidOperationException();

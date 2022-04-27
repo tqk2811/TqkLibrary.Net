@@ -26,6 +26,14 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// 
         /// </summary>
         public string Password { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{UserName}|{Password}";
+        }
     }
     /// <summary>
     /// 
@@ -36,6 +44,14 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         readonly int port;
         readonly Queue<ImapAccount> imapAccounts;
         readonly AsyncLock asyncLock = new AsyncLock();
+        /// <summary>
+        /// 
+        /// </summary>
+        public event Action<ImapManaged> OnDequeue;
+        /// <summary>
+        /// 
+        /// </summary>
+        public IEnumerable<ImapAccount> ImapAccounts { get { return imapAccounts; } }
         /// <summary>
         /// 
         /// </summary>
@@ -59,17 +75,22 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         {
             using (await asyncLock.LockAsync(cancellationToken))
             {
+
                 if (imapAccounts.Count == 0) return null;
-                var account = imapAccounts.Dequeue();
-                return new ImapSession(host, port, account);
+
+                try
+                {
+                    var account = imapAccounts.Dequeue();
+                    return new ImapSession(host, port, account);
+                }
+                finally
+                {
+                    ThreadPool.QueueUserWorkItem((o) => OnDequeue?.Invoke(this));
+                }
             }
         }
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class ImapSession : IMailSession
+    internal class ImapSession : IMailSession
     {
         readonly string host;
         readonly int port;
@@ -82,35 +103,19 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         }
 
         readonly ImapClient imapClient = new ImapClient();
-        /// <summary>
-        /// 
-        /// </summary>
         public string Email => account.UserName;
+        public string Password => account.Password;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public Task DeleteAsync(CancellationToken cancellationToken = default)
         {
             return imapClient.Inbox.CloseAsync(cancellationToken: cancellationToken);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void Dispose()
         {
             imapClient.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+
         public async Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default)
         {
             var uids = await imapClient.Inbox.SearchAsync(SearchQuery.All, cancellationToken).ConfigureAwait(false);
@@ -123,11 +128,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
             return results;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+
         public async Task<string> InitAsync(CancellationToken cancellationToken = default)
         {
             await imapClient.ConnectAsync(host, port, SecureSocketOptions.Auto, cancellationToken).ConfigureAwait(false);
@@ -136,27 +137,17 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
             return account.UserName;
         }
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    public class IMapMail : IMail
+
+    internal class IMapMail : IMail
     {
         readonly MimeMessage mimeMessage;
         internal IMapMail(MimeMessage mimeMessage)
         {
             this.mimeMessage = mimeMessage ?? throw new ArgumentNullException(nameof(mimeMessage));
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string FromAddress => mimeMessage.From?.First()?.Name;
-        /// <summary>
-        /// 
-        /// </summary>
         public string Subject => mimeMessage.Subject;
-        /// <summary>
-        /// 
-        /// </summary>
         public string RawBody => mimeMessage.HtmlBody;
     }
 }

@@ -32,6 +32,10 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed
         /// <summary>
         /// 
         /// </summary>
+        public string Password { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns>Email</returns>
         Task<string> InitAsync(CancellationToken cancellationToken = default);
         /// <summary>
