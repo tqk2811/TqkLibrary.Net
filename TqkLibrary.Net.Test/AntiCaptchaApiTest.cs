@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Test
         {
 
         }
-        else Task.Delay(2000, antiCaptchaApi.cancellationToken).Wait();
+        else Task.Delay(2000).Wait();
       }
     }
   }

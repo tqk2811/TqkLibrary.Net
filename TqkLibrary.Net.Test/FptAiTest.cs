@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TqkLibrary.Net.FptAi;
+using TqkLibrary.Net.Others.FptAi;
 
 namespace TqkLibrary.Net.Test
 {
