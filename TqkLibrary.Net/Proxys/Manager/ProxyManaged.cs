@@ -16,6 +16,11 @@ namespace TqkLibrary.Net.Proxys.Manager
     {
         readonly Dictionary<IProxyApi, ProxyApiItemData> _dicts = new Dictionary<IProxyApi, ProxyApiItemData>();
         readonly AsyncLock asyncLock = new AsyncLock();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event Action<string> logCallback;
         /// <summary>
         /// 
         /// </summary>
@@ -43,7 +48,7 @@ namespace TqkLibrary.Net.Proxys.Manager
             if (isClear) _dicts.Clear();
             foreach (var api in apis) _dicts[api] = new ProxyApiItemData();
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -69,7 +74,7 @@ namespace TqkLibrary.Net.Proxys.Manager
                 using (await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
                 {
                     if (_dicts.Count == 0) return null;
-                    
+
                     var currTime = DateTime.Now;
                     //check is item can reset
                     var pair = _dicts.FirstOrDefault(x =>
@@ -78,13 +83,21 @@ namespace TqkLibrary.Net.Proxys.Manager
                         (AllowTimeLeft == TimeSpan.Zero || currTime + AllowTimeLeft < x.Value.ExpiredTime));
                     if (pair.Key != null)
                     {
+                        ThreadPool.QueueUserWorkItem((o) => logCallback?.Invoke("ProxyManaged.GetNewProxyAsync"));
                         IProxyApiResponse proxyApiResponse = await pair.Key.GetNewProxyAsync(cancellationToken).ConfigureAwait(false);
                         if (proxyApiResponse == null) throw new InvalidOperationException(nameof(proxyApiResponse));
                         pair.Value.Reset(proxyApiResponse);
 
                         if (proxyApiResponse.IsSuccess == true)
                         {
+                            string log = $"ProxyManaged Got New Proxy {pair.Value.CurrentProxy} for key {pair.Key}";
+                            ThreadPool.QueueUserWorkItem((o) => logCallback?.Invoke(log));
                             return new Proxy_(pair.Value);
+                        }
+                        else
+                        {
+                            string log = $"ProxyManaged key {pair.Key} wait change in {proxyApiResponse.NextTime:HH:mm:ss}";
+                            ThreadPool.QueueUserWorkItem((o) => logCallback?.Invoke(log));
                         }
                     }
                     else
@@ -93,6 +106,8 @@ namespace TqkLibrary.Net.Proxys.Manager
                         pair = _dicts.FirstOrDefault(x => MaxUseCountPerApi > x.Value.UsingCount);
                         if (pair.Key != null)
                         {
+                            string log = $"ProxyManaged key {pair.Key} re-use {pair.Value.CurrentProxy}";
+                            ThreadPool.QueueUserWorkItem((o) => logCallback?.Invoke(log));
                             return new Proxy_(pair.Value);
                         }
                     }

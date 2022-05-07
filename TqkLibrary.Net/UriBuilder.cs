@@ -32,7 +32,7 @@ namespace TqkLibrary.Net
         public UriBuilder(params string[] urls)
         {
             if (urls == null || urls.Length == 0) throw new ArgumentNullException(nameof(urls));
-            this.url = string.Join("", urls);
+            this.url = string.Join("/", urls.Select(x => x.TrimStart('/').TrimEnd('/')));
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
         }
 

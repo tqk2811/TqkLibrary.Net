@@ -33,8 +33,18 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         public string socks5 { get; set; }
         public string https { get; set; }
         public int? timeout { get; set; }
-        public int next_request { get; set; }
-        public DateTime expired_at { get; set; }
+        public int? next_request { get; set; }
+        public string expired_at { get; set; }
+        
+        [JsonIgnore]
+        public DateTime? ExpiredAt
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(expired_at)) return null;
+                return DateTime.Parse(expired_at);
+            }
+        }
     }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     /// <summary>

@@ -51,7 +51,7 @@ namespace TqkLibrary.Net.Proxys.Manager.Helpers
                 IsSuccess = result.code == 0,
                 Proxy = result?.data.https ?? string.Empty,
                 NextTime = DateTime.Now.AddSeconds(result?.data.next_request ?? 5),
-                ExpiredTime = result?.data.expired_at ?? DateTime.Now
+                ExpiredTime = result?.data.ExpiredAt ?? DateTime.Now
             };
         }
     }
