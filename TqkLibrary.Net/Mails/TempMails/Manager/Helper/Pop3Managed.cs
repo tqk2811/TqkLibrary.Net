@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
+namespace TqkLibrary.Net.Mails.TempMails.Manager.Helper
 {
     /// <summary>
     /// 
@@ -34,7 +34,18 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public Task<IMailSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mailSession"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task ReQueueSessionAsync(IMailSession mailSession, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

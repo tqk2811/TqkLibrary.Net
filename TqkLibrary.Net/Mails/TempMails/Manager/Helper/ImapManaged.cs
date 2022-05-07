@@ -11,7 +11,7 @@ using MailKit.Security;
 using MailKit;
 using MailKit.Search;
 
-namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
+namespace TqkLibrary.Net.Mails.TempMails.Manager.Helper
 {
     /// <summary>
     /// 
@@ -71,9 +71,9 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<IMailSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
         {
-            using (await asyncLock.LockAsync(cancellationToken))
+            using (await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
             {
 
                 if (imapAccounts.Count == 0) return null;
@@ -89,12 +89,29 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mailSession"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task ReQueueSessionAsync(IMailSession mailSession, CancellationToken cancellationToken = default)
+        {
+            if (mailSession is ImapSession imapSession)
+            {
+                using (await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    imapAccounts.Enqueue(imapSession.account);
+                }
+            }
+        }
     }
     internal class ImapSession : IMailSession
     {
         readonly string host;
         readonly int port;
-        readonly ImapAccount account;
+        internal readonly ImapAccount account;
         internal ImapSession(string host, int port, ImapAccount imapAccount)
         {
             this.host = host;

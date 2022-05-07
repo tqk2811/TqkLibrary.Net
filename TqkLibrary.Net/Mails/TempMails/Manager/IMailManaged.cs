@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mails.TempMails.Managed
+namespace TqkLibrary.Net.Mails.TempMails.Manager
 {
     /// <summary>
     /// 
@@ -16,8 +16,12 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default);
-        
+        Task<IMailSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task ReQueueSessionAsync(IMailSession mailSession, CancellationToken cancellationToken = default);
     }
 
     /// <summary>

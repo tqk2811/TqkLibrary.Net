@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
+namespace TqkLibrary.Net.Mails.TempMails.Manager.Helper
 {
     /// <summary>
     /// 
@@ -16,10 +16,20 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public Task<IMailSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(login)) throw new ArgumentNullException(nameof(login));
             return Task.FromResult<IMailSession>(new MailTmTempManagedSession(login));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mailSession"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task ReQueueSessionAsync(IMailSession mailSession, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
         }
     }
 
@@ -49,7 +59,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
         }
         public string Email => mailTmAccount?.Address;
 
-        public string Password => mailTmAccount?.Password;
+        public string Password => string.Empty;
 
         public async Task<IEnumerable<IMail>> GetMailsAsync(CancellationToken cancellationToken = default)
         {

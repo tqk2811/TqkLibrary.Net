@@ -11,8 +11,45 @@ namespace TqkLibrary.Net.Mails.TempMails
     /// <summary>
     /// 
     /// </summary>
+    public class TempMailOrgEndPoint
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public Uri Uri { get; }
+        internal TempMailOrgEndPoint(Uri uri)
+        {
+            this.Uri = uri;
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
     public class TempMailOrg : BaseApi
     {
+        /// <summary>
+        /// https://mob2.temp-mail.org
+        /// </summary>
+        public static readonly TempMailOrgEndPoint Mob2 = new TempMailOrgEndPoint(new Uri("https://mob2.temp-mail.org"));
+        /// <summary>
+        /// https://web2.temp-mail.org
+        /// </summary>
+        public static readonly TempMailOrgEndPoint Web2 = new TempMailOrgEndPoint(new Uri("https://web2.temp-mail.org"));
+
+        TempMailOrgEndPoint _EndPoint = Mob2;
+        /// <summary>
+        /// 
+        /// </summary>
+        public TempMailOrgEndPoint EndPoint
+        {
+            get { return _EndPoint; }
+            set
+            {
+                if (value == null) throw new NullReferenceException(nameof(EndPoint));
+                _EndPoint = value;
+            }
+        }
+        const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36 Edg/90.0.818.62";
         /// <summary>
         /// 
         /// </summary>
@@ -20,42 +57,46 @@ namespace TqkLibrary.Net.Mails.TempMails
         {
 
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public Task<TempMailOrgToken> InitToken(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrl("https://mob2.temp-mail.org/mailbox", HttpMethod.Post)
-            .WithHeader("User-Agent", "3.00")
+            .WithUrl(new UriBuilder(EndPoint.Uri.AbsoluteUri, "mailbox"), HttpMethod.Post)
+            .WithHeader("User-Agent", UserAgent)
             .WithHeader("Accept", "application/json")
-            .WithHeader("Host", "mob2.temp-mail.org")
-            //.WithHeader("Connection", "Keep-Alive")
-            .WithHeader("Accept-Encoding", "gzip, deflate")
+            .WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgToken>();
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TempMailOrgMailBox> Messages(TempMailOrgToken token, CancellationToken cancellationToken = default)
+        public Task<TempMailOrgMailBox> Messages(
+            TempMailOrgToken token,
+            CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet("https://mob2.temp-mail.org/messages")
+            .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages"))
             .WithHeader("Authorization", token.Token)
-            .WithHeader("Host", "mob2.temp-mail.org")
-            .WithHeader("User-Agent", "3.02")
+            .WithHeader("User-Agent", UserAgent)
+            .WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgMailBox>();
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TempMailOrgMessageData> MessageData(TempMailOrgToken token, TempMailOrgMessageReView messageReView, CancellationToken cancellationToken = default)
+        public Task<TempMailOrgMessageData> MessageData(
+            TempMailOrgToken token,
+            TempMailOrgMessageReView messageReView,
+            CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet($"https://mob2.temp-mail.org/messages/{messageReView.Id}")
+            .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages", messageReView.Id))
             .WithHeader("Authorization", token.Token)
-            .WithHeader("Host", "mob2.temp-mail.org")
-            .WithHeader("User-Agent", "3.02")
+            .WithHeader("User-Agent", UserAgent)
+            .WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgMessageData>();
 
@@ -109,15 +150,15 @@ namespace TqkLibrary.Net.Mails.TempMails
     {
         [JsonProperty("user")]
         public string User { get; set; }
-        
+
         [JsonProperty("mailbox")]
         public string Mailbox { get; set; }
-        
+
         [JsonProperty("bodyHtml")]
         public string BodyHtml { get; set; }
-        
+
         //public object[] attachments { get; set; }
-        
+
         [JsonProperty("createdAt")]
         public DateTime CreatedAt { get; set; }
     }

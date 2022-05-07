@@ -5,20 +5,44 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
+namespace TqkLibrary.Net.Mails.TempMails.Manager.Helper
 {
     /// <summary>
     /// 
     /// </summary>
     public class TempMailOrgManaged : IMailManaged
     {
+        TempMailOrgEndPoint _endPoint = TempMailOrg.Web2;
+        /// <summary>
+        /// 
+        /// </summary>
+        public TempMailOrgEndPoint EndPoint
+        {
+            get { return _endPoint; }
+            set
+            {
+                if (_endPoint == null) throw new ArgumentNullException(nameof(EndPoint));
+                _endPoint = value;
+            }
+        }
+        
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<IMailSession> CreateTempMailSessionAsync(string login, CancellationToken cancellationToken = default)
+        public Task<IMailSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<IMailSession>(new TempMailOrgSession());
+            return Task.FromResult<IMailSession>(new TempMailOrgSession(EndPoint));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mailSession"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task ReQueueSessionAsync(IMailSession mailSession, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
         }
     }
 
@@ -26,9 +50,9 @@ namespace TqkLibrary.Net.Mails.TempMails.Managed.Helper
     {
         readonly TempMailOrg tempMailOrg = new TempMailOrg();
         TempMailOrgToken token;
-        internal TempMailOrgSession()
+        internal TempMailOrgSession(TempMailOrgEndPoint endPoint)
         {
-
+            tempMailOrg.EndPoint = endPoint;
         }
 
         public string Email => token.MailBox;
