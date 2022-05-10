@@ -19,7 +19,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="token"></param>
-        public KfarmTextNowApi(string token) : base(token)
+        public KfarmTextNowApi(string token) : base(token, NetSingleton.httpClient)
         {
         }
         /// <summary>

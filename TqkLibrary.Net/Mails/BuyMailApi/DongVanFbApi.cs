@@ -17,7 +17,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public DongVanFbApi(string apiKey) : base(apiKey)
+        public DongVanFbApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }

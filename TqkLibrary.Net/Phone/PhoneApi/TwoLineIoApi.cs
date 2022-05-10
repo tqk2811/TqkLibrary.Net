@@ -17,7 +17,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public TwoLineIoApi(string apiKey) : base(apiKey)
+        public TwoLineIoApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }
@@ -199,8 +199,8 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<List<TwoLineIoService>> GetServicesByContries(
-            TwoLineIoCountry country, 
-            TwoLineIoOperator codeOperator = null, 
+            TwoLineIoCountry country,
+            TwoLineIoOperator codeOperator = null,
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availableservice")
@@ -208,7 +208,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParamIfNotNull("operatorId", codeOperator?.OperatorId))
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<List<TwoLineIoService>>();
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -218,19 +218,19 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task PurchaseOtpCountry(
-            TwoLineIoCountry country, 
+            TwoLineIoCountry country,
             TwoLineIoService service,
             TwoLineIoOperator @operator = null,
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availableservice")
-                .WithParam("apikey",ApiKey)
+                .WithParam("apikey", ApiKey)
                 .WithParam("countryId", country.CountryId)
                 .WithParam("serviceId", service.ServiceId)
                 .WithParamIfNotNull("operatorId", @operator?.OperatorId))
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<List<TwoLineIoService>>();
-        
+
     }
 
 

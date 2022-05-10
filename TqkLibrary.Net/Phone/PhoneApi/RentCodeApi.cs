@@ -78,7 +78,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     {
         private const string EndPoint = "https://api.rentcode.net/api/v2/";
 
-        public RentCodeApi(string ApiKey) : base(ApiKey)
+        public RentCodeApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
         }
 

@@ -35,7 +35,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         public int? timeout { get; set; }
         public int? next_request { get; set; }
         public string expired_at { get; set; }
-        
+
         [JsonIgnore]
         public DateTime? ExpiredAt
         {
@@ -57,7 +57,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public TmProxyApi(string ApiKey) : base(ApiKey)
+        public TmProxyApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
 
         }

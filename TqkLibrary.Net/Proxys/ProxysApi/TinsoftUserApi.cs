@@ -41,7 +41,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         /// 
         /// </summary>
         /// <param name="UserApiKey"></param>
-        public TinsoftUserApi(string UserApiKey) : base(UserApiKey)
+        public TinsoftUserApi(string UserApiKey) : base(UserApiKey, NetSingleton.httpClient)
         {
         }
         /// <summary>

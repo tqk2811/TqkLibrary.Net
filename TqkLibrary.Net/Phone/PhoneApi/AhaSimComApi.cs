@@ -10,14 +10,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     /// <summary>
     /// http://ahasim.com/user/api
     /// </summary>
-    public class AhaSimCom : BaseApi
+    public class AhaSimComApi : BaseApi
     {
         const string EndPoint = "http://ahasim.com/api";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public AhaSimCom(string apiKey) : base(apiKey)
+        public AhaSimComApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }
@@ -227,7 +227,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public double Refund { get; set; }
     }
 
-    
+
     public class AhaSimComHistory
     {
         [JsonProperty("service_id")]
@@ -260,7 +260,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         [JsonProperty("message")]
         public AhaSimComMessage Message { get; set; }
     }
-    
+
     public class AhaSimComResponse<T>
     {
         [JsonProperty("success")]
@@ -268,7 +268,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
 
         [JsonProperty("message")]
         public string Message { get; set; }
-        
+
         [JsonProperty("data")]
         public T Data { get; set; }
     }

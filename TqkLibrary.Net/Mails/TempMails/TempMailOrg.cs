@@ -53,7 +53,7 @@ namespace TqkLibrary.Net.Mails.TempMails
         /// <summary>
         /// 
         /// </summary>
-        public TempMailOrg()
+        public TempMailOrg() : base(NetSingleton.httpClient)
         {
 
         }

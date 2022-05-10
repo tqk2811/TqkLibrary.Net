@@ -19,7 +19,7 @@ namespace TqkLibrary.Net.Others.FptAi
                 while (true)
                 {
                     await Task.Delay(step, cancellationToken).ConfigureAwait(false);
-                    using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    using HttpResponseMessage httpResponseMessage = await NetSingleton.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                     if (httpResponseMessage.IsSuccessStatusCode) return await httpResponseMessage.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                     if (cancellationTokenSource.IsCancellationRequested) return await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                 }

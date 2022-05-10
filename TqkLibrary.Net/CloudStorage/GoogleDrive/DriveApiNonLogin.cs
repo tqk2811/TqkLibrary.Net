@@ -20,7 +20,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     public static async Task Download(string fileId, Stream save, CancellationToken cancellationToken = default)
     {
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?id={fileId}");
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetSingleton.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       if(httpResponseMessage.IsSuccessStatusCode)
       {
         if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
@@ -36,7 +36,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
       
 
       using HttpRequestMessage httpRequestMessage2 = new HttpRequestMessage(HttpMethod.Get, $"https://docs.google.com/uc?confirm=abeQ?id={fileId}");
-      using HttpResponseMessage httpResponseMessage2 = await NetExtensions.httpClient.SendAsync(httpRequestMessage2, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage2 = await NetSingleton.httpClient.SendAsync(httpRequestMessage2, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       if (httpResponseMessage2.EnsureSuccessStatusCode().Content.Headers.ContentType.MediaType.Equals("application/octet-stream"))
       {
         await (await httpResponseMessage2.Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(save, 81920, cancellationToken).ConfigureAwait(false);
@@ -94,7 +94,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
       httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com");
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetSingleton.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
       return await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 
@@ -110,7 +110,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
       string url = $"https://docs.google.com/spreadsheets/d/{fileId}/export?format={format}&id={fileId}";
       using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
       httpRequestMessage.Headers.Referrer = new Uri("https://docs.google.com");
-      using HttpResponseMessage httpResponseMessage = await NetExtensions.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+      using HttpResponseMessage httpResponseMessage = await NetSingleton.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
       await (await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync().ConfigureAwait(false)).CopyToAsync(copy, 81920, cancellationToken).ConfigureAwait(false);
     }
 

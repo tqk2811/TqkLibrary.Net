@@ -127,7 +127,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         /// <param name="license"></param>
         /// <param name="secret"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public TtProxyApi(string license, string secret) : base(license)
+        public TtProxyApi(string license, string secret) : base(license, NetSingleton.httpClient)
         {
             if (string.IsNullOrEmpty(secret)) throw new ArgumentNullException(nameof(secret));
             this.secret = secret;
@@ -257,7 +257,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
                 .WithParamIfNotNull("key", subLicenseKey))
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TtProxyResult<TtProxySubLicenseRenewResult>>();
-        
+
         /// <summary>
         /// 
         /// </summary>

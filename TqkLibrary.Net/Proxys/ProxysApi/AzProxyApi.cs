@@ -75,7 +75,7 @@ namespace TqkLibrary.Net.Proxys.ProxysApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public AzProxyApi(string apiKey) : base(apiKey)
+        public AzProxyApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }

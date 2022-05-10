@@ -65,7 +65,7 @@ namespace TqkLibrary.Net
         /// </summary>
         protected BaseApi(HttpClientHandler httpClientHandler = null)
         {
-            if(httpClientHandler == null)
+            if (httpClientHandler == null)
             {
                 httpClientHandler = new HttpClientHandler();
                 httpClientHandler.CookieContainer = new CookieContainer();
@@ -86,6 +86,29 @@ namespace TqkLibrary.Net
             if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
             this.ApiKey = ApiKey;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        /// <param name="httpClient"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(string ApiKey, HttpClient httpClient)
+        {
+            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.ApiKey = ApiKey;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(HttpClient httpClient)
+        {
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -105,7 +128,7 @@ namespace TqkLibrary.Net
 
         void Dispose(bool disposing)
         {
-            httpClient.Dispose();
+            if (httpClient != NetSingleton.httpClient) httpClient.Dispose();
         }
 
 

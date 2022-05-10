@@ -17,7 +17,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public CodeTextNowApi(string apiKey) : base(apiKey)
+        public CodeTextNowApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }

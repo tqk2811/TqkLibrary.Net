@@ -14,7 +14,7 @@ namespace TqkLibrary.Net.ImagesHostApi
     {
         private const string EndPoint = "https://api.imageshack.com/v2/images";
 
-        public ImagesHackApi(string ApiKey) : base(ApiKey)
+        public ImagesHackApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
         }
 

@@ -93,7 +93,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public ChoThueSimCodeApi(string ApiKey) : base(ApiKey)
+        public ChoThueSimCodeApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
         }
 

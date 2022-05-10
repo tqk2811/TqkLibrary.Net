@@ -256,7 +256,7 @@ namespace TqkLibrary.Net.Mails.TempMails
         /// <summary>
         /// 
         /// </summary>
-        public MailTmApi()
+        public MailTmApi() : base(NetSingleton.httpClient)
         {
 
         }

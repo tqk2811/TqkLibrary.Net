@@ -258,7 +258,7 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <param name="ApiKey">ApiKey</param>
-        public AntiCaptchaApi(string ApiKey) : base(ApiKey)
+        public AntiCaptchaApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
         }
         /// <summary>
@@ -276,7 +276,7 @@ namespace TqkLibrary.Net.Captcha
                 LanguagePool = languagePool
             };
 
-            string json = JsonConvert.SerializeObject(createTaskJson, NetExtensions.JsonSerializerSettings);
+            string json = JsonConvert.SerializeObject(createTaskJson, NetSingleton.JsonSerializerSettings);
             return await RequestPostAsync<AntiCaptchaTaskResponse>(
               EndPoint + "/createTask",
               null,
@@ -294,14 +294,14 @@ namespace TqkLibrary.Net.Captcha
             taskResultJson.ClientKey = ApiKey;
             taskResultJson.TaskId = task.TaskId.Value;
 
-            string json = JsonConvert.SerializeObject(taskResultJson, NetExtensions.JsonSerializerSettings);
+            string json = JsonConvert.SerializeObject(taskResultJson, NetSingleton.JsonSerializerSettings);
             return RequestPostAsync<AntiCaptchaTaskResultResponse>(
               EndPoint + "/getTaskResult",
               null,
               new StringContent(json, Encoding.UTF8, "application/json"));
         }
     }
-    
+
     /// <summary>
     /// 
     /// </summary>

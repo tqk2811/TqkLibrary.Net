@@ -10,14 +10,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     /// <summary>
     /// https://docs.5sim.net/
     /// </summary>
-    public class FiveSimNet : BaseApi
+    public class FiveSimNetApi : BaseApi
     {
         const string EndPoint = "https://5sim.net/v1";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public FiveSimNet(string apiKey) : base(apiKey)
+        public FiveSimNetApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
         }

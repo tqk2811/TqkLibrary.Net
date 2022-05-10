@@ -62,7 +62,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     {
         private const string EndPoint = "http://api.simthue.com";
 
-        public SimThueApi(string ApiKey) : base(ApiKey)
+        public SimThueApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
         {
         }
 
