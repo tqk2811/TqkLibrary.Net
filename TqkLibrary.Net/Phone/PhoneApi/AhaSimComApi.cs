@@ -57,22 +57,22 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// </summary>
         /// <param name="service">Mã dịch vụ lấy ở <see cref="ServiceList"/></param>
         /// <param name="networks">ID nhà mạng lấy ở <see cref="NetworkList"/></param>
-        /// <param name="prefix">Đầu số muốn lấy số.Bao gồm các giá trị đầu số của các nhà mạng, dùng dấu phẩy nếu muốn lấy nhiều đầu số</param>
-        /// <param name="except_prefix"></param>
+        /// <param name="prefixs">Đầu số muốn lấy số.Bao gồm các giá trị đầu số của các nhà mạng, dùng dấu phẩy nếu muốn lấy nhiều đầu số</param>
+        /// <param name="except_prefixs"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<AhaSimComResponse<AhaSimComSession>> PhoneNewSession(
             AhaSimComService service,
             IEnumerable<AhaSimComNetwork> networks = null,
-            string prefix = null,
-            string except_prefix = null,
+            IEnumerable<string> prefixs = null,
+            IEnumerable<string> except_prefixs = null,
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
                 .WithParam("service", service.Id)
                 .WithParamIfNotNull("network", networks == null ? null : string.Join(",", networks.Select(x => x.Id)))
-                .WithParamIfNotNull("prefix", prefix)
-                .WithParamIfNotNull("except_prefix", except_prefix))
+                .WithParamIfNotNull("prefix",  prefixs == null ? null : string.Join(",", prefixs))
+                .WithParamIfNotNull("except_prefix", except_prefixs == null ? null : string.Join(",", except_prefixs)))
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>();
 

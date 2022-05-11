@@ -70,16 +70,16 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Manager.Helpers
         {
             if (ChoThueSimAppInfo == null) throw new InvalidOperationException($"{nameof(ChoThueSimAppInfo)} is null");
             var phone = await choThueSimCodeApi.GetPhoneNumber(ChoThueSimAppInfo, ChoThueSimCarrier, cancellationToken).ConfigureAwait(false);
-            return new ChoThueSimCodePhoneSession(choThueSimCodeApi, phone);
+            return new ChoThueSimCodeManagedSession(choThueSimCodeApi, phone);
         }
     }
 
 
-    internal class ChoThueSimCodePhoneSession : IPhoneSession
+    internal class ChoThueSimCodeManagedSession : IPhoneSession
     {
         readonly ChoThueSimCodeApi choThueSimCodeApi;
         readonly ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult> phone;
-        internal ChoThueSimCodePhoneSession(
+        internal ChoThueSimCodeManagedSession(
             ChoThueSimCodeApi choThueSimCodeApi, 
             ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult> phone)
         {
@@ -97,14 +97,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Manager.Helpers
         public async Task<IEnumerable<IPhoneSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var message = await choThueSimCodeApi.GetMessage(phone.Result, cancellationToken).ConfigureAwait(false);
-            return new ChoThueSimCodePhoneSms[] { new ChoThueSimCodePhoneSms(message) };
+            return new ChoThueSimCodeManagedSms[] { new ChoThueSimCodeManagedSms(message) };
         }
     }
 
-    internal class ChoThueSimCodePhoneSms : IPhoneSms
+    internal class ChoThueSimCodeManagedSms : IPhoneSms
     {
         readonly ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult> sms;
-        internal ChoThueSimCodePhoneSms(
+        internal ChoThueSimCodeManagedSms(
             ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult> sms)
         {
             this.sms = sms;
