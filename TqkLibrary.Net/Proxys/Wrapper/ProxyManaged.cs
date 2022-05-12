@@ -40,6 +40,20 @@ namespace TqkLibrary.Net.Proxys.Wrapper
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="proxyApi"></param>
+        /// <param name="isClear"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task Load(IProxyApiWrapper proxyApi, bool isClear = true)
+        {
+            using var l = await asyncLock.LockAsync().ConfigureAwait(false);
+            if (isClear) _dicts.Clear();
+            _dicts[proxyApi] = new ProxyApiItemData();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public async Task Load(IEnumerable<IProxyApiWrapper> proxyApis, bool isClear = true)
         {
             var apis = proxyApis?.ToList() ?? throw new ArgumentNullException(nameof(proxyApis));

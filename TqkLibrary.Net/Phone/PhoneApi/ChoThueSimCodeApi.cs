@@ -8,81 +8,6 @@ using System.Web;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public enum ChoThueSimResponseCode
-    {
-        Success = 0,
-        Error = 1,
-    }
-
-    public enum ChoThueSimResponseCodeGetPhoneNumber
-    {
-        Success = 0,
-        WalletNotEnough = 1,
-        AppNotExist = 2,
-        PhoneNumberIsTemporarilyRunningOut = 3
-    }
-
-    public enum ChoThueSimResponseCodeMessage
-    {
-        Success = 0,
-        Waitting = 1,
-        Timeout = 2,
-        InputIsCorrect = 3
-    }
-
-    public enum ChoThueSimResponseCodeCancelMessage
-    {
-        Success = 0,
-        IdNotFound = 1,
-        WasCanceled = 2
-    }
-    public class ChoThueSimRefundInfo
-    {
-        public double Balance { get; set; }
-        public double Refund { get; set; }
-    }
-    public class ChoThueSimPhoneNumberResult
-    {
-        public int Id { get; set; }
-        public string Number { get; set; }
-        public string App { get; set; }
-        public double Cost { get; set; }
-        public double Balance { get; set; }
-    }
-    public class ChoThueSimMessageResult
-    {
-        public string SMS { get; set; }
-        public string Code { get; set; }
-        public double? Cost { get; set; }
-        public bool? IsCall { get; set; }
-        public string CallFile { get; set; }
-        public string CallText { get; set; }
-    }
-    public enum ChoThueSimCarrier
-    {
-        Viettel, Mobi, Vina, VNMB
-    }
-    public class ChoThueSimBaseResult<T1, T2>
-    {
-        public T1 ResponseCode { get; set; }
-        public string Msg { get; set; }
-        public T2 Result { get; set; }
-    }
-    public class ChoThueSimAppInfo
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public double Cost { get; set; }
-    }
-    public class ChoThueSimAccountInfo
-    {
-        public string Name { get; set; }
-        public string Phone { get; set; }
-        public double Balance { get; set; }
-    }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-
     /// <summary>
     /// https://chothuesimcode.com/account/api
     /// </summary>
@@ -184,4 +109,82 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>>();
     }
+
+
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    public enum ChoThueSimResponseCode
+    {
+        Success = 0,
+        Error = 1,
+    }
+
+    public enum ChoThueSimResponseCodeGetPhoneNumber
+    {
+        Success = 0,
+        WalletNotEnough = 1,
+        AppNotExist = 2,
+        PhoneNumberIsTemporarilyRunningOut = 3
+    }
+
+    public enum ChoThueSimResponseCodeMessage
+    {
+        Success = 0,
+        Waitting = 1,
+        Timeout = 2,
+        InputIsCorrect = 3
+    }
+
+    public enum ChoThueSimResponseCodeCancelMessage
+    {
+        Success = 0,
+        IdNotFound = 1,
+        WasCanceled = 2
+    }
+    public class ChoThueSimRefundInfo
+    {
+        public double Balance { get; set; }
+        public double Refund { get; set; }
+    }
+    public class ChoThueSimPhoneNumberResult
+    {
+        public int Id { get; set; }
+        public string Number { get; set; }
+        public string App { get; set; }
+        public double Cost { get; set; }
+        public double Balance { get; set; }
+    }
+    public class ChoThueSimMessageResult
+    {
+        public string SMS { get; set; }
+        public string Code { get; set; }
+        public double? Cost { get; set; }
+        public bool? IsCall { get; set; }
+        public string CallFile { get; set; }
+        public string CallText { get; set; }
+    }
+    public enum ChoThueSimCarrier
+    {
+        Viettel, Mobi, Vina, VNMB
+    }
+    public class ChoThueSimBaseResult<T1, T2>
+    {
+        public T1 ResponseCode { get; set; }
+        public string Msg { get; set; }
+        public T2 Result { get; set; }
+    }
+    public class ChoThueSimAppInfo
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double Cost { get; set; }
+    }
+    public class ChoThueSimAccountInfo
+    {
+        public string Name { get; set; }
+        public string Phone { get; set; }
+        public double Balance { get; set; }
+    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

@@ -13,11 +13,11 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
     public class FiveSimNetWrapper : IPhoneWrapper
     {
         /// <summary>
-        /// 
+        /// default: any
         /// </summary>
         public string Country { get; set; } = "any";
         /// <summary>
-        /// 
+        /// default: any
         /// </summary>
         public string Operator { get; set; } = "any";
         /// <summary>

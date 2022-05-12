@@ -57,6 +57,15 @@ namespace TqkLibrary.Net.Mails.TempMails
         {
 
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClient"></param>
+        public TempMailOrg(HttpClient httpClient) : base(httpClient)
+        {
+
+        }
 
         /// <summary>
         /// 

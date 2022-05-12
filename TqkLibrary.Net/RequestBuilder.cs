@@ -228,9 +228,15 @@ namespace TqkLibrary.Net
         {
             if (method == null || uri == null) throw new InvalidOperationException($"method or uri is null");
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+
             foreach (var header in headers) httpRequestMessage.Headers.Add(header.Key, header.Value);
-            if (httpRequestMessage.Headers.Accept.Count == 0 && HttpClient.DefaultRequestHeaders.Accept.Count == 0) 
+
+            if (httpRequestMessage.Headers.Accept.Count == 0 && HttpClient.DefaultRequestHeaders.Accept.Count == 0)
                 httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(HttpClient.DefaultRequestHeaders.Host))
+                httpRequestMessage.Headers.Host = uri.Host;
+
             if (httpContent != null) httpRequestMessage.Content = httpContent;
             HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
             if (httpContentDispose) httpContent?.Dispose();
@@ -256,7 +262,9 @@ namespace TqkLibrary.Net
         /// <typeparam name="TException"></typeparam>
         /// <returns></returns>
         /// <exception cref="ApiException"></exception>
-        public async Task<TResult> ExecuteAsync<TResult, TException>() where TResult : class where TException : class
+        public async Task<TResult> ExecuteAsync<TResult, TException>() 
+            where TResult : class 
+            where TException : class
         {
             using HttpResponseMessage rep = await ExecuteAsync();
             if (rep.IsSuccessStatusCode)

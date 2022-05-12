@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TqkLibrary.Net.Mail.TempMail;
+using TqkLibrary.Net.Mails.TempMails;
 
 namespace TqkLibrary.Net.Test.TempMail
 {
@@ -10,9 +10,9 @@ namespace TqkLibrary.Net.Test.TempMail
         [TestMethod]
         public void TestMethod1()
         {
-            MailTm.Test();
-            var mail = MailTm.NewInstanceAsync().Result;
-            mail.StartListen().Wait();
+            //MailTmApi.Test();
+            //var mail = MailTm.NewInstanceAsync().Result;
+            //mail.StartListen().Wait();
         }
     }
 }

@@ -8,20 +8,31 @@ namespace TqkLibrary.Net
     /// </summary>
     public static class NetSingleton
     {
-        internal static readonly HttpClientHandler clientHandler = new HttpClientHandler()
+        static NetSingleton()
         {
-            UseCookies = true,
-            CookieContainer = new System.Net.CookieContainer(),
-            AllowAutoRedirect = true,
-            AutomaticDecompression = System.Net.DecompressionMethods.GZip
-        };
-        internal static readonly HttpClient httpClient = new HttpClient(clientHandler);
+            JsonSerializerSettings = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new IgnoreStringEmptyContractResolver()
+            };
 
 
-        internal static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = new IgnoreStringEmptyContractResolver()
-        };
+            clientHandler = new HttpClientHandler()
+            {
+                UseCookies = true,
+                CookieContainer = new System.Net.CookieContainer(),
+                AllowAutoRedirect = true,
+                AutomaticDecompression = System.Net.DecompressionMethods.GZip,
+            };
+            httpClient = new HttpClient(clientHandler);
+            httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
+        }
+
+
+
+
+        internal static readonly HttpClientHandler clientHandler;
+        internal static readonly HttpClient httpClient;
+        internal static readonly JsonSerializerSettings JsonSerializerSettings;
     }
 }
