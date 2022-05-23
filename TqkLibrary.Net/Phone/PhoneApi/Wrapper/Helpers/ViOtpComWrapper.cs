@@ -71,20 +71,31 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
         {
             if (Service == null) throw new InvalidOperationException($"{nameof(Service)} must be set");
             var res = await viOtpComApi.RequestRent(Service, Networks, Prefixs, ExceptPrefixs, cancellationToken);
-            return new ViOtpComWrapperSession(viOtpComApi, res.Data);
+            return new ViOtpComWrapperSession(viOtpComApi, res);
         }
     }
 
     internal class ViOtpComWrapperSession : IPhoneWrapperSession
     {
         readonly ViOtpComApi viOtpComApi;
-        readonly ViOtpComSession viOtpComSession;
-        internal ViOtpComWrapperSession(ViOtpComApi viOtpComApi, ViOtpComSession viOtpComSession)
+        readonly ViOtpComResponse<ViOtpComSession> viOtpComSession;
+        internal ViOtpComWrapperSession(ViOtpComApi viOtpComApi, ViOtpComResponse<ViOtpComSession> viOtpComSession)
         {
             this.viOtpComApi = viOtpComApi;
             this.viOtpComSession = viOtpComSession;
         }
-        public string PhoneNumber => viOtpComSession?.PhoneNumber;
+        public string PhoneNumber
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(viOtpComSession?.Data?.PhoneNumber)) return string.Empty;
+                if (viOtpComSession.Data.PhoneNumber.Length == 10 && viOtpComSession.Data.PhoneNumber.StartsWith("0")) return viOtpComSession.Data.PhoneNumber.Substring(1);
+                return viOtpComSession.Data.PhoneNumber;
+            }
+        }
+
+        public string Message => viOtpComSession?.Message;
+        public bool IsSuccess => viOtpComSession?.Success == true;
 
         public Task CancelWaitSms(CancellationToken cancellationToken = default)
         {
@@ -93,7 +104,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
 
         public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
-            var res = await viOtpComApi.SessionGet(viOtpComSession).ConfigureAwait(false);
+            var res = await viOtpComApi.SessionGet(viOtpComSession.Data).ConfigureAwait(false);
             return new ViOtpComWrapperSms[] { new ViOtpComWrapperSms(res.Data) };
         }
     }

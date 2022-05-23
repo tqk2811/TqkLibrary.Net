@@ -70,9 +70,9 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             IEnumerable<string> exceptPrefix = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "service", "get")
+            .WithUrlGet(new UriBuilder(EndPoint, "request", "get")
                 .WithParam("token", ApiKey)
-                .WithParam("service", service.Id)
+                .WithParam("serviceId", service.Id)
                 .WithParamIfNotNull("networks", networks?.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)).Join("|"))
                 .WithParamIfNotNull("prefix", prefix?.Join("|"))
                 .WithParamIfNotNull("exceptPrefix", exceptPrefix?.Join("|")))
@@ -86,14 +86,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <param name="number"> số điện thoại cần thuê lại có bao gồm số 0 ở đầu</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<ViOtpComResponse<ViOtpComSession>> RequestSession(
+        public Task<ViOtpComResponse<ViOtpComSession>> RequestReRent(
             ViOtpComService service,
             string number,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "service", "get")
+            .WithUrlGet(new UriBuilder(EndPoint, "request", "get")
                 .WithParam("token", ApiKey)
-                .WithParam("service", service.Id)
+                .WithParam("serviceId", service.Id)
                 .WithParam("number", number))
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>();

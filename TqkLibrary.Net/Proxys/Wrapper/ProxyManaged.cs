@@ -20,6 +20,10 @@ namespace TqkLibrary.Net.Proxys.Wrapper
         /// <summary>
         /// 
         /// </summary>
+        public int Count => _dicts.Count;
+        /// <summary>
+        /// 
+        /// </summary>
         public event Action<string> logCallback;
         /// <summary>
         /// 
@@ -91,7 +95,7 @@ namespace TqkLibrary.Net.Proxys.Wrapper
 
                     var currTime = DateTime.Now;
                     //check is item can reset
-                    var pair = _dicts.FirstOrDefault(x =>
+                    var pair = _dicts.OrderBy(x => Guid.NewGuid()).FirstOrDefault(x =>
                         currTime > x.Value.NextReset &&
                         (x.Key.IsAllowGetNewOnUsing || x.Value.UsingCount == 0) &&
                         (AllowTimeLeft == TimeSpan.Zero || currTime + AllowTimeLeft < x.Value.ExpiredTime));

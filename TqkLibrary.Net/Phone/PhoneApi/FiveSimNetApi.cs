@@ -17,7 +17,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public FiveSimNetApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
+        public FiveSimNetApi(string apiKey) : base(apiKey)
         {
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
         }

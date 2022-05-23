@@ -12,7 +12,17 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// <summary>
         /// 
         /// </summary>
+        bool IsSuccess { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         string PhoneNumber { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string Message { get; }
 
         /// <summary>
         /// 

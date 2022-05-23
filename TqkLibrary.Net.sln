@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net", "TqkLibrary.Net\TqkLibrary.Net.csproj", "{9F26E943-CB0C-4584-87E1-0A093FF1F794}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.Test", "TqkLibrary.Net.Test\TqkLibrary.Net.Test.csproj", "{07648F5B-FF44-4B31-A545-975BEFFB6728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.Test", "TqkLibrary.Net.Test\TqkLibrary.Net.Test.csproj", "{07648F5B-FF44-4B31-A545-975BEFFB6728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMailOrgTest", "TempMailOrgTest\TempMailOrgTest.csproj", "{C6071178-D8DA-4E11-BE10-C8DD9932255E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{07648F5B-FF44-4B31-A545-975BEFFB6728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07648F5B-FF44-4B31-A545-975BEFFB6728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07648F5B-FF44-4B31-A545-975BEFFB6728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6071178-D8DA-4E11-BE10-C8DD9932255E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6071178-D8DA-4E11-BE10-C8DD9932255E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6071178-D8DA-4E11-BE10-C8DD9932255E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6071178-D8DA-4E11-BE10-C8DD9932255E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

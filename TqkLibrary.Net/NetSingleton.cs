@@ -22,7 +22,7 @@ namespace TqkLibrary.Net
                 UseCookies = true,
                 CookieContainer = new System.Net.CookieContainer(),
                 AllowAutoRedirect = true,
-                AutomaticDecompression = System.Net.DecompressionMethods.GZip,
+                AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
             };
             httpClient = new HttpClient(clientHandler);
             httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");

@@ -57,7 +57,7 @@ namespace TqkLibrary.Net.Mails.TempMails
         {
 
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -73,10 +73,11 @@ namespace TqkLibrary.Net.Mails.TempMails
         /// <returns></returns>
         public Task<TempMailOrgToken> InitToken(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrl(new UriBuilder(EndPoint.Uri.AbsoluteUri, "mailbox"), HttpMethod.Post)
+            .WithUrlPostJson(new UriBuilder(EndPoint.Uri.AbsoluteUri, "mailbox"), new object())
             .WithHeader("User-Agent", UserAgent)
-            .WithHeader("Accept", "application/json")
-            .WithHeader("Accept-Encoding", "deflate")
+            .WithHeader("Referer","https://temp-mail.org/")
+            //.WithHeader("Accept", "application/json")
+            //.WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgToken>();
         /// <summary>
@@ -89,8 +90,9 @@ namespace TqkLibrary.Net.Mails.TempMails
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages"))
             .WithHeader("Authorization", token.Token)
+            .WithHeader("Referer","https://temp-mail.org/")
             .WithHeader("User-Agent", UserAgent)
-            .WithHeader("Accept-Encoding", "deflate")
+            //.WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgMailBox>();
         /// <summary>
@@ -104,8 +106,9 @@ namespace TqkLibrary.Net.Mails.TempMails
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages", messageReView.Id))
             .WithHeader("Authorization", token.Token)
+            .WithHeader("Referer", "https://temp-mail.org/")
             .WithHeader("User-Agent", UserAgent)
-            .WithHeader("Accept-Encoding", "deflate")
+            //.WithHeader("Accept-Encoding", "deflate")
             .WithCancellationToken(cancellationToken)
             .ExecuteAsync<TempMailOrgMessageData>();
 

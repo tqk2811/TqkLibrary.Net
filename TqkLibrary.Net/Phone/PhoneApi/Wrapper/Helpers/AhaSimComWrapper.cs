@@ -73,33 +73,34 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
         {
             if (AhaSimComService == null) throw new InvalidOperationException($"Set value to {nameof(AhaSimComService)} first");
             var session = await ahaSimComApi.PhoneNewSession(AhaSimComService, Networks, Prefixs, ExceptPrefixs, cancellationToken).ConfigureAwait(false);
-            if (session.Success)
-                return new AhaSimComWrapperSession(session.Data, ahaSimComApi);
-            else
-                return null;
+            return new AhaSimComWrapperSession(session, ahaSimComApi);
         }
     }
 
     internal class AhaSimComWrapperSession : IPhoneWrapperSession
     {
-        readonly AhaSimComSession ahaSimComSession;
+        readonly AhaSimComResponse<AhaSimComSession> ahaSimComSession;
         readonly AhaSimComApi ahaSimComApi;
-        internal AhaSimComWrapperSession(AhaSimComSession ahaSimComSession, AhaSimComApi ahaSimComApi)
+        internal AhaSimComWrapperSession(AhaSimComResponse<AhaSimComSession> ahaSimComSession, AhaSimComApi ahaSimComApi)
         {
             this.ahaSimComSession = ahaSimComSession;
             this.ahaSimComApi = ahaSimComApi;
         }
 
-        public string PhoneNumber => ahaSimComSession?.PhoneNumber;
+        public string PhoneNumber => ahaSimComSession?.Data?.PhoneNumber;
+
+        public bool IsSuccess => ahaSimComSession.Success;
+
+        public string Message => ahaSimComSession.Message;
 
         public Task CancelWaitSms(CancellationToken cancellationToken = default)
         {
-            return ahaSimComApi.SessionCancel(ahaSimComSession, cancellationToken);
+            return ahaSimComApi.SessionCancel(ahaSimComSession.Data, cancellationToken);
         }
 
         public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
-            var messages = await ahaSimComApi.SessionGetOtp(ahaSimComSession, cancellationToken).ConfigureAwait(false);
+            var messages = await ahaSimComApi.SessionGetOtp(ahaSimComSession.Data, cancellationToken).ConfigureAwait(false);
             return new AhaSimComWrapperSms[] { new AhaSimComWrapperSms(messages.Data) };
         }
     }

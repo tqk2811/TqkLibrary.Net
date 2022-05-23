@@ -57,5 +57,12 @@ namespace TqkLibrary.Net
             if (enumerable == null) return null;
             return string.Join(separator, enumerable);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static string GetDomain(this Uri uri) => $"{uri.Scheme}://{uri.Authority}";
     }
 }

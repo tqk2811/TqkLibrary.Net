@@ -10,14 +10,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     /// <summary>
     /// https://2ndline.io/documentapi
     /// </summary>
-    public class TwoLineIoApi : BaseApi
+    public class TwoNdLineIoApi : BaseApi
     {
         static readonly string EndPoint = "https://2ndline.io/apiv1";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public TwoLineIoApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
+        public TwoNdLineIoApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
         {
 
         }
@@ -77,7 +77,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoPurchaseOtpResponse purchaseOtpResponse,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "checkorder")
+            .WithUrlGet(new UriBuilder(EndPoint, "ordercheck")
                 .WithParam("apikey", ApiKey)
                 .WithParam("id", purchaseOtpResponse.Id))
             .WithCancellationToken(cancellationToken)

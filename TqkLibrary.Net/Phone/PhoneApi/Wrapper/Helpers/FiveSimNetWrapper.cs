@@ -81,6 +81,10 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
         }
         public string PhoneNumber => fiveSimNetNumber?.Phone;
 
+        public bool IsSuccess => fiveSimNetNumber.Status == FiveSimNetOrderStatuses.PENDING;
+
+        public string Message => string.Empty;
+
         public Task CancelWaitSms(CancellationToken cancellationToken = default)
         {
             return fiveSimNetApi.CancelOrder(fiveSimNetNumber, cancellationToken);

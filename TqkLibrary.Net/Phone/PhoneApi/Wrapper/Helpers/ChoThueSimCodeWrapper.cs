@@ -89,6 +89,10 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
 
         public string PhoneNumber => phone?.Result?.Number;
 
+        public bool IsSuccess => phone.ResponseCode == ChoThueSimResponseCodeGetPhoneNumber.Success;
+
+        public string Message => phone.Msg;
+
         public Task CancelWaitSms(CancellationToken cancellationToken = default)
         {
             return choThueSimCodeApi.CancelGetMessage(phone.Result, cancellationToken);
