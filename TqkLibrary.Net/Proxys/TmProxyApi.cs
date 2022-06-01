@@ -16,7 +16,7 @@ namespace TqkLibrary.Net.Proxys
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public TmProxyApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public TmProxyApi(string ApiKey) : base(ApiKey)
         {
 
         }

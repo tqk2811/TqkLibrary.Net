@@ -17,7 +17,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public TwoNdLineIoApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
+        public TwoNdLineIoApi(string apiKey) : base(apiKey)
         {
 
         }

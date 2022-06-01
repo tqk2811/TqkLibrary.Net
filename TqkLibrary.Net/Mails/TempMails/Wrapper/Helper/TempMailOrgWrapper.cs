@@ -25,7 +25,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Helper
                 _endPoint = value;
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -98,5 +98,7 @@ namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Helper
         public string Subject => messageData.Subject;
 
         public string RawBody => messageData.BodyHtml;
+
+        public string Code => string.Empty;
     }
 }

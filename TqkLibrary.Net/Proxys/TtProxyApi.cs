@@ -21,7 +21,7 @@ namespace TqkLibrary.Net.Proxys
         /// <param name="license"></param>
         /// <param name="secret"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public TtProxyApi(string license, string secret) : base(license, NetSingleton.httpClient)
+        public TtProxyApi(string license, string secret) : base(license)
         {
             if (string.IsNullOrEmpty(secret)) throw new ArgumentNullException(nameof(secret));
             this.secret = secret;

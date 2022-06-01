@@ -133,7 +133,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public OtpSimApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public OtpSimApi(string ApiKey) : base(ApiKey)
         {
         }
 

@@ -80,7 +80,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
         readonly ChoThueSimCodeApi choThueSimCodeApi;
         readonly ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult> phone;
         internal ChoThueSimCodeWrapperSession(
-            ChoThueSimCodeApi choThueSimCodeApi, 
+            ChoThueSimCodeApi choThueSimCodeApi,
             ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult> phone)
         {
             this.choThueSimCodeApi = choThueSimCodeApi ?? throw new ArgumentNullException(nameof(choThueSimCodeApi));
@@ -98,13 +98,21 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
             return choThueSimCodeApi.CancelGetMessage(phone.Result, cancellationToken);
         }
 
-        public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var message = await choThueSimCodeApi.GetMessage(phone.Result, cancellationToken).ConfigureAwait(false);
-            return new ChoThueSimCodeWrapperSms[] { new ChoThueSimCodeWrapperSms(message) };
+            return new ChoThueSimCodeWrapperSmsResult(false, new ChoThueSimCodeWrapperSms(message));
         }
     }
-
+    internal class ChoThueSimCodeWrapperSmsResult : List<ChoThueSimCodeWrapperSms>, IPhoneWrapperSmsResult<ChoThueSimCodeWrapperSms>
+    {
+        public ChoThueSimCodeWrapperSmsResult(bool isTimeout, ChoThueSimCodeWrapperSms wrapperSms)
+        {
+            this.IsTimeout = isTimeout;
+            this.Add(wrapperSms);
+        }
+        public bool IsTimeout { get; }
+    }
     internal class ChoThueSimCodeWrapperSms : IPhoneWrapperSms
     {
         readonly ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult> sms;

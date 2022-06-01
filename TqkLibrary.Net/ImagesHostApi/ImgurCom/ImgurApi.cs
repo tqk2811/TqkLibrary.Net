@@ -13,7 +13,7 @@ namespace TqkLibrary.Net.ImagesHostApi
     {
         private const string EndPoint = "https://api.imgur.com/3";
 
-        public ImgurApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public ImgurApi(string ApiKey) : base(ApiKey)
         {
         }
         public Task<ImgurResponse<ImgurImage>> UploadImage(Bitmap bitmap)

@@ -8,14 +8,19 @@
         /// <summary>
         /// 
         /// </summary>
-        public string FromAddress { get; }
+        string FromAddress { get; }
         /// <summary>
         /// 
         /// </summary>
-        public string Subject { get; }
+        string Subject { get; }
         /// <summary>
         /// 
         /// </summary>
-        public string RawBody { get; }
+        string RawBody { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        string Code { get; }
     }
 }

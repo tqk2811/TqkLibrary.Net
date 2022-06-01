@@ -50,7 +50,7 @@ namespace TqkLibrary.Net.Captcha
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public TwoCaptchaApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public TwoCaptchaApi(string ApiKey) : base(ApiKey)
         {
         }
 

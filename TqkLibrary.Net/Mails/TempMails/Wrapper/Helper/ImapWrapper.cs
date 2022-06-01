@@ -166,5 +166,6 @@ namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Helper
         public string FromAddress => mimeMessage.From?.First()?.Name;
         public string Subject => mimeMessage.Subject;
         public string RawBody => mimeMessage.HtmlBody;
+        public string Code => string.Empty;
     }
 }

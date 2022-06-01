@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -98,11 +99,21 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
             return ahaSimComApi.SessionCancel(ahaSimComSession.Data, cancellationToken);
         }
 
-        public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var messages = await ahaSimComApi.SessionGetOtp(ahaSimComSession.Data, cancellationToken).ConfigureAwait(false);
-            return new AhaSimComWrapperSms[] { new AhaSimComWrapperSms(messages.Data) };
+            return new AhaSimComWrapperSmsResult(false, new AhaSimComWrapperSms(messages.Data));
         }
+    }
+
+    internal class AhaSimComWrapperSmsResult : List<AhaSimComWrapperSms>, IPhoneWrapperSmsResult<AhaSimComWrapperSms>
+    {
+        public AhaSimComWrapperSmsResult(bool isTimeout, AhaSimComWrapperSms wrapperSms)
+        {
+            this.IsTimeout = isTimeout;
+            this.Add(wrapperSms);
+        }
+        public bool IsTimeout { get; }
     }
 
     internal class AhaSimComWrapperSms : IPhoneWrapperSms

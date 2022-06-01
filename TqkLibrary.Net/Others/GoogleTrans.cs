@@ -25,7 +25,7 @@ namespace TqkLibrary.Net.Others
         /// <summary>
         /// 
         /// </summary>
-        public GoogleTrans() : base("no api key")
+        public GoogleTrans() : base()
         {
             
         }

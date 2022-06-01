@@ -124,5 +124,6 @@ namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Helper
                 return string.Join("\r\n\r\n", mailTmMessageData.Html);
             }
         }
+        public string Code => string.Empty;
     }
 }

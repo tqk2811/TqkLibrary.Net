@@ -110,9 +110,9 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(twoLineIoOrderData?.Data?.Phone)) 
+                if (string.IsNullOrWhiteSpace(twoLineIoOrderData?.Data?.Phone))
                     return string.Empty;
-                if (twoLineIoOrderData.Data.Phone.Length == 10 && twoLineIoOrderData.Data.Phone.StartsWith("0")) 
+                if (twoLineIoOrderData.Data.Phone.Length == 10 && twoLineIoOrderData.Data.Phone.StartsWith("0"))
                     return twoLineIoOrderData.Data.Phone.Substring(1);
                 return twoLineIoOrderData.Data.Phone;
             }
@@ -127,13 +127,21 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var order = await twoLineIoApi.CheckOrder(twoLineIoPurchaseOtpResponse, cancellationToken).ConfigureAwait(false);
-            return new TwoLineIoWrapperSms[] { new TwoLineIoWrapperSms(order.Data) };
+            return new TwoLineIoWrapperSmsResult(order.Data.StatusOrder != TwoLineIoStatusOrder.Wait, new TwoLineIoWrapperSms(order.Data));
         }
     }
-
+    internal class TwoLineIoWrapperSmsResult : List<TwoLineIoWrapperSms>, IPhoneWrapperSmsResult<TwoLineIoWrapperSms>
+    {
+        public TwoLineIoWrapperSmsResult(bool isTimeout, TwoLineIoWrapperSms wrapperSms)
+        {
+            this.IsTimeout = isTimeout;
+            this.Add(wrapperSms);
+        }
+        public bool IsTimeout { get; }
+    }
     internal class TwoLineIoWrapperSms : IPhoneWrapperSms
     {
         readonly TwoLineIoOrderData twoLineIoOrderData;
@@ -146,4 +154,6 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
 
         public string Code => twoLineIoOrderData?.Code;
     }
+
+
 }

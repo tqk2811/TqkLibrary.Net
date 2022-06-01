@@ -60,12 +60,14 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         internal protected readonly HttpClientHandler httpClientHandler;
+
+        readonly bool isdisposeHttpclient = false;
         /// <summary>
         /// 
         /// </summary>
-        protected BaseApi(HttpClientHandler httpClientHandler = null)
+        protected BaseApi(HttpClientHandler httpClientHandler)
         {
-            if (httpClientHandler == null)
+            if (httpClientHandler != null)
             {
                 httpClientHandler = new HttpClientHandler();
                 httpClientHandler.CookieContainer = new CookieContainer();
@@ -73,42 +75,62 @@ namespace TqkLibrary.Net
                 httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
                 httpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
                 httpClientHandler.AllowAutoRedirect = true;
+                httpClient = new HttpClient(httpClientHandler, true);
+                isdisposeHttpclient = true;
             }
-            httpClient = new HttpClient(httpClientHandler, true);
+            else
+            {
+                httpClient = NetSingleton.httpClient;
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string ApiKey, HttpClientHandler httpClientHandler = null) : this(httpClientHandler)
+        protected BaseApi(string ApiKey, HttpClientHandler httpClientHandler) : this(httpClientHandler)
         {
             if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
             this.ApiKey = ApiKey;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ApiKey"></param>
-        /// <param name="httpClient"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string ApiKey, HttpClient httpClient)
-        {
-            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            this.ApiKey = ApiKey;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="httpClient"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(HttpClient httpClient)
-        {
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(string ApiKey, HttpClient httpClient, bool isDisposeHttpclient = true)
+        {
+            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.ApiKey = ApiKey;
+            this.isdisposeHttpclient = isDisposeHttpclient;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(HttpClient httpClient, bool isDisposeHttpclient = true)
+        {
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.isdisposeHttpclient = isDisposeHttpclient;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected BaseApi()
+        {
+            this.httpClient = NetSingleton.httpClient;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
+        protected BaseApi(string apiKey)
+        {
+            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            this.ApiKey = apiKey;
+            this.httpClient = NetSingleton.httpClient;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -128,7 +150,7 @@ namespace TqkLibrary.Net
 
         void Dispose(bool disposing)
         {
-            if (httpClient != NetSingleton.httpClient) httpClient.Dispose();
+            if (httpClient != NetSingleton.httpClient && isdisposeHttpclient) httpClient.Dispose();
         }
 
 

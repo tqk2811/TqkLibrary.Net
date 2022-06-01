@@ -102,13 +102,21 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var res = await viOtpComApi.SessionGet(viOtpComSession.Data).ConfigureAwait(false);
-            return new ViOtpComWrapperSms[] { new ViOtpComWrapperSms(res.Data) };
+            return new ViOtpComWrapperSmsResult(false, new ViOtpComWrapperSms(res.Data));
         }
     }
-
+    internal class ViOtpComWrapperSmsResult : List<ViOtpComWrapperSms>, IPhoneWrapperSmsResult<ViOtpComWrapperSms>
+    {
+        public ViOtpComWrapperSmsResult(bool isTimeout, ViOtpComWrapperSms wrapperSms)
+        {
+            this.IsTimeout = isTimeout;
+            this.Add(wrapperSms);
+        }
+        public bool IsTimeout { get; }
+    }
     internal class ViOtpComWrapperSms : IPhoneWrapperSms
     {
         readonly ViOtpComSessionGet viOtpComSessionGet;

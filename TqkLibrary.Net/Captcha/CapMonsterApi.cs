@@ -6,7 +6,7 @@ namespace TqkLibrary.Net.Captcha
     {
         private const string EndPoint = "";
 
-        public CapMonsterApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public CapMonsterApi(string ApiKey) : base(ApiKey)
         {
         }
     }

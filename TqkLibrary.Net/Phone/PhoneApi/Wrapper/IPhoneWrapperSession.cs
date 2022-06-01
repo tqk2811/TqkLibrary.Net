@@ -13,7 +13,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// 
         /// </summary>
         bool IsSuccess { get; }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -28,8 +28,8 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default);
-        
+        Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default);
+
         /// <summary>
         /// 
         /// </summary>

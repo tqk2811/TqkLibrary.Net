@@ -19,7 +19,7 @@ namespace TqkLibrary.Net.Proxys
         /// 
         /// </summary>
         /// <param name="ApiKey"></param>
-        public TinsoftProxyApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public TinsoftProxyApi(string ApiKey) : base(ApiKey)
         {
         }
 

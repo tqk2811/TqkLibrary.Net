@@ -90,13 +90,26 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
             return fiveSimNetApi.CancelOrder(fiveSimNetNumber, cancellationToken);
         }
 
-        public async Task<IEnumerable<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
         {
             var res = await fiveSimNetApi.CheckOrder(fiveSimNetNumber, cancellationToken).ConfigureAwait(false);
-            return res.Sms.Select(x => new FiveSimNetWrapperSms(x));
+            return new FiveSimNetWrapperSmsResult(
+                res.Status != FiveSimNetOrderStatuses.PENDING && res.Status != FiveSimNetOrderStatuses.FINISHED,
+                res.Sms.Select(x => new FiveSimNetWrapperSms(x)));
         }
     }
-
+    internal class FiveSimNetWrapperSmsResult : List<FiveSimNetWrapperSms>, IPhoneWrapperSmsResult<FiveSimNetWrapperSms>
+    {
+        public FiveSimNetWrapperSmsResult(bool isTimeout, IEnumerable<FiveSimNetWrapperSms> wrapperSms)
+        {
+            this.IsTimeout = isTimeout;
+            foreach (var item in wrapperSms)
+            {
+                this.Add(item);
+            }
+        }
+        public bool IsTimeout { get; }
+    }
     internal class FiveSimNetWrapperSms : IPhoneWrapperSms
     {
         readonly FiveSimNetSms fiveSimNetSms;

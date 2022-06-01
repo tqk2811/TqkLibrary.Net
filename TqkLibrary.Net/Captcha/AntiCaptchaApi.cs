@@ -258,7 +258,7 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <param name="ApiKey">ApiKey</param>
-        public AntiCaptchaApi(string ApiKey) : base(ApiKey, NetSingleton.httpClient)
+        public AntiCaptchaApi(string ApiKey) : base(ApiKey)
         {
         }
         /// <summary>

@@ -18,7 +18,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public ViOtpComApi(string apiKey) : base(apiKey, NetSingleton.httpClient)
+        public ViOtpComApi(string apiKey) : base(apiKey)
         {
 
         }
