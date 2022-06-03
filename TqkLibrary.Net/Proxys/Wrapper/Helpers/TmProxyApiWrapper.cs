@@ -51,8 +51,18 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
                 IsSuccess = result.code == 0,
                 Proxy = result?.data.https ?? string.Empty,
                 NextTime = DateTime.Now.AddSeconds(result?.data.next_request ?? 5),
-                ExpiredTime = result?.data.ExpiredAt ?? DateTime.Now
+                ExpiredTime = result?.data.ExpiredAt ?? DateTime.Now,
+                Message = result?.message
             };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"TmProxy ({tmProxyApi.ApiKey})";
         }
     }
 }

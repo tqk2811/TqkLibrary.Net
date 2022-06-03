@@ -57,6 +57,15 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
             var list = await obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);
             return new ObcProxyApiResponseWrapper(list.FirstOrDefault(x => x.ProxyPort == obcProxy.ProxyPort));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"ObcProxy ({obcProxy?.GetProxy()})";
+        }
     }
 
     internal class ObcProxyApiResponseWrapper : IProxyApiResponseWrapper
@@ -70,5 +79,6 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
         public string Proxy => obcProxy?.GetProxy();
         public DateTime NextTime => DateTime.Now.AddDays(-1);
         public DateTime ExpiredTime => DateTime.Now.AddDays(365);
+        public string Message => string.Empty;
     }
 }

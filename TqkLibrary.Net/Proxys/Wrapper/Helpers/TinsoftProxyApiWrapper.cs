@@ -57,8 +57,18 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
                 IsSuccess = result.Success,
                 Proxy = result.Proxy,
                 NextTime = DateTime.Now.AddSeconds(result.NextChange),
-                ExpiredTime = DateTime.Now.AddSeconds(result.Timeout)
+                ExpiredTime = DateTime.Now.AddSeconds(result.Timeout),
+                Message = result.Description
             };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"TinsoftProxy ({tinsoftProxyApi.ApiKey})";
         }
     }
 }

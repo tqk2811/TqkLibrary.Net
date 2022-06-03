@@ -50,7 +50,7 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        protected readonly string ApiKey;
+        public readonly string ApiKey;
 
         /// <summary>
         /// 
@@ -62,47 +62,16 @@ namespace TqkLibrary.Net
         internal protected readonly HttpClientHandler httpClientHandler;
 
         readonly bool isdisposeHttpclient = false;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected BaseApi(HttpClientHandler httpClientHandler)
-        {
-            if (httpClientHandler != null)
-            {
-                httpClientHandler = new HttpClientHandler();
-                httpClientHandler.CookieContainer = new CookieContainer();
-                httpClientHandler.UseCookies = true;
-                httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
-                httpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                httpClientHandler.AllowAutoRedirect = true;
-                httpClient = new HttpClient(httpClientHandler, true);
-                isdisposeHttpclient = true;
-            }
-            else
-            {
-                httpClient = NetSingleton.httpClient;
-            }
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string ApiKey, HttpClientHandler httpClientHandler) : this(httpClientHandler)
+        protected BaseApi(string apiKey, HttpClient httpClient, bool isDisposeHttpclient = true)
         {
-            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
-            this.ApiKey = ApiKey;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string ApiKey, HttpClient httpClient, bool isDisposeHttpclient = true)
-        {
-            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            if (string.IsNullOrEmpty(apiKey)) throw new ArgumentNullException(nameof(apiKey));
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            this.ApiKey = ApiKey;
+            this.ApiKey = apiKey;
             this.isdisposeHttpclient = isDisposeHttpclient;
         }
         /// <summary>
@@ -127,7 +96,7 @@ namespace TqkLibrary.Net
         /// <param name="apiKey"></param>
         protected BaseApi(string apiKey)
         {
-            if (string.IsNullOrEmpty(ApiKey)) throw new ArgumentNullException(nameof(ApiKey));
+            if (string.IsNullOrEmpty(apiKey)) throw new ArgumentNullException(nameof(apiKey));
             this.ApiKey = apiKey;
             this.httpClient = NetSingleton.httpClient;
         }

@@ -57,14 +57,23 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
         {
             var proxy = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken).ConfigureAwait(false);
             var proxy2 = await azProxyApi.GetNewProxy(Location, Provider, cancellationToken).ConfigureAwait(false);
-            DateTime nextTime = DateTime.Now.Add(proxy2.NextTime.HasValue ? proxy2.NextTime.Value : TimeSpan.FromMinutes(1));
+            DateTime nextTime = DateTime.Now.Add(proxy2.NextTime.HasValue ? proxy2.NextTime.Value : TimeSpan.FromSeconds(10));
             return new ProxyApiResponseWrapper()
             {
                 Proxy = proxy.Data?.Proxy,
                 IsSuccess = proxy.IsSuccess,
                 NextTime = nextTime,
                 ExpiredTime = nextTime.AddMinutes(20),
+                Message = proxy?.Message
             };
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"AzProxy ({azProxyApi.ApiKey})";
         }
     }
 }

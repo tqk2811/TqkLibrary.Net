@@ -114,14 +114,14 @@ namespace TqkLibrary.Net.Proxys.Wrapper
                         }
                         else
                         {
-                            string log = $"ProxyManaged key {pair.Key} wait change in {proxyApiResponse.NextTime:HH:mm:ss}";
+                            string log = $"ProxyManaged key {pair.Key} wait change at {proxyApiResponse.NextTime:HH:mm:ss} {proxyApiResponse?.Message}";
                             ThreadPool.QueueUserWorkItem((o) => logCallback?.Invoke(log));
                         }
                     }
                     else
                     {
                         //check is item allow using more times
-                        pair = _dicts.FirstOrDefault(x => MaxUseCountPerApi > x.Value.UsingCount);
+                        pair = _dicts.FirstOrDefault(x => MaxUseCountPerApi > x.Value.UsedCount && !string.IsNullOrWhiteSpace(x.Value.CurrentProxy));
                         if (pair.Key != null)
                         {
                             string log = $"ProxyManaged key {pair.Key} re-use {pair.Value.CurrentProxy}";
