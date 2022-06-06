@@ -8,6 +8,59 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SmmFansFasterApi : BaseApi
+    {
+        const string EndPoint = "https://smmfansfaster.com/api/v2";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        public SmmFansFasterApi(string ApiKey) : base(ApiKey)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<List<SmmFansFasterViewServiceResult>> ServiceList(CancellationToken cancellationToken = default)
+        {
+            var formPost = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("key", ApiKey),
+                new KeyValuePair<string, string>("action", "services")
+            });
+            return Build()
+                .WithUrlPost(EndPoint, formPost)
+                .ExecuteAsync<List<SmmFansFasterViewServiceResult>>(cancellationToken);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<SmmFansFasterOrderResult> AddOrder(SmmFansFasterViewServiceResult smmFansFasterViewServiceResult, string link, int quantity, CancellationToken cancellationToken = default)
+        {
+            var formPost = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("key", ApiKey),
+                new KeyValuePair<string, string>("action", "add"),
+                new KeyValuePair<string, string>("service", smmFansFasterViewServiceResult.service.ToString()),
+                new KeyValuePair<string, string>("link", link),
+                new KeyValuePair<string, string>("quantity", quantity.ToString())
+            });
+            return Build()
+                .WithUrlPost(EndPoint, formPost)
+                .ExecuteAsync<SmmFansFasterOrderResult>(cancellationToken);
+        }
+    }
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class SmmFansFasterViewServiceResult
     {
         public int service { get; set; }
@@ -30,36 +83,5 @@ namespace TqkLibrary.Net
         public int order { get; set; }
         public string error { get; set; }
     }
-
-    public class SmmFansFasterApi : BaseApi
-    {
-        const string EndPoint = "https://smmfansfaster.com/api/v2";
-        public SmmFansFasterApi(string ApiKey) : base(ApiKey)
-        {
-
-        }
-
-        public Task<List<SmmFansFasterViewServiceResult>> ServiceList()
-        {
-            var formPost = new FormUrlEncodedContent(new[]
-            {
-        new KeyValuePair<string, string>("key", ApiKey),
-        new KeyValuePair<string, string>("action", "services")
-      });
-            return RequestPostAsync<List<SmmFansFasterViewServiceResult>>(EndPoint, null, formPost);
-        }
-
-        public Task<SmmFansFasterOrderResult> AddOrder(SmmFansFasterViewServiceResult smmFansFasterViewServiceResult, string link, int quantity)
-        {
-            var formPost = new FormUrlEncodedContent(new[]
-            {
-        new KeyValuePair<string, string>("key", ApiKey),
-        new KeyValuePair<string, string>("action", "add"),
-        new KeyValuePair<string, string>("service", smmFansFasterViewServiceResult.service.ToString()),
-        new KeyValuePair<string, string>("link", link),
-        new KeyValuePair<string, string>("quantity", quantity.ToString())
-      });
-            return RequestPostAsync<SmmFansFasterOrderResult>(EndPoint, null, formPost);
-        }
-    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

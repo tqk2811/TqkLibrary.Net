@@ -7,16 +7,6 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Others
 {
-
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public enum TransLanguage
-    {
-        auto,
-        en,
-        vi,
-
-    }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     /// <summary>
     /// 
     /// </summary>
@@ -27,19 +17,30 @@ namespace TqkLibrary.Net.Others
         /// </summary>
         public GoogleTrans() : base()
         {
-            
+
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
         /// <returns></returns>
-        public Task<string> Translate(string text, TransLanguage from, TransLanguage to)
-        {
-            return this.RequestGetAsync<string>($"https://translate.googleapis.com/translate_a/single?client=gtx&sl={from}&tl={to}&dt=t&q=%22{text}%22");
-        }
+        public Task<string> Translate(string text, TransLanguage from, TransLanguage to, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder("https://translate.googleapis.com/translate_a/single")
+                .WithParam("client", "gtx")
+                .WithParam("sl", from)
+                .WithParam("tl", to)
+                .WithParam("dt", "t")
+                .WithParam("q", $"\"{text}\""))
+            .ExecuteAsync<string>(cancellationToken);
     }
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    public enum TransLanguage
+    {
+        auto,
+        en,
+        vi,
+
+    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

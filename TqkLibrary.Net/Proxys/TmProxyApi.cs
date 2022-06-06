@@ -27,8 +27,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TMProxyResponse<TMProxyStatResponse>> Stats(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlPostJson(EndPoint + "stats", new { api_key = ApiKey })
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TMProxyResponse<TMProxyStatResponse>>();
+            .ExecuteAsync<TMProxyResponse<TMProxyStatResponse>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -37,8 +36,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TMProxyResponse<TMProxyProxyResponse>> GetCurrentProxy(CancellationToken cancellationToken = default)
              => Build()
             .WithUrlPostJson(EndPoint + "get-current-proxy", new { api_key = ApiKey })
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>();
+            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -47,8 +45,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TMProxyResponse<TMProxyProxyResponse>> GetNewProxy(int id_location = 0, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlPostJson(EndPoint + "get-new-proxy", new { api_key = ApiKey, id_location = id_location })
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>();
+            .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>(cancellationToken);
 
     }
 

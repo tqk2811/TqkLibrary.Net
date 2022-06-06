@@ -7,32 +7,44 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Cryptos
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PancakeInfoApi : BaseApi
     {
-        public PancakeInfoApi() : base("no api key")
+        const string EndPoint = "https://api.pancakeswap.info/api/v2";
+        /// <summary>
+        /// 
+        /// </summary>
+        public PancakeInfoApi() : base()
         {
 
         }
         /// <summary>
         /// Returns the token information, based on address.
         /// </summary>
-        /// <param name="address"></param>
         /// <returns></returns>
-        public Task<PancakeSwapBaseResponse<PancakeSwapTokenData>> Token(string address)
-          => RequestGetAsync<PancakeSwapBaseResponse<PancakeSwapTokenData>>($"https://api.pancakeswap.info/api/v2/tokens/{address}");
+        public Task<PancakeSwapBaseResponse<PancakeSwapTokenData>> Token(string address, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "tokens", address))
+            .ExecuteAsync<PancakeSwapBaseResponse<PancakeSwapTokenData>>(cancellationToken);
 
         /// <summary>
         /// Returns the tokens in the top ~1000 pairs on PancakeSwap, sorted by reserves.
         /// </summary>
         /// <returns></returns>
-        public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>> Tokens()
-          => RequestGetAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>>("https://api.pancakeswap.info/api/v2/tokens");
+        public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>> Tokens(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "tokens"))
+            .ExecuteAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>>(cancellationToken);
 
         /// <summary>
         /// Returns data for the top ~1000 PancakeSwap pairs, sorted by reserves.
         /// </summary>
         /// <returns></returns>
-        public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>> PancakeSwapPairs()
-          => RequestGetAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>>("https://api.pancakeswap.info/api/v2/pairs");
+        public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>> PancakeSwapPairs(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "pairs"))
+            .ExecuteAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>>(cancellationToken);
     }
 }

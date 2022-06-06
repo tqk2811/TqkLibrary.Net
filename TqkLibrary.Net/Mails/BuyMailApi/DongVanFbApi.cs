@@ -30,8 +30,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
         public Task<DongVanFbBalanceResponse> CheckBalance(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "user", "balance").WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<DongVanFbBalanceResponse>();
+            .ExecuteAsync<DongVanFbBalanceResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -40,8 +39,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
         public Task<DongVanFbAccountTypeResponse> AccountType(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "user", "account_type").WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<DongVanFbAccountTypeResponse>();
+            .ExecuteAsync<DongVanFbAccountTypeResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -53,8 +51,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
                 .WithParam("apikey", ApiKey)
                 .WithParam("account_type", accountType.Id)
                 .WithParam("quality", quality))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<DongVanFbBuyMailResponse>();
+            .ExecuteAsync<DongVanFbBuyMailResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -66,8 +63,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
                 .WithParam("mail", mailAccount.Email)
                 .WithParam("pass", mailAccount.Password)
                 .WithParamIfNotNull("type", mailFrom?.ToString()?.ToLower()))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<DongVanFbGetCodeMailResponse>();
+            .ExecuteAsync<DongVanFbGetCodeMailResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -78,8 +74,7 @@ namespace TqkLibrary.Net.Mails.BuyMailApi
             .WithUrlGet(new UriBuilder(EndPointTools, "get_messages")
                 .WithParam("mail", mailAccount.Email)
                 .WithParam("pass", mailAccount.Password))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<DongVanFbGetMessageResponse>();
+            .ExecuteAsync<DongVanFbGetMessageResponse>(cancellationToken);
     }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

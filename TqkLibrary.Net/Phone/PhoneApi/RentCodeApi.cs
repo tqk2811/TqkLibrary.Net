@@ -7,6 +7,70 @@ using System.Web;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class RentCodeApi : BaseApi
+    {
+        private const string EndPoint = "https://api.rentcode.net/api/v2/";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        public RentCodeApi(string ApiKey) : base(ApiKey)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <exception cref="RentCodeException"></exception>
+        /// <returns></returns>
+        public Task<RentCodeResult> Request(
+          int? MaximumSms = null,
+          bool? AllowVoiceSms = null,
+          RentCodeNetworkProvider? networkProvider = null,
+          RentCodeServiceProviderId? serviceProviderId = null,
+          CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "order/request")
+                .WithParam("apiKey", ApiKey)
+                .WithParam("ServiceProviderId", (int)serviceProviderId)
+                .WithParamIfNotNull("NetworkProvider", (int?)networkProvider)
+                .WithParamIfNotNull("MaximumSms", MaximumSms)
+                .WithParamIfNotNull("AllowVoiceSms", AllowVoiceSms))
+            .ExecuteAsync<RentCodeResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<RentCodeResult> RequestHolding(
+          RentCodeNetworkProvider networkProvider,
+          int Duration = 300,
+          int Unit = 1,
+          CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "order/request-holding")
+                .WithParam("apiKey", ApiKey)
+                .WithParam("Duration", Duration)
+                .WithParam("Unit", Unit)
+                .WithParam("NetworkProvider", (int)networkProvider))
+            .ExecuteAsync<RentCodeResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<RentCodeCheckOrderResults> Check(RentCodeResult rentCodeResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "order", rentCodeResult.Id, "check").WithParam("apiKey", ApiKey))
+            .ExecuteAsync<RentCodeCheckOrderResults>(cancellationToken);
+    }
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public sealed class RentCodeException : Exception
     {
         internal RentCodeException(string Message)
@@ -47,7 +111,6 @@ namespace TqkLibrary.Net.Phone.PhoneApi
     }
     public enum RentCodeNetworkProvider : int
     {
-        None = 0,
         Viettel = 1,
         VinaPhone = 2,
         MobilePhone = 3,
@@ -74,56 +137,5 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             return $"Success: {Success}, PhoneNumberApi: {PhoneNumber}, Message: {Message}";
         }
     }
-    public sealed class RentCodeApi : BaseApi
-    {
-        private const string EndPoint = "https://api.rentcode.net/api/v2/";
-
-        public RentCodeApi(string ApiKey) : base(ApiKey)
-        {
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="MaximumSms"></param>
-        /// <param name="AllowVoiceSms"></param>
-        /// <param name="networkProvider"></param>
-        /// <param name="serviceProviderId"></param>
-        /// <exception cref="RentCodeException"></exception>
-        /// <returns></returns>
-        public Task<RentCodeResult> Request(
-          int? MaximumSms = null,
-          bool? AllowVoiceSms = null,
-          RentCodeNetworkProvider networkProvider = RentCodeNetworkProvider.None,
-          RentCodeServiceProviderId serviceProviderId = RentCodeServiceProviderId.Facebook)
-        {
-            if (serviceProviderId == RentCodeServiceProviderId.None) throw new RentCodeException("serviceProviderId is required");
-
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["apiKey"] = ApiKey;
-            parameters["ServiceProviderId"] = ((int)serviceProviderId).ToString();
-            if (networkProvider != RentCodeNetworkProvider.None) parameters["NetworkProvider"] = ((int)networkProvider).ToString();
-            if (MaximumSms != null) parameters["MaximumSms"] = MaximumSms.Value.ToString();
-            if (AllowVoiceSms != null) parameters["AllowVoiceSms"] = AllowVoiceSms.Value.ToString();
-
-            return RequestGetAsync<RentCodeResult>(EndPoint + "order/request?" + parameters.ToString());
-        }
-
-        public Task<RentCodeResult> RequestHolding(
-          int Duration = 300,
-          int Unit = 1,
-          RentCodeNetworkProvider networkProvider = RentCodeNetworkProvider.None)
-        {
-            var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["apiKey"] = ApiKey;
-            parameters["Duration"] = Duration.ToString();
-            parameters["Unit"] = Unit.ToString();
-            if (networkProvider != RentCodeNetworkProvider.None) parameters["NetworkProvider"] = ((int)networkProvider).ToString();
-
-            return RequestGetAsync<RentCodeResult>(EndPoint + $"order/request-holding?apiKey={ApiKey}&Duration={Duration}&Unit=1&NetworkProvider={(int)networkProvider}");
-        }
-
-        public Task<RentCodeCheckOrderResults> Check(RentCodeResult rentCodeResult)
-          => RequestGetAsync<RentCodeCheckOrderResults>(EndPoint + $"order/{rentCodeResult.Id}/check?apiKey={ApiKey}");
-    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

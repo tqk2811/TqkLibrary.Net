@@ -31,8 +31,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint)
                 .WithParam("action", "services")
                 .WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<CodeTextNowService>>();
+            .ExecuteAsync<List<CodeTextNowService>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -45,8 +44,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("apikey", ApiKey)
                 .WithParam("serviceId", service.serviceId)
                 .WithParam("count", count))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<CodeTextNowCreateRequest>();
+            .ExecuteAsync<CodeTextNowCreateRequest>(cancellationToken);
 
         /// <summary>
         /// 
@@ -58,8 +56,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("action", "data-request")
                 .WithParam("apikey", ApiKey)
                 .WithParam("rentId", rent.requestId))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<CodeTextNowDataRequest>();
+            .ExecuteAsync<CodeTextNowDataRequest>(cancellationToken);
 
     }
 

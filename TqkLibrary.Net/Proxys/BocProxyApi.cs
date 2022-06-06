@@ -31,8 +31,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<List<ObcProxy>> ProxyList(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(_endPoint.GetDomain(), "proxy_list"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<ObcProxy>>();
+            .ExecuteAsync<List<ObcProxy>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -43,8 +42,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<ObcStatus> Reset(ObcProxy obcProxy, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(_endPoint.GetDomain(), "reset").WithParam("proxy", obcProxy.ProxyPort))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ObcStatus>();
+            .ExecuteAsync<ObcStatus>(cancellationToken);
 
         /// <summary>
         /// 
@@ -54,8 +52,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<ObcStatus> ResetAll(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(_endPoint.GetDomain(), "reset_all"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ObcStatus>();
+            .ExecuteAsync<ObcStatus>(cancellationToken);
 
         /// <summary>
         /// 
@@ -66,8 +63,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<ObcStatus> Status(ObcProxy obcProxy, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(_endPoint.GetDomain(), "status").WithParam("proxy", obcProxy.ProxyPort))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ObcStatus>();
+            .ExecuteAsync<ObcStatus>(cancellationToken);
 
 
         //public Task PublicIp(ObcProxy obcProxy,CancellationToken cancellationToken = default)

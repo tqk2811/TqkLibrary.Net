@@ -32,8 +32,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "users", "balance")
                 .WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<ViOtpComBalance>>();
+            .ExecuteAsync<ViOtpComResponse<ViOtpComBalance>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -44,8 +43,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "networks", "get")
                 .WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<List<ViOtpComNetwork>>>();
+            .ExecuteAsync<ViOtpComResponse<List<ViOtpComNetwork>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -56,8 +54,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "service", "get")
                 .WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<List<ViOtpComService>>>();
+            .ExecuteAsync<ViOtpComResponse<List<ViOtpComService>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -76,8 +73,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParamIfNotNull("networks", networks?.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)).Join("|"))
                 .WithParamIfNotNull("prefix", prefix?.Join("|"))
                 .WithParamIfNotNull("exceptPrefix", exceptPrefix?.Join("|")))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>();
+            .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -95,8 +91,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("token", ApiKey)
                 .WithParam("serviceId", service.Id)
                 .WithParam("number", number))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>();
+            .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -111,8 +106,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "session", "get")
                 .WithParam("token", ApiKey)
                 .WithParam("service", session.RequestId))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<ViOtpComSessionGet>>();
+            .ExecuteAsync<ViOtpComResponse<ViOtpComSessionGet>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -139,8 +133,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParamIfNotNull("limit", limit)
                 .WithParamIfNotNull("fromDate", fromDate?.ToString("yyyy-MM-dd"))
                 .WithParamIfNotNull("toDate",  toDate?.ToString("yyyy-MM-dd")))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<ViOtpComResponse<ViOtpComSessionGet>>();
+            .ExecuteAsync<ViOtpComResponse<ViOtpComSessionGet>>(cancellationToken);
     }
 
 

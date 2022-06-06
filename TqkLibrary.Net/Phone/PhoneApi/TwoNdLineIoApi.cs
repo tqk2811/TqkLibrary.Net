@@ -31,8 +31,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "getbalance")
                 .WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoResponseBalance>();
+            .ExecuteAsync<TwoLineIoResponseBalance>(cancellationToken);
 
         /// <summary>
         /// 
@@ -42,8 +41,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<List<TwoLineIoService>> GetServices(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availableservice"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<TwoLineIoService>>();
+            .ExecuteAsync<List<TwoLineIoService>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -64,8 +62,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("serviceId", service.ServiceId)
                 .WithParamIfNotNull("networkId", netWorkId.HasValue ? (int?)netWorkId.Value : null)
                 .WithParamIfNotNull("allowVoiceSms", allowVoiceSms))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>();
+            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -80,8 +77,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "ordercheck")
                 .WithParam("apikey", ApiKey)
                 .WithParam("id", purchaseOtpResponse.Id))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoData<TwoLineIoOrderData>>();
+            .ExecuteAsync<TwoLineIoData<TwoLineIoOrderData>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -96,8 +92,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "continueorder")
                 .WithParam("apikey", ApiKey)
                 .WithParam("orderId", purchaseOtpResponse.Id))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>();
+            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -108,8 +103,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availabletime")
                 .WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<TwoLineIoTimeHolding>>();
+            .ExecuteAsync<List<TwoLineIoTimeHolding>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -130,8 +124,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("orderId", purchaseOtpResponse.Id)
                 .WithParam("time", time)
                 .WithParam("unit", holdUnit))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>();
+            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -142,8 +135,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availablephone")
                 .WithParam("apikey", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoData<List<TwoLineIoPhoneKept>>>();
+            .ExecuteAsync<TwoLineIoData<List<TwoLineIoPhoneKept>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -164,8 +156,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("serviceId", service.ServiceId)
                 .WithParam("phone", phoneKept.Phone)
                 .WithParamIfNotNull("allowVoiceSms", allowVoiceSms))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>();
+            .ExecuteAsync<TwoLineIoPurchaseOtpResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -175,8 +166,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<List<TwoLineIoCountry>> GetAvailableCountry(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availablecountry"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<TwoLineIoCountry>>();
+            .ExecuteAsync<List<TwoLineIoCountry>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -188,8 +178,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<TwoLineIoOperator> GetAvailableoperator(TwoLineIoCountry country, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "availableoperator").WithParam("countryId", country.CountryId))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TwoLineIoOperator>();
+            .ExecuteAsync<TwoLineIoOperator>(cancellationToken);
 
         /// <summary>
         /// 
@@ -206,8 +195,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "availableservice")
                 .WithParam("countryId", country.CountryId)
                 .WithParamIfNotNull("operatorId", codeOperator?.OperatorId))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<TwoLineIoService>>();
+            .ExecuteAsync<List<TwoLineIoService>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -228,8 +216,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParam("countryId", country.CountryId)
                 .WithParam("serviceId", service.ServiceId)
                 .WithParamIfNotNull("operatorId", @operator?.OperatorId))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<List<TwoLineIoService>>();
+            .ExecuteAsync<List<TwoLineIoService>>(cancellationToken);
 
     }
 

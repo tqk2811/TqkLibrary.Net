@@ -29,9 +29,8 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<KfarmTextNowResponse<KfarmTextNowPhone>> GetAccTextNow(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(EndPoint + "GetAccTextNow")
-            .WithCancellationToken(cancellationToken)
             .WithHeader("Token", ApiKey)
-            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowPhone>>();
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowPhone>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -40,9 +39,8 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<KfarmTextNowResponse<KfarmTextNowOrder>> GetOrderTextNow(KfarmTextNowPhone phone, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlPostJson(EndPoint + "GetOrderTextNow", phone)
-            .WithCancellationToken(cancellationToken)
             .WithHeader("Token", ApiKey)
-            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowOrder>>();
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowOrder>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -51,9 +49,8 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<KfarmTextNowResponse<KfarmTextNowCode>> GetCode(KfarmTextNowOrder orderId, CancellationToken cancellationToken = default)
              => Build()
             .WithUrlPostJson(EndPoint + "GetOrderTextNow", orderId)
-            .WithCancellationToken(cancellationToken)
             .WithHeader("Token", ApiKey)
-            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowCode>>();
+            .ExecuteAsync<KfarmTextNowResponse<KfarmTextNowCode>>(cancellationToken);
     }
 
 

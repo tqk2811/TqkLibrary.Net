@@ -22,8 +22,9 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public static async Task<MyIp> GetCurrentIpAdreess()
         {
+            using HttpClient httpClient = new HttpClient(NetSingleton.HttpClientHandler, false);
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://api.myip.com");
-            using HttpResponseMessage httpResponseMessage = await NetSingleton.httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
+            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<MyIp>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 

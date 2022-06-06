@@ -29,8 +29,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<AhaSimComResponse<AhaSimComBalance>> Balance(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "user", "balance").WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<AhaSimComBalance>>();
+            .ExecuteAsync<AhaSimComResponse<AhaSimComBalance>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -39,8 +38,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<AhaSimComResponse<List<AhaSimComNetwork>>> NetworkList(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "network", "list").WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<List<AhaSimComNetwork>>>();
+            .ExecuteAsync<AhaSimComResponse<List<AhaSimComNetwork>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -49,8 +47,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<AhaSimComResponse<List<AhaSimComService>>> ServiceList(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "service", "list").WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<List<AhaSimComService>>>();
+            .ExecuteAsync<AhaSimComResponse<List<AhaSimComService>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -73,8 +70,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParamIfNotNull("network", networks == null ? null : string.Join(",", networks.Select(x => x.Id)))
                 .WithParamIfNotNull("prefix",  prefixs == null ? null : string.Join(",", prefixs))
                 .WithParamIfNotNull("except_prefix", except_prefixs == null ? null : string.Join(",", except_prefixs)))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>();
+            .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -91,8 +87,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
                 .WithParam("service", service.Id)
                 .WithParamIfNotNull("number", number))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>();
+            .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -103,8 +98,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<AhaSimComResponse<AhaSimComOtp>> SessionGetOtp(AhaSimComSession session, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "session", session.Session, "get-otp").WithParam("token", ApiKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<AhaSimComOtp>>();
+            .ExecuteAsync<AhaSimComResponse<AhaSimComOtp>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -117,8 +111,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             .WithUrlGet(new UriBuilder(EndPoint, "session", "cancel")
                 .WithParam("token", ApiKey)
                 .WithParam("session", session.Session))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<AhaSimComSessionCancel>>();
+            .ExecuteAsync<AhaSimComResponse<AhaSimComSessionCancel>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -137,8 +130,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
                 .WithParamIfNotNull("service_id", service_id)
                 .WithParamIfNotNull("fromDate", fromDate)
                 .WithParamIfNotNull("toDate", toDate))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<AhaSimComResponse<List<AhaSimComHistory>>>();
+            .ExecuteAsync<AhaSimComResponse<List<AhaSimComHistory>>>(cancellationToken);
     }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

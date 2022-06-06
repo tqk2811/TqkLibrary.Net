@@ -47,8 +47,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<TtProxyObtainResult>> Obtain(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet($"{EndPoint}obtain?{GenerateParameters()}")
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxyObtainResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxyObtainResult>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -57,8 +56,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<TtProxyObtainResult>> Obtain(int count, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}obtain?{GenerateParameters()}").WithParam("cnt", count))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxyObtainResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxyObtainResult>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -67,8 +65,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> WhiteListQuery(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}whitelist/query?{GenerateParameters()}"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -77,8 +74,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> WhiteListExists(string ip, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}whitelist/exists?{GenerateParameters()}").WithParam("ip", ip))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -87,8 +83,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> WhiteListAdd(string ip, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}whitelist/add?{GenerateParameters()}").WithParam("ip", ip))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -97,8 +92,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> WhiteListDelete(string ip, CancellationToken cancellationToken = default)
              => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}whitelist/del?{GenerateParameters()}").WithParam("ip", ip))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -107,8 +101,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> WhiteListClear(string ip, CancellationToken cancellationToken = default)
              => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}whitelist/clear?{GenerateParameters()}").WithParam("ip", ip))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -117,8 +110,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<List<string>>> SubLicenseList(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}subLicense/list?{GenerateParameters()}"))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<List<string>>>();
+            .ExecuteAsync<TtProxyResult<List<string>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -127,8 +119,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<TtProxySubLicenseResult>> SubLicenseList(int? page = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}subLicense/list?{GenerateParameters()}").WithParamIfNotNull("page", page))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxySubLicenseResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxySubLicenseResult>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -137,8 +128,7 @@ namespace TqkLibrary.Net.Proxys
         public Task<TtProxyResult<TtProxySubLicenseCreateResult>> SubLicenseCreate(int? traffic = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}subLicense/create?{GenerateParameters()}").WithParamIfNotNull("traffic", traffic))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxySubLicenseCreateResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxySubLicenseCreateResult>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -149,19 +139,16 @@ namespace TqkLibrary.Net.Proxys
             .WithUrlGet(new UriBuilder($"{EndPoint}subLicense/renew?{GenerateParameters()}")
                 .WithParamIfNotNull("traffic", traffic)
                 .WithParamIfNotNull("key", subLicenseKey))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxySubLicenseRenewResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxySubLicenseRenewResult>>(cancellationToken);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
         /// <returns></returns>
         public Task<TtProxyResult<TtProxySubLicenseRenewResult>> SubLicenseReclaim(string key = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UriBuilder($"{EndPoint}subLicense/reclaim?{GenerateParameters()}").WithParamIfNotNull("key", key))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<TtProxyResult<TtProxySubLicenseRenewResult>>();
+            .ExecuteAsync<TtProxyResult<TtProxySubLicenseRenewResult>>(cancellationToken);
 
     }
 

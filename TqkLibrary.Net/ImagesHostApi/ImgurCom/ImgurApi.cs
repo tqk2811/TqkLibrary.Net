@@ -9,30 +9,41 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.ImagesHostApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ImgurApi : BaseApi
     {
         private const string EndPoint = "https://api.imgur.com/3";
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
         public ImgurApi(string ApiKey) : base(ApiKey)
         {
         }
-        public Task<ImgurResponse<ImgurImage>> UploadImage(Bitmap bitmap)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<ImgurResponse<ImgurImage>> UploadImage(Bitmap bitmap, CancellationToken cancellationToken = default)
           => UploadImage(bitmap.BitmapToBuffer());
 
-        public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<ImgurResponse<ImgurImage>> UploadImage(byte[] bitmap, CancellationToken cancellationToken = default)
         {
-            //using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/Upload");
-            //httpRequestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            //httpRequestMessage.Headers.Add("Authorization", $"Client-ID {ApiKey}");
-
-            using MultipartFormDataContent requestContent = new MultipartFormDataContent();
-            using ByteArrayContent imageContent_instructions = new ByteArrayContent(bitmap);
+            MultipartFormDataContent requestContent = new MultipartFormDataContent();
+            ByteArrayContent imageContent_instructions = new ByteArrayContent(bitmap);
             imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_instructions, "image");
             requestContent.Add(new StringContent("file"), "type");
-            //httpRequestMessage.Content = requestContent;
-
-            return RequestPostAsync<ImgurResponse<ImgurImage>>($"{EndPoint}/Upload", null, requestContent);
+            return Build()
+                .WithUrlPost(new UriBuilder(EndPoint, "upload"), requestContent)
+                .WithHeader("Authorization", $"Client-ID {ApiKey}")
+                .ExecuteAsync<ImgurResponse<ImgurImage>>(cancellationToken);
         }
     }
 }

@@ -7,6 +7,7 @@
 		<LangVersion>10.0</LangVersion>
 	</PropertyGroup>
 
+
 	<ItemGroup>
 		<ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
 	</ItemGroup>

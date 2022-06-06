@@ -25,9 +25,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyUserKeyInfo> GetUserKeys(CancellationToken cancellationToken = default)
              => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/getUserKeys.php").WithParam("key", ApiKey))
-            .ExecuteAsync<TinsoftProxyUserKeyInfo>();
+            .ExecuteAsync<TinsoftProxyUserKeyInfo>(cancellationToken);
 
         /// <summary>
         /// 
@@ -36,9 +35,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyUserInfo> GetUserInfo(CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/getUserInfo.php").WithParam("key", ApiKey))
-            .ExecuteAsync<TinsoftProxyUserInfo>();
+            .ExecuteAsync<TinsoftProxyUserInfo>(cancellationToken);
 
         /// <summary>
         /// 
@@ -50,13 +48,12 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyOrderResult> OrderKeys(int quantity, DateTime dateTime, TinsoftProxyVip tinsoftVip, CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/orderKeys.php")
                 .WithParam("key", ApiKey)
                 .WithParam("quantity", quantity)
                 .WithParam("days", $"{dateTime:dd-MM-yyyy HH:mm:ss}")
                 .WithParam("vip", (int)tinsoftVip))
-            .ExecuteAsync<TinsoftProxyOrderResult>();
+            .ExecuteAsync<TinsoftProxyOrderResult>(cancellationToken);
 
         /// <summary>
         /// 
@@ -67,12 +64,11 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyBaseResult> ExtendKey(DateTime dateTime, string proxyKey, CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(TinsoftProxyApi.EndPoint + "/orderKeys.php")
                 .WithParam("key", ApiKey)
                 .WithParam("days", $"{dateTime:dd-MM-yyyy HH:mm:ss}")
                 .WithParam("proxy_key", proxyKey))
-            .ExecuteAsync<TinsoftProxyBaseResult>();
+            .ExecuteAsync<TinsoftProxyBaseResult>(cancellationToken);
     }
 
 

@@ -41,8 +41,7 @@ namespace TqkLibrary.Net.Proxys
                         .WithParam("access_token", ApiKey)
                         .WithParamIfNotNull("location", location)
                         .WithParamIfNotNull("provider", provider))
-                .WithCancellationToken(cancellationToken)
-                .ExecuteAsync<AzProxyResponse>();
+                .ExecuteAsync<AzProxyResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -54,8 +53,7 @@ namespace TqkLibrary.Net.Proxys
                .WithUrlGet(
                    new UriBuilder($"{EndPoint}getCurrentProxy")
                        .WithParam("access_token", ApiKey))
-               .WithCancellationToken(cancellationToken)
-               .ExecuteAsync<AzProxyResponse>();
+               .ExecuteAsync<AzProxyResponse>(cancellationToken);
     }
 
 

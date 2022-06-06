@@ -31,9 +31,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyProxyResult> ChangeProxy(int location = 0, CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(EndPoint + "/changeProxy.php").WithParam("key", ApiKey).WithParam("location", location))
-            .ExecuteAsync<TinsoftProxyProxyResult>();
+            .ExecuteAsync<TinsoftProxyProxyResult>(cancellationToken);
 
         /// <summary>
         /// 
@@ -41,9 +40,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyKeyInfo> GetKeyInfo(CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(EndPoint + "/getKeyInfo.php").WithParam("key", ApiKey))
-            .ExecuteAsync<TinsoftProxyKeyInfo>();
+            .ExecuteAsync<TinsoftProxyKeyInfo>(cancellationToken);
 
         /// <summary>
         /// 
@@ -51,9 +49,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyKeyInfo> DeleteKey(CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(EndPoint + "/deleteKey.php").WithParam("key", ApiKey))
-            .ExecuteAsync<TinsoftProxyKeyInfo>();
+            .ExecuteAsync<TinsoftProxyKeyInfo>(cancellationToken);
 
         /// <summary>
         /// 
@@ -61,9 +58,8 @@ namespace TqkLibrary.Net.Proxys
         /// <returns></returns>
         public Task<TinsoftProxyLocationResult> GetLocations(CancellationToken cancellationToken = default)
             => Build()
-            .WithCancellationToken(cancellationToken)
             .WithUrlGet(new UriBuilder(EndPoint + "/getLocations.php"))
-            .ExecuteAsync<TinsoftProxyLocationResult>();
+            .ExecuteAsync<TinsoftProxyLocationResult>(cancellationToken);
     }
 
 

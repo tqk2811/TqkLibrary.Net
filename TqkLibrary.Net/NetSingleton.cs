@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
+using TqkLibrary.Net.HttpClientHandles;
 
 namespace TqkLibrary.Net
 {
@@ -16,23 +17,19 @@ namespace TqkLibrary.Net
                 ContractResolver = new IgnoreStringEmptyContractResolver()
             };
 
-
-            clientHandler = new HttpClientHandler()
+            HttpClientHandler = new WrapperHttpClientHandler()
             {
-                UseCookies = true,
-                CookieContainer = new System.Net.CookieContainer(),
                 AllowAutoRedirect = true,
                 AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
             };
-            httpClient = new HttpClient(clientHandler);
-            httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
         }
 
 
 
-
-        internal static readonly HttpClientHandler clientHandler;
-        internal static readonly HttpClient httpClient;
+        /// <summary>
+        /// 
+        /// </summary>
+        public static WrapperHttpClientHandler HttpClientHandler { get; }
         internal static readonly JsonSerializerSettings JsonSerializerSettings;
     }
 }

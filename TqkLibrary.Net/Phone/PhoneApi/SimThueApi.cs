@@ -6,6 +6,89 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Phone.PhoneApi
 {
+    /// <summary>
+    /// https://simthue.com/vi/api/index
+    /// </summary>
+    [Obsolete("Dead service")]
+    public sealed class SimThueApi : BaseApi
+    {
+        private const string EndPoint = "http://api.simthue.com";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ApiKey"></param>
+        public SimThueApi(string ApiKey) : base(ApiKey)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueBalanceResult> GetBalance(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "balance").WithParam("key", ApiKey))
+            .ExecuteAsync<SimThueBalanceResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueServicesResult> GetAvailableServices(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "service").WithParam("key", ApiKey))
+            .ExecuteAsync<SimThueServicesResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serviceResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueRequestResult> CreateRequest(SimThueServiceResult serviceResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "create").WithParam("key", ApiKey).WithParam("service_id",serviceResult.Id))
+            .ExecuteAsync<SimThueRequestResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueCheckResult> CheckRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "check").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .ExecuteAsync<SimThueCheckResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueRequestResult> CancelRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "cancel").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .ExecuteAsync<SimThueRequestResult>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<SimThueRequestResult> FinishRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "finish").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .ExecuteAsync<SimThueRequestResult>(cancellationToken);
+    }
+
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class SimThueServicesResult : SimThueBaseResult
     {
         [JsonProperty("services")]
@@ -55,45 +138,5 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         [JsonProperty("balance")]
         public double? Balance { get; set; }
     }
-    /// <summary>
-    /// https://simthue.com/vi/api/index
-    /// </summary>
-    public sealed class SimThueApi : BaseApi
-    {
-        private const string EndPoint = "http://api.simthue.com";
-
-        public SimThueApi(string ApiKey) : base(ApiKey)
-        {
-        }
-
-        public Task<SimThueBalanceResult> GetBalance()
-          => RequestGetAsync<SimThueBalanceResult>(string.Format(EndPoint + "/balance?key={0}", ApiKey));
-
-        public Task<SimThueServicesResult> GetAvailableServices()
-          => RequestGetAsync<SimThueServicesResult>(string.Format(EndPoint + "/service?key={0}", ApiKey));
-
-        public Task<SimThueRequestResult> CreateRequest(SimThueServiceResult serviceResult)
-        {
-            if (null == serviceResult) throw new ArgumentNullException(nameof(serviceResult));
-            return RequestGetAsync<SimThueRequestResult>(string.Format(EndPoint + "/create?key={0}&service_id={1}", ApiKey, serviceResult.Id));
-        }
-
-        public Task<SimThueCheckResult> CheckRequest(SimThueRequestResult createResult)
-        {
-            if (null == createResult) throw new ArgumentNullException(nameof(createResult));
-            return RequestGetAsync<SimThueCheckResult>(string.Format(EndPoint + "/check?key={0}&id={1}", ApiKey, createResult.Id));
-        }
-
-        public Task<SimThueRequestResult> CancelRequest(SimThueRequestResult createResult)
-        {
-            if (null == createResult) throw new ArgumentNullException(nameof(createResult));
-            return RequestGetAsync<SimThueRequestResult>(string.Format(EndPoint + "/cancel?key={0}&id={1}", ApiKey, createResult.Id));
-        }
-
-        public Task<SimThueRequestResult> FinishRequest(SimThueRequestResult createResult)
-        {
-            if (null == createResult) throw new ArgumentNullException(nameof(createResult));
-            return RequestGetAsync<SimThueRequestResult>(string.Format(EndPoint + "/cancel?key={0}&id={1}", ApiKey, createResult.Id));
-        }
-    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

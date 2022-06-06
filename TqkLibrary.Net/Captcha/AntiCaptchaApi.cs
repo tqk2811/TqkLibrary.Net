@@ -12,6 +12,85 @@ namespace TqkLibrary.Net.Captcha
     /// <summary>
     /// https://anti-captcha.com/apidoc/image
     /// </summary>
+    public class AntiCaptchaApi : BaseApi
+    {
+        private class CreateTaskJson
+        {
+            [JsonProperty("clientKey")]
+            public string ClientKey { get; set; }
+
+            [JsonProperty("task")]
+            public AntiCaptchaTask Task { get; set; }
+
+            [JsonProperty("softId")]
+            public int? SoftId { get; set; }
+
+            [JsonProperty("languagePool")]
+            public string LanguagePool { get; set; } = "en";
+
+            [JsonProperty("callbackUrl")]
+            public string CallbackUrl { get; set; }
+        }
+        private class TaskResultJson
+        {
+            [JsonProperty("clientKey")]
+            public string ClientKey { get; set; }
+
+            [JsonProperty("taskId")]
+            public long TaskId { get; set; }
+        }
+
+
+        private const string EndPoint = "https://api.anti-captcha.com";
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <param name="ApiKey">ApiKey</param>
+        public AntiCaptchaApi(string ApiKey) : base(ApiKey)
+        {
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IAntiCaptchaTaskResponse> CreateTask(
+            AntiCaptchaTask antiCaptchaTask,
+            string languagePool = "en",
+            CancellationToken cancellationToken = default)
+        {
+            return await Build()
+                .WithUrlPostJson(
+                    new UriBuilder(EndPoint, "createTask"),
+                    new CreateTaskJson
+                    {
+                        ClientKey = ApiKey,
+                        Task = antiCaptchaTask,
+                        LanguagePool = languagePool
+                    })
+                .ExecuteAsync<AntiCaptchaTaskResponse>(cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<AntiCaptchaTaskResultResponse> GetTaskResult(IAntiCaptchaTaskResponse task, CancellationToken cancellationToken = default)
+            => Build()
+               .WithUrlPostJson(
+                   new UriBuilder(EndPoint, "getTaskResult"),
+                   new TaskResultJson
+                   {
+                       ClientKey = ApiKey,
+                       TaskId = task.TaskId.Value
+                   })
+               .ExecuteAsync<AntiCaptchaTaskResultResponse>(cancellationToken);
+    }
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class AntiCaptchaTask
     {
         [JsonConverter(typeof(StringEnumConverter))]
@@ -69,33 +148,15 @@ namespace TqkLibrary.Net.Captcha
         [JsonProperty("isInvisible")]
         public bool? IsInvisible { get; set; }
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public interface IAntiCaptchaTaskResponse
     {
-        /// <summary>
-        /// 
-        /// </summary>
         string ErrorCode { get; }
-        /// <summary>
-        /// 
-        /// </summary>
         string ErrorDescription { get; }
-        /// <summary>
-        /// 
-        /// </summary>
         int ErrorId { get; }
-        /// <summary>
-        /// 
-        /// </summary>
         long? TaskId { get; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     internal class AntiCaptchaTaskResponse : IAntiCaptchaTaskResponse
     {
         [JsonProperty("errorId")]
@@ -110,9 +171,7 @@ namespace TqkLibrary.Net.Captcha
         [JsonProperty("taskId")]
         public long? TaskId { get; set; }
     }
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public class AntiCaptchaTaskResultResponse
     {
         [JsonProperty("errorId")]
@@ -150,9 +209,7 @@ namespace TqkLibrary.Net.Captcha
             return Status == null || Status.Equals("ready");
         }
     }
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public class AntiCaptchaTaskSolutionResultResponse
     {
         [JsonProperty("text")]
@@ -169,138 +226,20 @@ namespace TqkLibrary.Net.Captcha
     /// </summary>
     public enum AntiCaptchaType
     {
-        /// <summary>
-        /// 
-        /// </summary>
         ImageToTextTask,
-        /// <summary>
-        /// 
-        /// </summary>
         RecaptchaV2Task,
-        /// <summary>
-        /// 
-        /// </summary>
         RecaptchaV2TaskProxyless,
-        /// <summary>
-        /// 
-        /// </summary>
         RecaptchaV3TaskProxyless,
-        /// <summary>
-        /// 
-        /// </summary>
         RecaptchaV2EnterpriseTask,
-        /// <summary>
-        /// 
-        /// </summary>
         RecaptchaV2EnterpriseTaskProxyless,
-        /// <summary>
-        /// 
-        /// </summary>
         FunCaptchaTask,
-        /// <summary>
-        /// 
-        /// </summary>
         FunCaptchaTaskProxyless,
-        /// <summary>
-        /// 
-        /// </summary>
         GeeTestTask,
-        /// <summary>
-        /// 
-        /// </summary>
         GeeTestTaskProxyless,
-        /// <summary>
-        /// 
-        /// </summary>
         HCaptchaTask,
-        /// <summary>
-        /// 
-        /// </summary>
         HCaptchaTaskProxyless
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class AntiCaptchaApi : BaseApi
-    {
-        private class CreateTaskJson
-        {
-            [JsonProperty("clientKey")]
-            public string ClientKey { get; set; }
-
-            [JsonProperty("task")]
-            public AntiCaptchaTask Task { get; set; }
-
-            [JsonProperty("softId")]
-            public int? SoftId { get; set; }
-
-            [JsonProperty("languagePool")]
-            public string LanguagePool { get; set; } = "en";
-
-            [JsonProperty("callbackUrl")]
-            public string CallbackUrl { get; set; }
-        }
-        private class TaskResultJson
-        {
-            [JsonProperty("clientKey")]
-            public string ClientKey { get; set; }
-
-            [JsonProperty("taskId")]
-            public long TaskId { get; set; }
-        }
-
-
-        private const string EndPoint = "https://api.anti-captcha.com";
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <param name="ApiKey">ApiKey</param>
-        public AntiCaptchaApi(string ApiKey) : base(ApiKey)
-        {
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="antiCaptchaTask"></param>
-        /// <param name="languagePool"></param>
-        /// <returns></returns>
-        public async Task<IAntiCaptchaTaskResponse> CreateTask(AntiCaptchaTask antiCaptchaTask, string languagePool = "en")
-        {
-            CreateTaskJson createTaskJson = new CreateTaskJson
-            {
-                ClientKey = ApiKey,
-                Task = antiCaptchaTask,
-                LanguagePool = languagePool
-            };
-
-            string json = JsonConvert.SerializeObject(createTaskJson, NetSingleton.JsonSerializerSettings);
-            return await RequestPostAsync<AntiCaptchaTaskResponse>(
-              EndPoint + "/createTask",
-              null,
-              new StringContent(json, Encoding.UTF8, "application/json"));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="task"></param>
-        /// <returns></returns>
-        public Task<AntiCaptchaTaskResultResponse> GetTaskResult(IAntiCaptchaTaskResponse task)
-        {
-            TaskResultJson taskResultJson = new TaskResultJson();
-            taskResultJson.ClientKey = ApiKey;
-            taskResultJson.TaskId = task.TaskId.Value;
-
-            string json = JsonConvert.SerializeObject(taskResultJson, NetSingleton.JsonSerializerSettings);
-            return RequestPostAsync<AntiCaptchaTaskResultResponse>(
-              EndPoint + "/getTaskResult",
-              null,
-              new StringContent(json, Encoding.UTF8, "application/json"));
-        }
-    }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     /// <summary>
     /// 

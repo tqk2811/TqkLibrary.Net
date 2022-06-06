@@ -35,8 +35,7 @@ namespace TqkLibrary.Net.Others
             .WithUrlGet(new UriBuilder(EndPoint, "ListResource.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<CloneMailSieuReListResourceResponse>();
+            .ExecuteAsync<CloneMailSieuReListResourceResponse>(cancellationToken);
 
         /// <summary>
         /// 
@@ -52,8 +51,7 @@ namespace TqkLibrary.Net.Others
                 .WithParam("password", passWord)
                 .WithParam("id", account.Id)
                 .WithParam("amount", amount))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<CloneMailSieuReApiResponse<CloneMailSieuReResourceData>>();
+            .ExecuteAsync<CloneMailSieuReApiResponse<CloneMailSieuReResourceData>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -67,8 +65,7 @@ namespace TqkLibrary.Net.Others
                 .WithParam("username", userName)
                 .WithParam("password", passWord)
                 .WithParam("id", account.Id))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<CloneMailSieuReApiResponse<CloneMailSieuReAccount>>();
+            .ExecuteAsync<CloneMailSieuReApiResponse<CloneMailSieuReAccount>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -80,8 +77,7 @@ namespace TqkLibrary.Net.Others
             .WithUrlGet(new UriBuilder(EndPoint, "GetBalance.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<string>();
+            .ExecuteAsync<string>(cancellationToken);
 
         /// <summary>
         /// 
@@ -97,8 +93,7 @@ namespace TqkLibrary.Net.Others
                 .WithParam("password", passWord)
                 .WithParam("product", product)
                 .WithParam("account", data))
-            .WithCancellationToken(cancellationToken)
-            .ExecuteAsync<string>();
+            .ExecuteAsync<string>(cancellationToken);
     }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

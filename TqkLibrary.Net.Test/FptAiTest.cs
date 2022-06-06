@@ -23,7 +23,7 @@ Dài : 45
 Eo : 84
 -----------------
 Mọi người có thể FOLLOW mình tại đây nhé!!!";
-      TextToSpeech textToSpeech = new TextToSpeech("IYvSNfjOQPSVKg7KZsBb2oFXTI0yDiD8");
+      TextToSpeechFptAi textToSpeech = new TextToSpeechFptAi("IYvSNfjOQPSVKg7KZsBb2oFXTI0yDiD8");
       TTSResponse response = textToSpeech.TTS(text).Result;
     }
   }

@@ -24,7 +24,6 @@ namespace TqkLibrary.Net
             this.HttpClient = httpClient;
         }
         HttpClient HttpClient { get; set; }
-        CancellationToken cancellationToken = CancellationToken.None;
         HttpContent httpContent = null;
         bool httpContentDispose = true;
 
@@ -155,16 +154,6 @@ namespace TqkLibrary.Net
         {
             return WithUrl((Uri)uri, HttpMethod.Post).WithJsonBody(obj);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public RequestBuilder WithCancellationToken(CancellationToken cancellationToken)
-        {
-            this.cancellationToken = cancellationToken;
-            return this;
-        }
 
         /// <summary>
         /// 
@@ -224,7 +213,7 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<HttpResponseMessage> ExecuteAsync()
+        public async Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken = default)
         {
             if (method == null || uri == null) throw new InvalidOperationException($"method or uri is null");
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
@@ -248,9 +237,9 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <returns></returns>
-        public Task<TResult> ExecuteAsync<TResult>() where TResult : class
+        public Task<TResult> ExecuteAsync<TResult>(CancellationToken cancellationToken = default) where TResult : class
         {
-            return ExecuteAsync<TResult, string>();
+            return ExecuteAsync<TResult, string>(cancellationToken);
         }
 
         static readonly Type typeString = typeof(string);
@@ -262,11 +251,11 @@ namespace TqkLibrary.Net
         /// <typeparam name="TException"></typeparam>
         /// <returns></returns>
         /// <exception cref="ApiException"></exception>
-        public async Task<TResult> ExecuteAsync<TResult, TException>() 
+        public async Task<TResult> ExecuteAsync<TResult, TException>(CancellationToken cancellationToken = default) 
             where TResult : class 
             where TException : class
         {
-            using HttpResponseMessage rep = await ExecuteAsync();
+            using HttpResponseMessage rep = await ExecuteAsync(cancellationToken);
             if (rep.IsSuccessStatusCode)
             {
                 if (typeof(TResult).Equals(typeBuffer))
