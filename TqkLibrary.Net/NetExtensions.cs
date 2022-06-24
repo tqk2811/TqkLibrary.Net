@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -16,6 +17,29 @@ namespace TqkLibrary.Net
     /// </summary>
     public static class NetExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strings"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string JoinIfNotNull(this IEnumerable<string> strings, string separator)
+        {
+            if (strings == null || strings.Count() == 0) return null;
+            return string.Join(separator, strings);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strings"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string JoinIfNotNull(this string[] strings, string separator)
+        {
+            if (strings == null || strings.Count() == 0) return null;
+            return string.Join(separator, strings);
+        }
+
         /// <summary>
         /// 
         /// </summary>
