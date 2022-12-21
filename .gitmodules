@@ -1,0 +1,3 @@
+[submodule "CsharpNugetPush"]
+	path = CsharpNugetPush
+	url = https://github.com/tqk2811/CsharpNugetPush.git
