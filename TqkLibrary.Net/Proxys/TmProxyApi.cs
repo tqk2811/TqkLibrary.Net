@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -86,8 +87,16 @@ namespace TqkLibrary.Net.Proxys
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(expired_at)) return null;
-                return DateTime.Parse(expired_at);
+                if (!string.IsNullOrWhiteSpace(expired_at) && DateTime.TryParseExact(
+                    expired_at,
+                    "HH:mm:ss dd/MM/yyyy",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out DateTime startDate))
+                {
+                    return startDate;
+                }
+                return null;
             }
         }
     }
