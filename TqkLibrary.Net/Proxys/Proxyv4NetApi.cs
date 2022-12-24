@@ -11,18 +11,18 @@ namespace TqkLibrary.Net.Proxys
     /// <summary>
     /// 
     /// </summary>
-    public class Proxyv4Net : BaseApi
+    public class Proxyv4NetApi : BaseApi
     {
         readonly string EndPoint;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public Proxyv4Net(string apiKey) : this(apiKey, "https://api.proxyv4.net/")
+        public Proxyv4NetApi(string apiKey) : this(apiKey, "https://api.proxyv4.net/")
         {
 
         }
-        internal Proxyv4Net(string apiKey, string endPoint) : base(apiKey)
+        internal Proxyv4NetApi(string apiKey, string endPoint) : base(apiKey)
         {
             if (string.IsNullOrWhiteSpace(endPoint)) throw new ArgumentNullException(nameof(endPoint));
             this.EndPoint = endPoint;

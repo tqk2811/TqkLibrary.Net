@@ -13,14 +13,14 @@ namespace TqkLibrary.Net.Proxys
     /// <summary>
     /// 
     /// </summary>
-    public class ProxyNo1Com : BaseApi
+    public class ProxyNo1ComApi : BaseApi
     {
         const string EndPoint = "https://app.proxyno1.com/api";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public ProxyNo1Com(string apiKey) : base(apiKey)
+        public ProxyNo1ComApi(string apiKey) : base(apiKey)
         {
 
         }
