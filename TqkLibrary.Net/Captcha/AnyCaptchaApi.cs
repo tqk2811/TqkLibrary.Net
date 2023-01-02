@@ -49,8 +49,7 @@ namespace TqkLibrary.Net.Captcha
             AnyCaptchaTaskResponse responseTask = await Build()
                 .WithUrlPostJson(new UriBuilder(EndPoint, "createTask"), createTaskData)
                 .ExecuteAsync<AnyCaptchaTaskResponse>(cancellationToken);
-
-
+            responseTask.anyCaptchaApi = this;
             return responseTask;
         }
 
