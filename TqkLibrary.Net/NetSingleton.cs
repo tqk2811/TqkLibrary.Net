@@ -14,7 +14,7 @@ namespace TqkLibrary.Net
             JsonSerializerSettings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new IgnoreStringEmptyContractResolver()
+                ContractResolver = new MyContractResolver(),
             };
 
             HttpClientHandler = new WrapperHttpClientHandler()
