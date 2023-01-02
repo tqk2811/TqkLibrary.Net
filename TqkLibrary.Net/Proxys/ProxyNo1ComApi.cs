@@ -13,14 +13,14 @@ namespace TqkLibrary.Net.Proxys
     /// <summary>
     /// 
     /// </summary>
-    public class ProxyNo1ComApi : BaseApi
+    public class ProxyNo1ComUserApi : BaseApi
     {
         const string EndPoint = "https://app.proxyno1.com/api";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
-        public ProxyNo1ComApi(string apiKey) : base(apiKey)
+        public ProxyNo1ComUserApi(string apiKey) : base(apiKey)
         {
 
         }
@@ -38,48 +38,12 @@ namespace TqkLibrary.Net.Proxys
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="keyInfo"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Task<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>> KeyStatus(ProxyNo1ComKeyInfo keyInfo, CancellationToken cancellationToken = default)
+        public Task<ProxyNo1ComResponse<List<ProxyNo1ComPrice>>> ListPrice(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "key-status", keyInfo?.GetKey() ?? throw new ArgumentNullException(nameof(keyInfo))))
-            .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>>(cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keyInfo"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Task<ProxyNo1ComResponse> ChangeKeyIp(ProxyNo1ComKeyInfo keyInfo, CancellationToken cancellationToken = default)
-            => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "change-key-ip", keyInfo?.GetKey() ?? throw new ArgumentNullException(nameof(keyInfo))))
-            .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keyInfo"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Task<ProxyNo1ComResponse> ReNew(ProxyNo1ComKeyInfo keyInfo, CancellationToken cancellationToken = default)
-            => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "renew", keyInfo?.GetKey() ?? throw new ArgumentNullException(nameof(keyInfo))))
-            .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>> GetLocation(CancellationToken cancellationToken = default)
-            => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "get-location"))
-            .ExecuteAsync<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>>(cancellationToken);
+            .WithUrlGet(new UriBuilder(EndPoint, "list-price", ApiKey))
+            .ExecuteAsync<ProxyNo1ComResponse<List<ProxyNo1ComPrice>>>(cancellationToken);
 
         /// <summary>
         /// 
@@ -127,6 +91,7 @@ namespace TqkLibrary.Net.Proxys
                .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComProxyInfo>>(cancellationToken);
         }
 
+
         /// <summary>
         /// 
         /// </summary>
@@ -167,16 +132,74 @@ namespace TqkLibrary.Net.Proxys
                .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
         }
 
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="keyInfo"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>> GetLocation(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "get-location"))
+            .ExecuteAsync<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>>(cancellationToken);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ProxyNo1ComApi : BaseApi
+    {
+        const string EndPoint = "https://app.proxyno1.com/api";
+        /// <summary>
+        /// 
+        /// </summary>
+        public ProxyNo1ComApi(ProxyNo1ComKeyInfo keyInfo) : base(keyInfo?.Key)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public Task<ProxyNo1ComResponse> RebootKey(ProxyNo1ComKeyInfo keyInfo, CancellationToken cancellationToken = default)
+        public Task<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>> KeyStatus(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "reboot-key", keyInfo?.GetKey() ?? throw new ArgumentNullException(nameof(keyInfo))))
+            .WithUrlGet(new UriBuilder(EndPoint, "key-status", ApiKey))
+            .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Task<ProxyNo1ComResponse> ChangeKeyIp(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "change-key-ip", ApiKey))
+            .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Task<ProxyNo1ComResponse> ReNew(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "renew", ApiKey))
+            .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Task<ProxyNo1ComResponse> RebootKey(CancellationToken cancellationToken = default)
+            => Build()
+            .WithUrlGet(new UriBuilder(EndPoint, "reboot-key", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
     }
 
@@ -198,7 +221,7 @@ namespace TqkLibrary.Net.Proxys
     public class ProxyNo1ComResponse<T> : ProxyNo1ComResponse
     {
         [JsonProperty("data")]
-        public List<T> Data { get; set; }
+        public T Data { get; set; }
     }
     public class ProxyNo1ComKeyInfo
     {
@@ -238,11 +261,14 @@ namespace TqkLibrary.Net.Proxys
     }
     public class ProxyNo1ComKeyStatus
     {
-        [JsonProperty("account")]
-        public object Account { get; set; }
+        [JsonProperty("authentication")]
+        public string Authentication { get; set; }
 
-        [JsonProperty("client_ip")]
-        public object ClientIp { get; set; }
+        [JsonProperty("ip_allow")]
+        public string IpAllow { get; set; }
+
+        [JsonProperty("change_ip_interval")]
+        public int ChangeIpInterval { get; set; }
 
         [JsonProperty("key")]
         public string Key { get; set; }
@@ -250,17 +276,39 @@ namespace TqkLibrary.Net.Proxys
         [JsonProperty("expired_at")]
         public string ExpiredAt { get; set; }
 
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
         [JsonProperty("plan")]
         public string Plan { get; set; }
 
-        [JsonProperty("http")]
-        public object Http { get; set; }
-
-        [JsonProperty("sock5")]
-        public object Sock5 { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("proxy")]
+        public ProxyNo1ComProxyInfo Proxy { get; set; }
+
+        [JsonProperty("is_vip")]
+        public int IsVip { get; set; }
+
+
+        [JsonIgnore]
+        public DateTime? GetExpiredAt
+        {
+            get
+            {
+                if (DateTime.TryParseExact(
+                    ExpiredAt,
+                    "yyyy-MM-dd HH:mm:ss",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out DateTime date))
+                {
+                    return date;
+                }
+                return null;
+            }
+        }
     }
     public class ProxyNo1ComPrice
     {
