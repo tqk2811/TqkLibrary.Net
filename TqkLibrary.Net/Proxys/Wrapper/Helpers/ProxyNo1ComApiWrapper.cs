@@ -56,5 +56,14 @@ namespace TqkLibrary.Net.Proxys.Wrapper.Helpers
                 Message = res_changeIp.Message,
             };
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return proxyNo1ComApi.ApiKey;
+        }
     }
 }
