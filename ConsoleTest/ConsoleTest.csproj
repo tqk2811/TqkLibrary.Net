@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net462</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>10.0</LangVersion>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\TqkLibrary.Net.Captcha\TqkLibrary.Net.Captcha.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net.CloudStorage.GoogleDrive\TqkLibrary.Net.CloudStorage.GoogleDrive.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net.Mail\TqkLibrary.Net.Mail.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net.Other\TqkLibrary.Net.Other.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net.Phone\TqkLibrary.Net.Phone.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net.Proxy\TqkLibrary.Net.Proxy.csproj" />
+		<ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
+	</ItemGroup>
+
+</Project>

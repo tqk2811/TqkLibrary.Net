@@ -1,13 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 namespace TqkLibrary.Net
 {
     /// <summary>
@@ -72,7 +65,7 @@ namespace TqkLibrary.Net
         {
             this.httpClient = new HttpClient(NetSingleton.HttpClientHandler, false);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

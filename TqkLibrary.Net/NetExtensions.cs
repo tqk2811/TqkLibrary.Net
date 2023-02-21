@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace TqkLibrary.Net
@@ -57,18 +55,19 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        public static byte[] BitmapToBuffer(this Bitmap bitmap)
+        public static byte[] BitmapToBuffer(this Bitmap bitmap, ImageFormat imageFormat = null)
         {
             byte[] buffer_bitmap = null;
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                bitmap.Save(memoryStream, ImageFormat.Jpeg);//hoac png
+                bitmap.Save(memoryStream, imageFormat ?? ImageFormat.Jpeg);
                 memoryStream.Position = 0;
                 buffer_bitmap = new byte[memoryStream.Length];
-                memoryStream.Read(buffer_bitmap, 0, (int)memoryStream.Length);
+                buffer_bitmap = memoryStream.ToArray();
             }
             return buffer_bitmap;
         }
+
         /// <summary>
         /// 
         /// </summary>

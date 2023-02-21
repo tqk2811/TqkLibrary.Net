@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\ProjectBuildProperties.targets" />
+
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="3.2.0" />
+		<PackageReference Include="MimeKit" Version="3.2.0" />
+		<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+		<Reference Include="System.Web" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
+	</ItemGroup>
+	
+</Project>

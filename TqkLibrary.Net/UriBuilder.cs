@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Web;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Web;
 
 namespace TqkLibrary.Net
 {
@@ -46,7 +42,7 @@ namespace TqkLibrary.Net
             this.url = string.Join("/", urls.Select(x => x.ToString().TrimStart('/').TrimEnd('/')));
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

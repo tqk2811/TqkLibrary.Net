@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -251,8 +250,8 @@ namespace TqkLibrary.Net
         /// <typeparam name="TException"></typeparam>
         /// <returns></returns>
         /// <exception cref="ApiException"></exception>
-        public async Task<TResult> ExecuteAsync<TResult, TException>(CancellationToken cancellationToken = default) 
-            where TResult : class 
+        public async Task<TResult> ExecuteAsync<TResult, TException>(CancellationToken cancellationToken = default)
+            where TResult : class
             where TException : class
         {
             using HttpResponseMessage rep = await ExecuteAsync(cancellationToken);

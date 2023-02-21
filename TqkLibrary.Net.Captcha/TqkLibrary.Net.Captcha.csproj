@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\ProjectBuildProperties.targets" />
+	
+	<PropertyGroup>
+	</PropertyGroup>
+
+	<ItemGroup>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
+	</ItemGroup>
+
+</Project>
