@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Helpers
+namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 {
     /// <summary>
     /// 

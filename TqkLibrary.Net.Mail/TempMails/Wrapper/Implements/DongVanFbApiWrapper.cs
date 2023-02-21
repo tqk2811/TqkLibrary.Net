@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Mail.BuyMailApi;
 
-namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Helper
+namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
 {
     /// <summary>
     /// 

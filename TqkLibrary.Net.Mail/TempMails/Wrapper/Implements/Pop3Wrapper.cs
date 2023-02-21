@@ -6,7 +6,7 @@
 //using System.Threading;
 //using System.Threading.Tasks;
 
-//namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Helper
+//namespace TqkLibrary.Net.Mails.TempMails.Wrapper.Implements
 //{
 //    /// <summary>
 //    /// 
@@ -25,7 +25,7 @@
 //        /// <param name="imapAccounts"></param>
 //        public Pop3Wrapper(string host, int port, IEnumerable<ImapAccount> imapAccounts)
 //        {
-            
+
 //        }
 //        /// <summary>
 //        /// 

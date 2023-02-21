@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy;
 
-namespace TqkLibrary.Net.Proxy.Wrapper.Helpers
+namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
     /// <summary>
     /// 

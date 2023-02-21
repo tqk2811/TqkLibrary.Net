@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.Wrapper.Helpers
+namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
     /// <summary>
     /// 
