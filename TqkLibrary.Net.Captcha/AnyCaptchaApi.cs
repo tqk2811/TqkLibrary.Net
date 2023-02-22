@@ -17,12 +17,40 @@ namespace TqkLibrary.Net.Captcha
         /// <param name="apiKey"></param>
         public AnyCaptchaApi(string apiKey) : base(apiKey) { }
 
+        async Task<IAnyCaptchaTaskResponse> RequestTask(CreateTaskRequest createTaskRequest, CancellationToken cancellationToken = default)
+        {
+            AnyCaptchaTaskResponse responseTask = await Build()
+                .WithUrlPostJson(new UriBuilder(EndPoint, "createTask"), createTaskRequest)
+                .ExecuteAsync<AnyCaptchaTaskResponse>(cancellationToken);
+            responseTask.anyCaptchaApi = this;
+            return responseTask;
+        }
+
+
+        public Task<IAnyCaptchaTaskResponse> ImageToTextAsync(byte[] imageBuffer, CancellationToken cancellationToken = default)
+        {
+            if (imageBuffer is null || imageBuffer.Length == 0) throw new ArgumentNullException(nameof(imageBuffer));
+            CreateTaskRequest createTaskData = new CreateTaskRequest()
+            {
+                ClientKey = this.ApiKey,
+                Task = new TaskData()
+                {
+                    Type = "ImageToTextTask",
+                    Body = Convert.ToBase64String(imageBuffer),
+                }
+            };
+
+            return RequestTask(createTaskData, cancellationToken);
+        }
+
+
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task<IAnyCaptchaTaskResponse> RecaptchaV2TaskProxyless(
+        public Task<IAnyCaptchaTaskResponse> RecaptchaV2TaskProxylessAsync(
             string websiteURL,
             string websiteKey,
             bool isInvisible = false,
@@ -36,18 +64,14 @@ namespace TqkLibrary.Net.Captcha
                 ClientKey = this.ApiKey,
                 Task = new TaskData()
                 {
-                    Type = nameof(RecaptchaV2TaskProxyless),
-                    WebsiteURL = websiteURL,
+                    Type = "RecaptchaV2TaskProxyless",
+                    WebsiteURL = uri.ToString(),
                     WebsiteKey = websiteKey,
                     IsInvisible = isInvisible
                 }
             };
 
-            AnyCaptchaTaskResponse responseTask = await Build()
-                .WithUrlPostJson(new UriBuilder(EndPoint, "createTask"), createTaskData)
-                .ExecuteAsync<AnyCaptchaTaskResponse>(cancellationToken);
-            responseTask.anyCaptchaApi = this;
-            return responseTask;
+            return RequestTask(createTaskData, cancellationToken);
         }
 
 
@@ -105,6 +129,9 @@ namespace TqkLibrary.Net.Captcha
 
             [JsonProperty("isInvisible")]
             public bool IsInvisible { get; set; }
+
+            [JsonProperty("body")]
+            public string Body { get; set; }
         }
     }
 
@@ -169,9 +196,9 @@ namespace TqkLibrary.Net.Captcha
         {
             while (true)
             {
-                await Task.Delay(delay, cancellationToken);
                 GetTaskResultResponse getTaskResultResponse = await anyCaptchaApi.GetTaskResult(this, cancellationToken).ConfigureAwait(false);
                 if (getTaskResultResponse.ErrorId != 0 || "ready".Equals(getTaskResultResponse.Status)) return getTaskResultResponse;
+                await Task.Delay(delay, cancellationToken);
             }
         }
     }

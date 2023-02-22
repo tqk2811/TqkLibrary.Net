@@ -19,18 +19,21 @@ namespace TqkLibrary.Net.Captcha
 
     public class TwoCaptchaResponse
     {
-        public int status { get; set; }
-        public string request { get; set; }
+        [JsonProperty("status")]
+        public int Status { get; set; }
+
+        [JsonProperty("request")]
+        public string Request { get; set; }
 
         public override string ToString()
         {
-            return $"request: {status}, request: {request}";
+            return $"request: {Status}, request: {Request}";
         }
 
         public TwoCaptchaState CheckState()
         {
-            if (status == 1) return TwoCaptchaState.Success;
-            if (request.Contains("CAPCHA_NOT_READY")) return TwoCaptchaState.NotReady;
+            if (Status == 1) return TwoCaptchaState.Success;
+            if (Request.Contains("CAPCHA_NOT_READY")) return TwoCaptchaState.NotReady;
             else return TwoCaptchaState.Error;
         }
     }
