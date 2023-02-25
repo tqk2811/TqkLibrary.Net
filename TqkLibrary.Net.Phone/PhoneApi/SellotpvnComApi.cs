@@ -52,8 +52,9 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         {
             [JsonProperty("error")]
             public bool? Error { get; set; }
+
             [JsonProperty("id")]
-            public int Id { get; set; }
+            public string Id { get; set; }
 
             [JsonProperty("phoneNumber")]
             public string PhoneNumber { get; set; }
