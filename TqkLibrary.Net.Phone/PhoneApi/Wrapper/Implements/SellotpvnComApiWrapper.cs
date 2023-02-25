@@ -47,7 +47,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
             public string PhoneNumber => response.PhoneNumber;
 
-            public string Message => response.otp;
+            public string Message => response.Content;
 
             public Task CancelWaitSms(CancellationToken cancellationToken = default)
             {
