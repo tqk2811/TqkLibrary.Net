@@ -10,6 +10,6 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        public bool IsTimeout { get; }
+        bool IsTimeout { get; }
     }
 }

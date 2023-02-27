@@ -65,6 +65,9 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             [JsonProperty("content")]
             public string Content { get; set; }
 
+            [JsonProperty("otp")]
+            public string Otp { get; set; }
+
             [JsonProperty("status")]
             public Status Status { get; set; }
 

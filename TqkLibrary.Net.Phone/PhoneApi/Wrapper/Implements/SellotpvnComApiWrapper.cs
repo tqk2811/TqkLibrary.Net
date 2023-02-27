@@ -37,7 +37,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         class PhoneWrapperSession : IPhoneWrapperSession
         {
             readonly SellotpvnComApi sellotpvnComApi;
-            readonly SellotpvnComApi.Response response;
+            SellotpvnComApi.Response response;
             public PhoneWrapperSession(SellotpvnComApi sellotpvnComApi, SellotpvnComApi.Response response)
             {
                 this.sellotpvnComApi = sellotpvnComApi ?? throw new ArgumentNullException(nameof(sellotpvnComApi));
@@ -54,9 +54,43 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
                 throw new NotImplementedException();
             }
 
-            public Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+            public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
             {
-                throw new NotImplementedException();
+                response = await sellotpvnComApi.GetOrder(response, cancellationToken);
+                if (response.Status == SellotpvnComApi.Status.Failed)
+                {
+                    return new PhoneWrapperSmsResult() { IsTimeout = true };
+                }
+                if (!string.IsNullOrWhiteSpace(response.Content))
+                {
+                    return new PhoneWrapperSmsResult(new PhoneWrapperSms(response));
+                }
+                return new PhoneWrapperSmsResult();
+            }
+
+            class PhoneWrapperSmsResult : List<IPhoneWrapperSms>, IPhoneWrapperSmsResult<IPhoneWrapperSms>
+            {
+                public PhoneWrapperSmsResult()
+                {
+
+                }
+                public bool IsTimeout { get; set; } = false;
+                public PhoneWrapperSmsResult(PhoneWrapperSms phoneWrapperSms)
+                {
+                    this.Add(phoneWrapperSms ?? throw new ArgumentNullException(nameof(phoneWrapperSms)));
+                }
+            }
+
+            class PhoneWrapperSms : IPhoneWrapperSms
+            {
+                readonly SellotpvnComApi.Response response;
+                public PhoneWrapperSms(SellotpvnComApi.Response response)
+                {
+                    this.response = response ?? throw new ArgumentNullException(nameof(response));
+                }
+                public string Text => response.Content;
+
+                public string Code => response.Otp;
             }
         }
     }
