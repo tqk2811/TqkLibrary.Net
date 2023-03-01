@@ -114,42 +114,24 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
                 httpRequestMessage.Headers.Add("Origin", "https://drive.google.com/");
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-                if (httpResponseMessage.IsSuccessStatusCode)
+                httpResponseMessage.EnsureSuccessStatusCode();
+                if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
                 {
-                    if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
-                    {
-                        Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
-                        return new StreamWrapper(httpResponseMessage, stream);
-                    }
-                    else if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
-                    {
-                        string content = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
-                        Match match = regex_confirmDriveDownload.Match(content);
-                        if (match.Success)//file large, can't scan virus, need confirm
-                        {
-                            url = HttpUtility.HtmlDecode(match.Value);
-                            method = HttpMethod.Post;
-                            continue;
-                        }
-                    }
-
-                    throw new Exception(url);
+                    Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+                    return new StreamWrapper(httpResponseMessage, stream);
                 }
-                else
+                else if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
                 {
-                    httpResponseMessage.Dispose();
-
-                    switch (httpResponseMessage.StatusCode)
+                    string content = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+                    Match match = regex_confirmDriveDownload.Match(content);
+                    if (match.Success)//file large, can't scan virus, need confirm
                     {
-                        case HttpStatusCode.NotFound:
-                            {
-                                throw new FileNotFoundException(url);
-                            }
-
-                        default:
-                            throw new Exception(url);
+                        url = HttpUtility.HtmlDecode(match.Value);
+                        method = HttpMethod.Post;
+                        continue;
                     }
                 }
+                throw new InvalidDataException($"Can't find download link for fileId: {fileId}, {url}");
             }
         }
     }
