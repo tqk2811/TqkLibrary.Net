@@ -15,6 +15,16 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             this.httpResponseMessage = httpResponseMessage ?? throw new ArgumentNullException(nameof(httpResponseMessage));
             this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
+        ~StreamWrapper()
+        {
+            Dispose(false);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            httpResponseMessage.Dispose();
+            stream.Dispose();
+            base.Dispose(disposing);
+        }
         public override bool CanRead => stream.CanRead;
 
         public override bool CanSeek => stream.CanSeek;
@@ -50,6 +60,9 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             stream.Write(buffer, offset, count);
         }
 
+
+        //https://devblogs.microsoft.com/pfxteam/overriding-stream-asynchrony/
+        //must overwite BeginRead/EndRead, BeginWrite/EndWrite for asynchronous 
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
             return stream.BeginRead(buffer, offset, count, callback, state);
@@ -57,20 +70,6 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
             return stream.BeginWrite(buffer, offset, count, callback, state);
-        }
-        public override bool CanTimeout => stream.CanTimeout;
-        public override void Close()
-        {
-            stream.Close();
-        }
-        public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
-        {
-            return stream.CopyToAsync(destination, bufferSize, cancellationToken);
-        }
-        protected override void Dispose(bool disposing)
-        {
-            stream.Dispose();
-            httpResponseMessage.Dispose();
         }
         public override int EndRead(IAsyncResult asyncResult)
         {
@@ -80,65 +79,27 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         {
             stream.EndWrite(asyncResult);
         }
-        public override bool Equals(object obj)
-        {
-            return stream.Equals(obj);
-        }
-        public override Task FlushAsync(CancellationToken cancellationToken)
-        {
-            return stream.FlushAsync(cancellationToken);
-        }
-        public override int GetHashCode()
-        {
-            return stream.GetHashCode();
-        }
-        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
             return stream.ReadAsync(buffer, offset, count, cancellationToken);
         }
-        public override int ReadByte()
-        {
-            return stream.ReadByte();
-        }
-        public override int ReadTimeout { get => stream.ReadTimeout; set => stream.ReadTimeout = value; }
-        public override string ToString()
-        {
-            return stream.ToString();
-        }
-        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
             return stream.WriteAsync(buffer, offset, count, cancellationToken);
         }
-        public override void WriteByte(byte value)
+        public override Task FlushAsync(CancellationToken cancellationToken = default)
         {
-            stream.WriteByte(value);
+            return stream.FlushAsync(cancellationToken);
         }
-        public override int WriteTimeout { get => stream.WriteTimeout; set => stream.WriteTimeout = value; }
-
 #if NET5_0_OR_GREATER
-        public override void CopyTo(Stream destination, int bufferSize)
-        {
-            stream.CopyTo(destination, bufferSize);
-        }
-        public override ValueTask DisposeAsync()
-        {
-            return stream.DisposeAsync();
-        }
-        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
-        {
-            return stream.WriteAsync(buffer, cancellationToken);
-        }
-        public override void Write(ReadOnlySpan<byte> buffer)
-        {
-            stream.Write(buffer);
-        }
         public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             return stream.ReadAsync(buffer, cancellationToken);
         }
-        public override int Read(Span<byte> buffer)
+        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            return stream.Read(buffer);
+            return stream.WriteAsync(buffer, cancellationToken);
         }
 #endif
     }
