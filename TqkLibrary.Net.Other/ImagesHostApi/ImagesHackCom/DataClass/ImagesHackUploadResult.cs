@@ -2,15 +2,15 @@
 
 namespace TqkLibrary.Net.ImagesHostApi
 {
-  public class ImagesHackUploadResult
-  {
-    public long? max_filesize { get; set; }
-    public long? space_limit { get; set; }
-    public long? space_used { get; set; }
-    public long? space_left { get; set; }
-    public int? passed { get; set; }
-    public int? failed { get; set; }
-    public int? total { get; set; }
-    public List<ImagesHackUploadImage> images { get; set; }
-  }
+    public class ImagesHackUploadResult
+    {
+        public long? max_filesize { get; set; }
+        public long? space_limit { get; set; }
+        public long? space_used { get; set; }
+        public long? space_left { get; set; }
+        public int? passed { get; set; }
+        public int? failed { get; set; }
+        public int? total { get; set; }
+        public List<ImagesHackUploadImage> images { get; set; }
+    }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
@@ -35,10 +30,10 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         }
 
         public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(
-            Bitmap bitmap,
+            byte[] bitmapBuffer,
             CancellationToken cancellationToken = default)
         {
-            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.Nomal(bitmap.BitmapToBuffer(), cancellationToken);
+            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.Nomal(bitmapBuffer, cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
         }
 

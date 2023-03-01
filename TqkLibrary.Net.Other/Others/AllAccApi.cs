@@ -25,7 +25,7 @@ namespace TqkLibrary.Net.Others
         {
             public string api_key { get; set; }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -34,7 +34,7 @@ namespace TqkLibrary.Net.Others
             => Build()
             .WithUrlPostJson(new UriBuilder(EndPoint, "v1/balance"), new ApiPost() { api_key = ApiKey })
             .ExecuteAsync<AllAccApiBalanceResponse>(cancellationToken);
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.Others
             => Build()
             .WithUrlGet(new UriBuilder(EndPoint, "v1/category", category.Id.ToString()))
             .ExecuteAsync<AllAccData<AllAccProduct>>(cancellationToken);
-        
+
         class BuyPost : ApiPost
         {
             public int id_product { get; set; }

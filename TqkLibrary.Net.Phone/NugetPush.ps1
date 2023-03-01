@@ -1,1 +1,1 @@
-﻿.\..\CsharpNugetPush\CsharpNugetPush.ps1 "01"
+﻿.\..\CsharpNugetPush\CsharpNugetPush.ps1 "00"

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -247,13 +246,13 @@ namespace TqkLibrary.Net.Captcha
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="bitmap"></param>
+        /// <param name="bitmapBuffer"></param>
         /// <returns></returns>
-        public static AntiCaptchaTask AntiCaptchaImageToTextTask(this Bitmap bitmap)
+        public static AntiCaptchaTask AntiCaptchaImageToTextTask(this byte[] bitmapBuffer)
         {
             AntiCaptchaTask task = new AntiCaptchaTask();
             task.Type = AntiCaptchaType.ImageToTextTask;
-            task.Body = Convert.ToBase64String(bitmap.BitmapToBuffer());
+            task.Body = Convert.ToBase64String(bitmapBuffer);
             return task;
         }
     }

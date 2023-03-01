@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -48,24 +45,6 @@ namespace TqkLibrary.Net
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://api.myip.com");
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<MyIp>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bitmap"></param>
-        /// <returns></returns>
-        public static byte[] BitmapToBuffer(this Bitmap bitmap, ImageFormat imageFormat = null)
-        {
-            byte[] buffer_bitmap = null;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                bitmap.Save(memoryStream, imageFormat ?? ImageFormat.Jpeg);
-                memoryStream.Position = 0;
-                buffer_bitmap = new byte[memoryStream.Length];
-                buffer_bitmap = memoryStream.ToArray();
-            }
-            return buffer_bitmap;
         }
 
         /// <summary>

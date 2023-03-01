@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,23 +24,16 @@ namespace TqkLibrary.Net.ImagesHostApi
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<ImagesHackResponse<ImagesHackUploadResult>> UploadImage(Bitmap bitmap, CancellationToken cancellationToken = default)
-          => UploadImage(bitmap.BitmapToBuffer(), cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<ImagesHackResponse<ImagesHackUploadResult>> UploadImage(byte[] bitmap, CancellationToken cancellationToken = default)
+        public Task<ImagesHackResponse<ImagesHackUploadResult>> UploadImage(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
         {
             MultipartFormDataContent requestContent = new MultipartFormDataContent();
-            ByteArrayContent imageContent_instructions = new ByteArrayContent(bitmap);
+            ByteArrayContent imageContent_instructions = new ByteArrayContent(bitmapBuffer);
             imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_instructions, "file", "file.jpeg");
 
             return Build()
-            .WithUrlPost(new UriBuilder(EndPoint).WithParam("api_key", ApiKey), requestContent)
-            .ExecuteAsync<ImagesHackResponse<ImagesHackUploadResult>>(cancellationToken);
+                .WithUrlPost(new UriBuilder(EndPoint).WithParam("api_key", ApiKey), requestContent)
+                .ExecuteAsync<ImagesHackResponse<ImagesHackUploadResult>>(cancellationToken);
         }
     }
 }

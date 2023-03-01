@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Drawing;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -103,18 +102,18 @@ namespace TqkLibrary.Net.Captcha
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         public Task<TwoCaptchaResponse> ReCaptchaV2_old(
-            Bitmap bitmap, Bitmap imginstructions,
+            byte[] bitmapBuffer, byte[] imginstructionsBuffer,
             int? recaptcharows = null, int? recaptchacols = null,
             CancellationToken cancellationToken = default)
         {
-            if (null == bitmap) throw new ArgumentNullException(nameof(bitmap));
-            if (null == imginstructions) throw new ArgumentNullException(nameof(imginstructions));
+            if (bitmapBuffer is null || bitmapBuffer.Length == 0) throw new ArgumentNullException(nameof(bitmapBuffer));
+            if (imginstructionsBuffer is null || imginstructionsBuffer.Length == 0) throw new ArgumentNullException(nameof(imginstructionsBuffer));
 
             MultipartFormDataContent requestContent = new MultipartFormDataContent();
-            ByteArrayContent imageContent_bitmap = new ByteArrayContent(bitmap.BitmapToBuffer());
+            ByteArrayContent imageContent_bitmap = new ByteArrayContent(bitmapBuffer);
             imageContent_bitmap.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_bitmap, "file", "file.jpg");
-            ByteArrayContent imageContent_instructions = new ByteArrayContent(imginstructions.BitmapToBuffer());
+            ByteArrayContent imageContent_instructions = new ByteArrayContent(imginstructionsBuffer);
             imageContent_instructions.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent_instructions, "imginstructions", "imginstructions.jpg");
 
@@ -150,12 +149,6 @@ namespace TqkLibrary.Net.Captcha
                     requestContent)
                 .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<TwoCaptchaResponse> Nomal(Bitmap bitmap, CancellationToken cancellationToken = default)
-          => Nomal(bitmap.BitmapToBuffer(), cancellationToken);
 
         //https://2captcha.com/2captcha-api#recaptchav2new_proxy
         /// <summary>

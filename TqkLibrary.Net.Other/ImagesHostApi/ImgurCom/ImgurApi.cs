@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,12 +18,6 @@ namespace TqkLibrary.Net.ImagesHostApi
         public ImgurApi(string ApiKey) : base(ApiKey)
         {
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<ImgurResponse<ImgurImage>> UploadImage(Bitmap bitmap, CancellationToken cancellationToken = default)
-          => UploadImage(bitmap.BitmapToBuffer());
 
         /// <summary>
         /// 

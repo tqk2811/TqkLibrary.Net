@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,10 +27,10 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 .ConfigureAwait(false);
             return new CaptchaTask(anyCaptchaTaskResponse, s => s.GRecaptchaResponse);
         }
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(Bitmap bitmap, CancellationToken cancellationToken = default)
+        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
         {
             IAnyCaptchaTaskResponse anyCaptchaTaskResponse = await anyCaptchaApi
-                .ImageToTextAsync(bitmap.BitmapToBuffer(), cancellationToken: cancellationToken)
+                .ImageToTextAsync(bitmapBuffer, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
             return new CaptchaTask(anyCaptchaTaskResponse, s => s.Text);
         }
