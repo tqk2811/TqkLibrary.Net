@@ -50,9 +50,6 @@ namespace TqkLibrary.Net.Phone.PhoneApi
 
         public class Response
         {
-            [JsonProperty("error")]
-            public bool? Error { get; set; }
-
             [JsonProperty("id")]
             public string Id { get; set; }
 
@@ -73,10 +70,14 @@ namespace TqkLibrary.Net.Phone.PhoneApi
 
             [JsonProperty("createdAt")]
             public string CreatedAt { get; set; }
+
+            [JsonProperty("msg")]
+            public string Message { get; set; }
         }
         public enum Status
         {
-            Failed,
+            False = 0,
+            Failed = 0,
             Successed,
             Pending
         }

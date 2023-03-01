@@ -47,11 +47,18 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
             public string PhoneNumber => response.PhoneNumber;
 
-            public string Message => response.Content;
+            public string Message
+            {
+                get
+                {
+                    if (!string.IsNullOrWhiteSpace(response.Message)) return response.Message;
+                    return string.Empty;
+                }
+            }
 
             public Task CancelWaitSms(CancellationToken cancellationToken = default)
             {
-                throw new NotImplementedException();
+                return Task.CompletedTask;
             }
 
             public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
