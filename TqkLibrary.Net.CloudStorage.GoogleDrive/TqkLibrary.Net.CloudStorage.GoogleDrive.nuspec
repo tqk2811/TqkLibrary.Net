@@ -36,5 +36,6 @@
 		<file src="bin\Release\**\$id$.dll" target="lib\" />
 		<file src="bin\Release\**\$id$.pdb" target="lib\" />
 		<file src="bin\Release\**\$id$.xml" target="lib\" />
+		<file src="**\*.cs" target="src\" exclude="obj\**\*.cs;bin\**\*.cs"/>
 	</files>
 </package>
