@@ -9,13 +9,20 @@ namespace ConsoleTest.CloudStorage
 {
     internal class GoogleDriveTest
     {
+        const string folderId = "0Bx154iMNwuyWR1FhbzFUX3VuT0E";
+        const string folderResourceKey = "0-8tPJbWpik3QCtggrAEc-cA";
+        const string fileId = "1TNjvaoiSxoR94Vfo_F4YDPqcEC-iOTPg";
+        //const string fileId = "1Yz7FGBDdH3sStSd1YGhnw6Xc3BPYmYj5";
+        const string fileIdLarge = "1RWBqh_A_r5WRF9srwsBJVpcnLKHI4TAK";
         public static async Task Test()
         {
             DriveApiNonLogin driveApiNonLogin = new DriveApiNonLogin();
             int count = 0;
             while (true)
             {
-                using Stream stream = await driveApiNonLogin.DownloadFileAsync("1Yz7FGBDdH3sStSd1YGhnw6Xc3BPYmYj5");
+                //var metadatas = await driveApiNonLogin.ListPublicFolderAsync(DriveFileListOption.CreateQueryFolder(folderId, folderResourceKey));
+                //var metadata = await driveApiNonLogin.GetMetadataAsync(fileId);
+                using Stream stream = await driveApiNonLogin.DownloadFileAsync(fileIdLarge);
                 byte[] buffer = new byte[1024 * 1024 * 8];
                 long total = 0;
                 while (true)

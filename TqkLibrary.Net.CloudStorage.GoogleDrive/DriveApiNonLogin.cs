@@ -14,7 +14,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 {
     public class DriveApiNonLogin : IDisposable
     {
-        const string apiKey = "AIzaSyC1qbk75NzWBvSaDh6KnsjjA9pIrP4lYIE";
+        public string ApiKey { get; set; } = "AIzaSyC1qbk75NzWBvSaDh6KnsjjA9pIrP4lYIE";
         readonly HttpClient httpClient;
         public DriveApiNonLogin() : this(
             new HttpClient(
@@ -64,7 +64,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 queryBuilder.Add("includeTeamDriveItems", option.IncludeTeamDriveItems.ToString().ToLower());
                 queryBuilder.Add("corpora", "default");
                 queryBuilder.Add("retryCount", "0");
-                queryBuilder.Add("key", apiKey);
+                queryBuilder.Add("key", ApiKey);
                 queryBuilder.Add("q", option.Query);
                 queryBuilder.Add("fields", option.Fields);
                 queryBuilder.Add("orderBy", option.OrderBy);
@@ -74,7 +74,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             }
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-            httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com");
+            httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("x-goog-drive-resource-keys", $"{option.FolderId}/{option.Resourcekey}");
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
@@ -90,12 +90,12 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             queryBuilder.Add("supportsTeamDrives", "true");
             queryBuilder.Add("includeBadgedLabels", "true");
             queryBuilder.Add("enforceSingleParent", "true");
-            queryBuilder.Add("key", apiKey);
+            queryBuilder.Add("key", ApiKey);
             queryBuilder.Add("fields", "*");
 
-            string url = $"https://content.googleapis.com//drive/v2beta/files/{fileId}";
+            string url = $"https://content.googleapis.com/drive/v2beta/files/{fileId}?{queryBuilder.ToString()}";
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-            httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com");
+            httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
             httpRequestMessage.Headers.Add("Accept", "application/json");
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
             string json_text = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -111,16 +111,11 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             while (true)
             {
                 using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, url);
-                httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
-                httpRequestMessage.Headers.Add("Origin", "https://drive.google.com/");
+                //httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
+                //httpRequestMessage.Headers.Add("Origin", "https://drive.google.com/");
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
                 httpResponseMessage.EnsureSuccessStatusCode();
-                if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
-                {
-                    Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
-                    return new StreamWrapper(httpResponseMessage, stream);
-                }
-                else if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
+                if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
                 {
                     string content = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
                     Match match = regex_confirmDriveDownload.Match(content);
@@ -131,7 +126,12 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                         continue;
                     }
                 }
-                throw new InvalidDataException($"Can't find download link for fileId: {fileId}, {url}");
+                else// if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
+                {
+                    Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+                    return new StreamWrapper(httpResponseMessage, stream);
+                }
+                //throw new InvalidDataException($"Can't find download link for fileId: {fileId}, {url}");
             }
         }
     }
