@@ -31,7 +31,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 
         public override bool CanWrite => stream.CanWrite;
 
-        public override long Length => stream.Length;
+        public override long Length => httpResponseMessage.Content?.Headers?.ContentLength ?? stream.Length;
 
         public override long Position { get => stream.Position; set => stream.Position = value; }
 
