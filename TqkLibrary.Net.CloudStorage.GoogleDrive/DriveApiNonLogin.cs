@@ -12,10 +12,19 @@ using Newtonsoft.Json;
 
 namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DriveApiNonLogin : IDisposable
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string ApiKey { get; set; } = "AIzaSyC1qbk75NzWBvSaDh6KnsjjA9pIrP4lYIE";
         readonly HttpClient httpClient;
+        /// <summary>
+        /// 
+        /// </summary>
         public DriveApiNonLogin() : this(
             new HttpClient(
                 new HttpClientHandler()
@@ -27,20 +36,37 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         {
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public DriveApiNonLogin(HttpClient httpClient)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
+        /// <summary>
+        /// 
+        /// </summary>
         ~DriveApiNonLogin()
         {
             httpClient.Dispose();
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             httpClient.Dispose();
             GC.SuppressFinalize(this);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="option"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<FileList> ListPublicFolderAsync(DriveFileListOption option, CancellationToken cancellationToken = default)
         {
             if (option == null) throw new ArgumentNullException(nameof(option));
@@ -82,6 +108,13 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             return JsonConvert.DeserializeObject<FileList>(json_text);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<Google.Apis.Drive.v2.Data.File> GetMetadataAsync(string fileId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(fileId)) throw new ArgumentNullException(fileId);
@@ -104,6 +137,12 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
 
 
         static readonly Regex regex_confirmDriveDownload = new Regex("(?<=action=\")https:\\/\\/drive.google.com\\/uc?.*?(?=\")");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<Stream> DownloadFileAsync(string fileId, CancellationToken cancellationToken = default)
         {
             string url = $"https://drive.google.com/uc?export=download&id={fileId}";
