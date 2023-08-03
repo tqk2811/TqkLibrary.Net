@@ -43,11 +43,10 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="login"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailWrapperSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<IMailWrapperSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             if (AccountType == null) throw new InvalidOperationException($"{AccountType} was null");
             var acc = await dongVanFbApi.BuyMail(AccountType, Amount, cancellationToken).ConfigureAwait(false);
@@ -65,57 +64,59 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         {
             return Task.CompletedTask;
         }
-    }
 
-    internal class DongVanFbApiWrapperSession : IMailWrapperSession
-    {
-        readonly DongVanFbApi dongVanFbApi;
-        readonly DongVanFbBuyMailResponse dongVanFbBuyMailResponse;
-        readonly DongVanFbMailAccount account;
-        internal DongVanFbApiWrapperSession(DongVanFbApi dongVanFbApi, DongVanFbBuyMailResponse dongVanFbBuyMailResponse)
+
+
+        internal class DongVanFbApiWrapperSession : IMailWrapperSession
         {
-            this.dongVanFbApi = dongVanFbApi;
-            this.dongVanFbBuyMailResponse = dongVanFbBuyMailResponse;
-            this.account = dongVanFbBuyMailResponse.Data.ListDataAccount.FirstOrDefault();
-        }
-        public string Email => account?.Email;
-        public string Password => account?.Password;
+            readonly DongVanFbApi _dongVanFbApi;
+            readonly DongVanFbBuyMailResponse _dongVanFbBuyMailResponse;
+            readonly DongVanFbMailAccount _account;
+            internal DongVanFbApiWrapperSession(DongVanFbApi dongVanFbApi, DongVanFbBuyMailResponse dongVanFbBuyMailResponse)
+            {
+                this._dongVanFbApi = dongVanFbApi;
+                this._dongVanFbBuyMailResponse = dongVanFbBuyMailResponse;
+                this._account = dongVanFbBuyMailResponse.Data.ListDataAccount.FirstOrDefault();
+            }
+            public string Email => _account?.Email;
+            public string Password => _account?.Password;
 
-        public Task DeleteAsync(CancellationToken cancellationToken = default)
+            public Task DeleteAsync(CancellationToken cancellationToken = default)
+            {
+                return Task.CompletedTask;
+            }
+
+            public void Dispose()
+            {
+
+            }
+
+            public async Task<IEnumerable<IMailWrapperEmail>> GetMailsAsync(CancellationToken cancellationToken = default)
+            {
+                var messages = await _dongVanFbApi.GetMessages(_account, cancellationToken).ConfigureAwait(false);
+                return messages.Messages.Select(x => new DongVanFbApiWrapperEmail(x));
+            }
+
+            public Task<string> InitAsync(CancellationToken cancellationToken = default)
+            {
+                return Task.FromResult(string.Empty);
+            }
+        }
+
+        internal class DongVanFbApiWrapperEmail : IMailWrapperEmail
         {
-            return Task.CompletedTask;
+            readonly DongVanFbMessage _dongVanFbMessage;
+            internal DongVanFbApiWrapperEmail(DongVanFbMessage dongVanFbMessage)
+            {
+                this._dongVanFbMessage = dongVanFbMessage;
+            }
+            public string FromAddress => _dongVanFbMessage?.From?.FirstOrDefault()?.Address;
+
+            public string Subject => _dongVanFbMessage?.Subject;
+
+            public string RawBody => _dongVanFbMessage?.Message;
+
+            public string Code => _dongVanFbMessage?.Code;
         }
-
-        public void Dispose()
-        {
-
-        }
-
-        public async Task<IEnumerable<IMailWrapperEmail>> GetMailsAsync(CancellationToken cancellationToken = default)
-        {
-            var messages = await dongVanFbApi.GetMessages(account, cancellationToken).ConfigureAwait(false);
-            return messages.Messages.Select(x => new DongVanFbApiWrapperEmail(x));
-        }
-
-        public Task<string> InitAsync(CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(string.Empty);
-        }
-    }
-
-    internal class DongVanFbApiWrapperEmail : IMailWrapperEmail
-    {
-        readonly DongVanFbMessage dongVanFbMessage;
-        internal DongVanFbApiWrapperEmail(DongVanFbMessage dongVanFbMessage)
-        {
-            this.dongVanFbMessage = dongVanFbMessage;
-        }
-        public string FromAddress => dongVanFbMessage?.From?.FirstOrDefault()?.Address;
-
-        public string Subject => dongVanFbMessage?.Subject;
-
-        public string RawBody => dongVanFbMessage?.Message;
-
-        public string Code => dongVanFbMessage?.Code;
     }
 }

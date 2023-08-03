@@ -18,10 +18,10 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
     /// </summary>
     public class ImapWrapper : IMailWrapper
     {
-        readonly string host;
-        readonly int port;
-        readonly Queue<ImapAccount> imapAccounts;
-        readonly AsyncLock asyncLock = new AsyncLock();
+        readonly string _host;
+        readonly int _port;
+        readonly Queue<ImapAccount> _imapAccounts;
+        readonly AsyncLock _asyncLock = new AsyncLock();
         /// <summary>
         /// 
         /// </summary>
@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<ImapAccount> ImapAccounts { get { return imapAccounts; } }
+        public IEnumerable<ImapAccount> ImapAccounts { get { return _imapAccounts; } }
         /// <summary>
         /// 
         /// </summary>
@@ -38,28 +38,27 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         /// <param name="imapAccounts"></param>
         public ImapWrapper(string host, int port, IEnumerable<ImapAccount> imapAccounts)
         {
-            this.host = host;
-            this.port = port;
-            this.imapAccounts = new Queue<ImapAccount>(imapAccounts);
+            if (string.IsNullOrWhiteSpace(host)) throw new ArgumentNullException(nameof(host));
+            this._host = host;
+            this._port = port;
+            this._imapAccounts = new Queue<ImapAccount>(imapAccounts);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="login"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailWrapperSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<IMailWrapperSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            using (await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
+            using (await _asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
             {
-
-                if (imapAccounts.Count == 0) return null;
+                if (_imapAccounts.Count == 0) return null;
 
                 try
                 {
-                    var account = imapAccounts.Dequeue();
-                    return new ImapSession(host, port, account);
+                    var account = _imapAccounts.Dequeue();
+                    return new ImapSession(_host, _port, account);
                 }
                 finally
                 {
@@ -78,9 +77,9 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         {
             if (mailSession is ImapSession imapSession)
             {
-                using (await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
+                using (await _asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    imapAccounts.Enqueue(imapSession.account);
+                    _imapAccounts.Enqueue(imapSession.account);
                 }
             }
         }

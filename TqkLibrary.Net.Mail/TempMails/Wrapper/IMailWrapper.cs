@@ -16,7 +16,7 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IMailWrapperSession> CreateSessionAsync(string login, CancellationToken cancellationToken = default);
+        Task<IMailWrapperSession> CreateSessionAsync(CancellationToken cancellationToken = default);
         /// <summary>
         /// 
         /// </summary>
