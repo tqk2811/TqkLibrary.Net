@@ -165,6 +165,11 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                         httpResponseMessage.Dispose();
                         continue;
                     }
+                    else
+                    {
+                        httpResponseMessage.Dispose();
+                        throw new Exception(content);
+                    }
                 }
                 else// if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
                 {
