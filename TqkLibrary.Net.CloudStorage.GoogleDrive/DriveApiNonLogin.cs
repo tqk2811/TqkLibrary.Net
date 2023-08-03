@@ -162,6 +162,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                     {
                         url = HttpUtility.HtmlDecode(match.Value);
                         method = HttpMethod.Post;
+                        httpResponseMessage.Dispose();
                         continue;
                     }
                 }
