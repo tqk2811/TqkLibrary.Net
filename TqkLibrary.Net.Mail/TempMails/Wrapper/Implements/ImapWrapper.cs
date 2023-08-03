@@ -16,28 +16,6 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
     /// <summary>
     /// 
     /// </summary>
-    public class ImapAccount
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string UserName { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Password { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{UserName}|{Password}";
-        }
-    }
-    /// <summary>
-    /// 
-    /// </summary>
     public class ImapWrapper : IMailWrapper
     {
         readonly string host;
@@ -106,66 +84,91 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
                 }
             }
         }
-    }
-    internal class ImapSession : IMailWrapperSession
-    {
-        readonly string host;
-        readonly int port;
-        internal readonly ImapAccount account;
-        internal ImapSession(string host, int port, ImapAccount imapAccount)
-        {
-            this.host = host;
-            this.port = port;
-            this.account = imapAccount;
-        }
-
-        readonly ImapClient imapClient = new ImapClient();
-        public string Email => account.UserName;
-        public string Password => account.Password;
-
-        public Task DeleteAsync(CancellationToken cancellationToken = default)
-        {
-            return imapClient.Inbox.CloseAsync(cancellationToken: cancellationToken);
-        }
-        public void Dispose()
-        {
-            imapClient.Dispose();
-        }
 
 
-        public async Task<IEnumerable<IMailWrapperEmail>> GetMailsAsync(CancellationToken cancellationToken = default)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public class ImapAccount
         {
-            var uids = await imapClient.Inbox.SearchAsync(SearchQuery.All, cancellationToken).ConfigureAwait(false);
-            var results = new List<IMailWrapperEmail>();
-            foreach (var uid in uids)
+            /// <summary>
+            /// 
+            /// </summary>
+            public string UserName { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            public string Password { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public override string ToString()
             {
-                var message = await imapClient.Inbox.GetMessageAsync(uid, cancellationToken).ConfigureAwait(false);
-                results.Add(new IMapMail(message));
+                return $"{UserName}|{Password}";
             }
-            return results;
         }
-
-
-        public async Task<string> InitAsync(CancellationToken cancellationToken = default)
+        internal class ImapSession : IMailWrapperSession
         {
-            await imapClient.ConnectAsync(host, port, SecureSocketOptions.Auto, cancellationToken).ConfigureAwait(false);
-            await imapClient.AuthenticateAsync(account.UserName, account.Password, cancellationToken).ConfigureAwait(false);
-            await imapClient.Inbox.OpenAsync(FolderAccess.ReadOnly, cancellationToken).ConfigureAwait(false);
-            return account.UserName;
-        }
-    }
+            readonly string host;
+            readonly int port;
+            internal readonly ImapAccount account;
+            internal ImapSession(string host, int port, ImapAccount imapAccount)
+            {
+                this.host = host;
+                this.port = port;
+                this.account = imapAccount;
+            }
 
-    internal class IMapMail : IMailWrapperEmail
-    {
-        readonly MimeMessage mimeMessage;
-        internal IMapMail(MimeMessage mimeMessage)
+            readonly ImapClient imapClient = new ImapClient();
+            public string Email => account.UserName;
+            public string Password => account.Password;
+
+            public Task DeleteAsync(CancellationToken cancellationToken = default)
+            {
+                return imapClient.Inbox.CloseAsync(cancellationToken: cancellationToken);
+            }
+            public void Dispose()
+            {
+                imapClient.Dispose();
+            }
+
+
+            public async Task<IEnumerable<IMailWrapperEmail>> GetMailsAsync(CancellationToken cancellationToken = default)
+            {
+                var uids = await imapClient.Inbox.SearchAsync(SearchQuery.All, cancellationToken).ConfigureAwait(false);
+                var results = new List<IMailWrapperEmail>();
+                foreach (var uid in uids)
+                {
+                    var message = await imapClient.Inbox.GetMessageAsync(uid, cancellationToken).ConfigureAwait(false);
+                    results.Add(new IMapMail(message));
+                }
+                return results;
+            }
+
+
+            public async Task<string> InitAsync(CancellationToken cancellationToken = default)
+            {
+                await imapClient.ConnectAsync(host, port, SecureSocketOptions.Auto, cancellationToken).ConfigureAwait(false);
+                await imapClient.AuthenticateAsync(account.UserName, account.Password, cancellationToken).ConfigureAwait(false);
+                await imapClient.Inbox.OpenAsync(FolderAccess.ReadOnly, cancellationToken).ConfigureAwait(false);
+                return account.UserName;
+            }
+        }
+
+        internal class IMapMail : IMailWrapperEmail
         {
-            this.mimeMessage = mimeMessage ?? throw new ArgumentNullException(nameof(mimeMessage));
-        }
+            readonly MimeMessage mimeMessage;
+            internal IMapMail(MimeMessage mimeMessage)
+            {
+                this.mimeMessage = mimeMessage ?? throw new ArgumentNullException(nameof(mimeMessage));
+            }
 
-        public string FromAddress => mimeMessage.From?.First()?.Name;
-        public string Subject => mimeMessage.Subject;
-        public string RawBody => mimeMessage.HtmlBody;
-        public string Code => string.Empty;
+            public string FromAddress => mimeMessage.From?.First()?.Name;
+            public string Subject => mimeMessage.Subject;
+            public string RawBody => mimeMessage.HtmlBody;
+            public string Code => string.Empty;
+        }
     }
 }
