@@ -102,6 +102,8 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
             public string RawBody => messageData.BodyHtml;
 
             public string Code => string.Empty;
+
+            public DateTime? ReceivedTime => messageData?.CreatedAt;
         }
     }
 }

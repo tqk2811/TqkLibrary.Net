@@ -168,6 +168,7 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
             public string Subject => mimeMessage.Subject;
             public string RawBody => mimeMessage.HtmlBody;
             public string Code => string.Empty;
+            public DateTime? ReceivedTime => mimeMessage?.Date.DateTime;
         }
     }
 }

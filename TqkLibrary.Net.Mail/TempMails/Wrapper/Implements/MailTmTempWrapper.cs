@@ -156,6 +156,8 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
                 }
             }
             public string Code => string.Empty;
+
+            public DateTime? ReceivedTime => mailTmMessageData?.RetentionDate;
         }
     }
 }

@@ -117,6 +117,8 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
             public string RawBody => _dongVanFbMessage?.Message;
 
             public string Code => _dongVanFbMessage?.Code;
+
+            public DateTime? ReceivedTime => _dongVanFbMessage?.Date;
         }
     }
 }

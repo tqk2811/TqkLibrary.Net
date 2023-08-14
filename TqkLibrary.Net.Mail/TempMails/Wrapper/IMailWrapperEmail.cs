@@ -1,4 +1,5 @@
-﻿namespace TqkLibrary.Net.Mail.TempMails.Wrapper
+﻿using System;
+namespace TqkLibrary.Net.Mail.TempMails.Wrapper
 {
     /// <summary>
     /// 
@@ -22,5 +23,10 @@
         /// 
         /// </summary>
         string Code { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        DateTime? ReceivedTime { get; }
     }
 }
