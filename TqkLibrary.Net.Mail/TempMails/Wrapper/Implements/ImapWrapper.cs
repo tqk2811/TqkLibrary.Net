@@ -25,6 +25,14 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
+        public int MaxMailTake { get; set; } = 20;
+        /// <summary>
+        /// 
+        /// </summary>
+        public SearchQuery SearchQuery { get; set; } = SearchQuery.All;
+        /// <summary>
+        /// 
+        /// </summary>
         public event Action<ImapWrapper> OnDequeue;
         /// <summary>
         /// 
@@ -58,7 +66,7 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
                 try
                 {
                     var account = _imapAccounts.Dequeue();
-                    return new ImapSession(_host, _port, account);
+                    return new ImapSession(_host, _port, account, this);
                 }
                 finally
                 {
@@ -113,11 +121,13 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
             readonly string host;
             readonly int port;
             internal readonly ImapAccount account;
-            internal ImapSession(string host, int port, ImapAccount imapAccount)
+            readonly ImapWrapper imapWrapper;
+            internal ImapSession(string host, int port, ImapAccount imapAccount, ImapWrapper imapWrapper)
             {
                 this.host = host;
                 this.port = port;
                 this.account = imapAccount;
+                this.imapWrapper = imapWrapper;
             }
 
             readonly ImapClient imapClient = new ImapClient();
@@ -136,9 +146,9 @@ namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
 
             public async Task<IEnumerable<IMailWrapperEmail>> GetMailsAsync(CancellationToken cancellationToken = default)
             {
-                var uids = await imapClient.Inbox.SearchAsync(SearchQuery.All, cancellationToken).ConfigureAwait(false);
+                var uids = await imapClient.Inbox.SearchAsync(imapWrapper.SearchQuery, cancellationToken).ConfigureAwait(false);
                 var results = new List<IMailWrapperEmail>();
-                foreach (var uid in uids)
+                foreach (var uid in uids.Take(imapWrapper.MaxMailTake))
                 {
                     var message = await imapClient.Inbox.GetMessageAsync(uid, cancellationToken).ConfigureAwait(false);
                     results.Add(new IMapMail(message));
