@@ -7,38 +7,6 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Captcha
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public enum TwoCaptchaState
-    {
-        NotReady,
-        Error,
-        Success
-    }
-
-
-    public class TwoCaptchaResponse
-    {
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
-        [JsonProperty("request")]
-        public string Request { get; set; }
-
-        public override string ToString()
-        {
-            return $"request: {Status}, request: {Request}";
-        }
-
-        public TwoCaptchaState CheckState()
-        {
-            if (Status == 1) return TwoCaptchaState.Success;
-            if (Request.Contains("CAPCHA_NOT_READY")) return TwoCaptchaState.NotReady;
-            else return TwoCaptchaState.Error;
-        }
-    }
-
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-
     /// <summary>
     /// 
     /// </summary>
@@ -174,6 +142,25 @@ namespace TqkLibrary.Net.Captcha
         /// 
         /// </summary>
         /// <returns></returns>
+        public Task<TwoCaptchaResponse> RecaptchaV2Invisible(
+            string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null,
+            CancellationToken cancellationToken = default)
+            => Build()
+                .WithUrlGet(new UriBuilder(EndPoint, "in.php")
+                    .WithParam("key", ApiKey)
+                    .WithParam("method", "userrecaptcha")
+                    .WithParam("json", 1)
+                    .WithParam("invisible",1)
+                    .WithParam("googlekey", googleKey)
+                    .WithParam("pageurl", pageUrl)
+                    .WithParamIfNotNull("cookies", cookies)
+                    .WithParamIfNotNull("proxy", proxy)
+                    .WithParamIfNotNull("proxytype", proxytype))
+                .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV3(
             string googleKey, string pageUrl, float minScore = 0.3f,
             CancellationToken cancellationToken = default)
@@ -207,5 +194,43 @@ namespace TqkLibrary.Net.Captcha
                     multipartFormDataContent)
                 .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
         }
+
+
+
+
+
+
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public enum TwoCaptchaState
+        {
+            NotReady,
+            Error,
+            Success
+        }
+
+
+        public class TwoCaptchaResponse
+        {
+            [JsonProperty("status")]
+            public int Status { get; set; }
+
+            [JsonProperty("request")]
+            public string Request { get; set; }
+
+            public override string ToString()
+            {
+                return $"request: {Status}, request: {Request}";
+            }
+
+            public TwoCaptchaState CheckState()
+            {
+                if (Status == 1) return TwoCaptchaState.Success;
+                if (Request.Contains("CAPCHA_NOT_READY")) return TwoCaptchaState.NotReady;
+                else return TwoCaptchaState.Error;
+            }
+        }
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
