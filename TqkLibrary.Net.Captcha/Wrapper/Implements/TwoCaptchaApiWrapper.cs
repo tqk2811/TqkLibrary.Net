@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using static TqkLibrary.Net.Captcha.TwoCaptchaApi;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
