@@ -23,7 +23,7 @@ namespace TqkLibrary.Net.Cryptos
         /// <returns></returns>
         public Task<PancakeSwapBaseResponse<PancakeSwapTokenData>> Token(string address, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "tokens", address))
+            .WithUrlGet(new UrlBuilder(EndPoint, "tokens", address))
             .ExecuteAsync<PancakeSwapBaseResponse<PancakeSwapTokenData>>(cancellationToken);
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace TqkLibrary.Net.Cryptos
         /// <returns></returns>
         public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>> Tokens(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "tokens"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "tokens"))
             .ExecuteAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenData>>>(cancellationToken);
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TqkLibrary.Net.Cryptos
         /// <returns></returns>
         public Task<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>> PancakeSwapPairs(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "pairs"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "pairs"))
             .ExecuteAsync<PancakeSwapBaseResponse<Dictionary<string, PancakeSwapTokenPairsData>>>(cancellationToken);
     }
 }

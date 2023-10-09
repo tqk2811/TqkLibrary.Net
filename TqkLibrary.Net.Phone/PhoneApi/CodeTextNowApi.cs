@@ -28,7 +28,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<List<CodeTextNowService>> Services(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("action", "services")
                 .WithParam("apikey", ApiKey))
             .ExecuteAsync<List<CodeTextNowService>>(cancellationToken);
@@ -39,7 +39,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<CodeTextNowCreateRequest> CreateRequest(CodeTextNowService service, int count = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("action", "create-request")
                 .WithParam("apikey", ApiKey)
                 .WithParam("serviceId", service.serviceId)
@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<CodeTextNowDataRequest> DataRequest(CodeTextNowRent rent, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("action", "data-request")
                 .WithParam("apikey", ApiKey)
                 .WithParam("rentId", rent.requestId))

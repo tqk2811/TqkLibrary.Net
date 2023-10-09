@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Others.FptAi
         /// <exception cref="ArgumentNullException"></exception>
         public Task<TTSResponse> TTS(string text, Voice voice = Voice.BanMai, Speed speed = Speed.Normal, Format format = Format.mp3, CancellationToken cancellationToken = default)
             => Build()
-                .WithUrlPost(new UriBuilder(EndPoint, version), new StringContent(text, Encoding.UTF8, "text/html"), true)
+                .WithUrlPost(new UrlBuilder(EndPoint, version), new StringContent(text, Encoding.UTF8, "text/html"), true)
                 .WithHeader("api-key", ApiKey)
                 .WithHeader("speed", ((int)speed).ToString())
                 .WithHeader("voice", voice.ToString().ToLower())

@@ -37,7 +37,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<AzProxyResponse> GetNewProxy(AzProxyLocation? location = null, AzProxyProvider? provider = null, CancellationToken cancellationToken = default)
             => base.Build()
                 .WithUrlGet(
-                    new UriBuilder($"{EndPoint}getNewProxy")
+                    new UrlBuilder($"{EndPoint}getNewProxy")
                         .WithParam("access_token", ApiKey)
                         .WithParamIfNotNull("location", location)
                         .WithParamIfNotNull("provider", provider))
@@ -51,7 +51,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<AzProxyResponse> GetCurrentProxy(CancellationToken cancellationToken = default)
            => base.Build()
                .WithUrlGet(
-                   new UriBuilder($"{EndPoint}getCurrentProxy")
+                   new UrlBuilder($"{EndPoint}getCurrentProxy")
                        .WithParam("access_token", ApiKey))
                .ExecuteAsync<AzProxyResponse>(cancellationToken);
     }

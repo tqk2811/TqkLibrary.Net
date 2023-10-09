@@ -35,7 +35,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<Proxyv4NetResponse<Proxyv4UserInfo>> UserInfo(string authIp = null, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint + "/api/user-info").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
+            .WithUrlGet(new UrlBuilder(EndPoint + "/api/user-info").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
             .ExecuteAsync<Proxyv4NetResponse<Proxyv4UserInfo>>(cancellationToken);
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<Proxyv4NetResponse<List<ProxyV4Price>>> ListPrice(string authIp = null, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint + "/api/list-price").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
+            .WithUrlGet(new UrlBuilder(EndPoint + "/api/list-price").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
             .ExecuteAsync<Proxyv4NetResponse<List<ProxyV4Price>>>(cancellationToken);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<Proxyv4NetResponse<List<ProxyV4Contry>>> ListCountry(string authIp = null, CancellationToken cancellationToken = default)
            => Build()
-           .WithUrlGet(new UriBuilder(EndPoint + "/api/list-country").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
+           .WithUrlGet(new UrlBuilder(EndPoint + "/api/list-country").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
            .ExecuteAsync<Proxyv4NetResponse<List<ProxyV4Contry>>>(cancellationToken);
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<Proxyv4NetResponse<List<ProxyV4Proxy>>> ListProxy(string authIp = null, CancellationToken cancellationToken = default) 
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint + "/api/list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
+            .WithUrlGet(new UrlBuilder(EndPoint + "/api/list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp))
             .ExecuteAsync<Proxyv4NetResponse<List<ProxyV4Proxy>>>(cancellationToken);
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<Proxyv4NetResponse<List<ProxyV4Proxy>>> BuyProxy(int count, ProxyV4Price proxyV4Price, string authIp = null, CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlPostJson(
-                    new UriBuilder(EndPoint + "/api/buy-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
+                    new UrlBuilder(EndPoint + "/api/buy-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
                     new { count = count, period = proxyV4Price?.Period ?? throw new ArgumentNullException(nameof(proxyV4Price)), country = proxyV4Price?.Country })
                 .ExecuteAsync<Proxyv4NetResponse<List<ProxyV4Proxy>>>(cancellationToken);
 
@@ -82,7 +82,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<Proxyv4NetResponse<ProxyV4Detail>> ProxyDetail(string proxy_id, string authIp = null, CancellationToken cancellationToken = default)
           => Build()
-          .WithUrlGet(new UriBuilder(EndPoint + "/api/proxy-detail")
+          .WithUrlGet(new UrlBuilder(EndPoint + "/api/proxy-detail")
               .WithParam("api_key", ApiKey)
               .WithParam("proxy_id", proxy_id)
               .WithParamIfNotNull("authIp", authIp))
@@ -96,7 +96,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<Proxyv4NetResponse> UpdateListProxy(IEnumerable<string> proxy_ids, bool autoRenew = true, string comment = null, string authIp = null, CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlPostJson(
-                    new UriBuilder(EndPoint + "/api/update-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
+                    new UrlBuilder(EndPoint + "/api/update-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
                     new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), autoRenew = autoRenew, comment = comment })
                 .ExecuteAsync<Proxyv4NetResponse>(cancellationToken);
 
@@ -107,7 +107,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<Proxyv4NetResponse> RenewListProxy(IEnumerable<string> proxy_ids, int period, string authIp = null, CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlPostJson(
-                    new UriBuilder(EndPoint + "/api/renew-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
+                    new UrlBuilder(EndPoint + "/api/renew-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
                     new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), period = period })
                 .ExecuteAsync<Proxyv4NetResponse>(cancellationToken);
     }

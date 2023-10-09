@@ -8,7 +8,7 @@ namespace TqkLibrary.Net
     /// <summary>
     /// 
     /// </summary>
-    public class UriBuilder
+    public class UrlBuilder
     {
         string url = string.Empty;
         readonly NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(string.Empty);
@@ -16,7 +16,7 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="url"></param>
-        public UriBuilder(string url)
+        public UrlBuilder(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
             this.url = url;
@@ -25,7 +25,7 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="urls"></param>
-        public UriBuilder(params string[] urls)
+        public UrlBuilder(params string[] urls)
         {
             if (urls == null || urls.Length == 0) throw new ArgumentNullException(nameof(urls));
             this.url = string.Join("/", urls.Select(x => x.TrimStart('/').TrimEnd('/')));
@@ -36,7 +36,7 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <param name="urls"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public UriBuilder(params object[] urls)
+        public UrlBuilder(params object[] urls)
         {
             if (urls == null || urls.Length == 0) throw new ArgumentNullException(nameof(urls));
             this.url = string.Join("/", urls.Select(x => x.ToString().TrimStart('/').TrimEnd('/')));
@@ -50,7 +50,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UriBuilder WithParam(string name, string value)
+        public UrlBuilder WithParam(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
@@ -64,7 +64,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UriBuilder WithParam(string name, object value)
+        public UrlBuilder WithParam(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             string v = value?.ToString();
@@ -79,7 +79,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UriBuilder WithParamIfNotNull(string name, string value)
+        public UrlBuilder WithParamIfNotNull(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (!string.IsNullOrWhiteSpace(value)) nameValueCollection[name] = value;
@@ -93,7 +93,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UriBuilder WithParamIfNotNull(string name, object value)
+        public UrlBuilder WithParamIfNotNull(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (value != null)
@@ -119,6 +119,6 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        public static explicit operator Uri(UriBuilder builder) => new Uri(builder.ToString());
+        public static explicit operator Uri(UrlBuilder builder) => new Uri(builder.ToString());
     }
 }

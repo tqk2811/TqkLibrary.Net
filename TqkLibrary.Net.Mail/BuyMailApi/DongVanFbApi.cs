@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <returns></returns>
         public Task<DongVanFbBalanceResponse> CheckBalance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "user", "balance").WithParam("apikey", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "user", "balance").WithParam("apikey", ApiKey))
             .ExecuteAsync<DongVanFbBalanceResponse>(cancellationToken);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <returns></returns>
         public Task<DongVanFbAccountTypeResponse> AccountType(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "user", "account_type").WithParam("apikey", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "user", "account_type").WithParam("apikey", ApiKey))
             .ExecuteAsync<DongVanFbAccountTypeResponse>(cancellationToken);
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <returns></returns>
         public Task<DongVanFbBuyMailResponse> BuyMail(DongVanFbAccountType accountType, int quality = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "user", "buy")
+            .WithUrlGet(new UrlBuilder(EndPoint, "user", "buy")
                 .WithParam("apikey", ApiKey)
                 .WithParam("account_type", accountType.Id)
                 .WithParam("quality", quality))
@@ -59,7 +59,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <returns></returns>
         public Task<DongVanFbGetCodeMailResponse> GetCodeMail(DongVanFbMailAccount mailAccount, MailFrom? mailFrom = null, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPointTools, "get_code")
+            .WithUrlGet(new UrlBuilder(EndPointTools, "get_code")
                 .WithParam("mail", mailAccount.Email)
                 .WithParam("pass", mailAccount.Password)
                 .WithParamIfNotNull("type", mailFrom?.ToString()?.ToLower()))
@@ -71,7 +71,7 @@ namespace TqkLibrary.Net.Mail.BuyMailApi
         /// <returns></returns>
         public Task<DongVanFbGetMessageResponse> GetMessages(DongVanFbMailAccount mailAccount, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPointTools, "get_messages")
+            .WithUrlGet(new UrlBuilder(EndPointTools, "get_messages")
                 .WithParam("mail", mailAccount.Email)
                 .WithParam("pass", mailAccount.Password))
             .ExecuteAsync<DongVanFbGetMessageResponse>(cancellationToken);

@@ -36,7 +36,7 @@ namespace TqkLibrary.Net
         /// <param name="uri"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrl(UriBuilder uri, HttpMethod method)
+        public RequestBuilder WithUrl(UrlBuilder uri, HttpMethod method)
         {
             return WithUrl((Uri)uri, method);
         }
@@ -45,7 +45,7 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrlGet(UriBuilder uri)
+        public RequestBuilder WithUrlGet(UrlBuilder uri)
         {
             return WithUrl((Uri)uri, HttpMethod.Get);
         }
@@ -119,7 +119,7 @@ namespace TqkLibrary.Net
         /// <param name="httpContent"></param>
         /// <param name="dispose"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrlPost(UriBuilder uri, HttpContent httpContent, bool dispose = true)
+        public RequestBuilder WithUrlPost(UrlBuilder uri, HttpContent httpContent, bool dispose = true)
         {
             return WithUrl((Uri)uri, HttpMethod.Post).WithBody(httpContent, dispose);
         }
@@ -149,7 +149,7 @@ namespace TqkLibrary.Net
         /// <param name="uri"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public RequestBuilder WithUrlPostJson(UriBuilder uri, object obj)
+        public RequestBuilder WithUrlPostJson(UrlBuilder uri, object obj)
         {
             return WithUrl((Uri)uri, HttpMethod.Post).WithJsonBody(obj);
         }

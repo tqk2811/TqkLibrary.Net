@@ -28,7 +28,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<AhaSimComResponse<AhaSimComBalance>> Balance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "user", "balance").WithParam("token", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "user", "balance").WithParam("token", ApiKey))
             .ExecuteAsync<AhaSimComResponse<AhaSimComBalance>>(cancellationToken);
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<AhaSimComResponse<List<AhaSimComNetwork>>> NetworkList(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "network", "list").WithParam("token", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "network", "list").WithParam("token", ApiKey))
             .ExecuteAsync<AhaSimComResponse<List<AhaSimComNetwork>>>(cancellationToken);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<AhaSimComResponse<List<AhaSimComService>>> ServiceList(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "service", "list").WithParam("token", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "service", "list").WithParam("token", ApiKey))
             .ExecuteAsync<AhaSimComResponse<List<AhaSimComService>>>(cancellationToken);
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             IEnumerable<string> except_prefixs = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
+            .WithUrlGet(new UrlBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
                 .WithParam("service", service.Id)
                 .WithParamIfNotNull("network", networks == null ? null : string.Join(",", networks.Select(x => x.Id)))
                 .WithParamIfNotNull("prefix",  prefixs == null ? null : string.Join(",", prefixs))
@@ -84,7 +84,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             string number,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
+            .WithUrlGet(new UrlBuilder(EndPoint, "phone", "new-session").WithParam("token", ApiKey)
                 .WithParam("service", service.Id)
                 .WithParamIfNotNull("number", number))
             .ExecuteAsync<AhaSimComResponse<AhaSimComSession>>(cancellationToken);
@@ -97,7 +97,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<AhaSimComResponse<AhaSimComOtp>> SessionGetOtp(AhaSimComSession session, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "session", session.Session, "get-otp").WithParam("token", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "session", session.Session, "get-otp").WithParam("token", ApiKey))
             .ExecuteAsync<AhaSimComResponse<AhaSimComOtp>>(cancellationToken);
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<AhaSimComResponse<AhaSimComSessionCancel>> SessionCancel(AhaSimComSession session, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "session", "cancel")
+            .WithUrlGet(new UrlBuilder(EndPoint, "session", "cancel")
                 .WithParam("token", ApiKey)
                 .WithParam("session", session.Session))
             .ExecuteAsync<AhaSimComResponse<AhaSimComSessionCancel>>(cancellationToken);
@@ -124,7 +124,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             DateTime? toDate = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "service", "history")
+            .WithUrlGet(new UrlBuilder(EndPoint, "service", "history")
                 .WithParam("token", ApiKey)
                 .WithParamIfNotNull("number", number)
                 .WithParamIfNotNull("service_id", service_id)

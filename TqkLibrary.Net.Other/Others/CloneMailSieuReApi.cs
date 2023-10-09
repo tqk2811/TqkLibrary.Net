@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<CloneMailSieuReListResourceResponse> ListResource(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "ListResource.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "ListResource.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord))
             .ExecuteAsync<CloneMailSieuReListResourceResponse>(cancellationToken);
@@ -43,7 +43,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<CloneMailSieuReApiResponse<CloneMailSieuReResourceData>> BuyResource(CloneMailSieuReAccount account, int amount = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "BResource.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "BResource.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord)
                 .WithParam("id", account.Id)
@@ -58,7 +58,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<CloneMailSieuReApiResponse<CloneMailSieuReAccount>> InfoResource(CloneMailSieuReAccount account, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "InfoResource.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "InfoResource.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord)
                 .WithParam("id", account.Id))
@@ -71,7 +71,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<string> GetBalance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "GetBalance.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "GetBalance.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord))
             .ExecuteAsync<string>(cancellationToken);
@@ -85,7 +85,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task ImportAccount(int product, string data, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "importAccount.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "importAccount.php")
                 .WithParam("username", userName)
                 .WithParam("password", passWord)
                 .WithParam("product", product)

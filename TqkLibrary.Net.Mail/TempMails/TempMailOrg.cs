@@ -65,7 +65,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<TempMailOrgToken> InitToken(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint.Uri.AbsoluteUri, "mailbox"), new object())
+            .WithUrlPostJson(new UrlBuilder(EndPoint.Uri.AbsoluteUri, "mailbox"), new object())
             .WithHeader("User-Agent", UserAgent)
             .WithHeader("Referer", "https://temp-mail.org/")
             //.WithHeader("Accept", "application/json")
@@ -77,7 +77,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<TempMailOrgMailBox> Messages(TempMailOrgToken token, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages"))
+            .WithUrlGet(new UrlBuilder(EndPoint.Uri.AbsoluteUri, "messages"))
             .WithHeader("Authorization", token.Token)
             .WithHeader("Referer", "https://temp-mail.org/")
             .WithHeader("User-Agent", UserAgent)
@@ -89,7 +89,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<TempMailOrgMessageData> MessageData(TempMailOrgToken token, TempMailOrgMessageReView messageReView, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint.Uri.AbsoluteUri, "messages", messageReView.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint.Uri.AbsoluteUri, "messages", messageReView.Id))
             .WithHeader("Authorization", token.Token)
             .WithHeader("Referer", "https://temp-mail.org/")
             .WithHeader("User-Agent", UserAgent)

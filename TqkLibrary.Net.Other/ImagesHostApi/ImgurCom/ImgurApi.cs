@@ -31,7 +31,7 @@ namespace TqkLibrary.Net.ImagesHostApi
             requestContent.Add(imageContent_instructions, "image");
             requestContent.Add(new StringContent("file"), "type");
             return Build()
-                .WithUrlPost(new UriBuilder(EndPoint, "upload"), requestContent)
+                .WithUrlPost(new UrlBuilder(EndPoint, "upload"), requestContent)
                 .WithHeader("Authorization", $"Client-ID {ApiKey}")
                 .ExecuteAsync<ImgurResponse<ImgurImage>>(cancellationToken);
         }

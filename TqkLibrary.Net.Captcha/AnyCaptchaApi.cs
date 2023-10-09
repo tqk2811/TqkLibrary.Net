@@ -20,7 +20,7 @@ namespace TqkLibrary.Net.Captcha
         async Task<IAnyCaptchaTaskResponse> RequestTask(CreateTaskRequest createTaskRequest, CancellationToken cancellationToken = default)
         {
             AnyCaptchaTaskResponse responseTask = await Build()
-                .WithUrlPostJson(new UriBuilder(EndPoint, "createTask"), createTaskRequest)
+                .WithUrlPostJson(new UrlBuilder(EndPoint, "createTask"), createTaskRequest)
                 .ExecuteAsync<AnyCaptchaTaskResponse>(cancellationToken);
             responseTask.anyCaptchaApi = this;
             return responseTask;
@@ -87,7 +87,7 @@ namespace TqkLibrary.Net.Captcha
             };
 
             return Build()
-                .WithUrlPostJson(new UriBuilder(EndPoint, "getTaskResult"), getTaskResultData)
+                .WithUrlPostJson(new UrlBuilder(EndPoint, "getTaskResult"), getTaskResultData)
                 .ExecuteAsync<GetTaskResultResponse>(cancellationToken);
         }
 

@@ -59,7 +59,7 @@ namespace TqkLibrary.Net.Captcha
         {
             return await Build()
                 .WithUrlPostJson(
-                    new UriBuilder(EndPoint, "createTask"),
+                    new UrlBuilder(EndPoint, "createTask"),
                     new CreateTaskJson
                     {
                         ClientKey = ApiKey,
@@ -77,7 +77,7 @@ namespace TqkLibrary.Net.Captcha
         public Task<AntiCaptchaTaskResultResponse> GetTaskResult(IAntiCaptchaTaskResponse task, CancellationToken cancellationToken = default)
             => Build()
                .WithUrlPostJson(
-                   new UriBuilder(EndPoint, "getTaskResult"),
+                   new UrlBuilder(EndPoint, "getTaskResult"),
                    new TaskResultJson
                    {
                        ClientKey = ApiKey,

@@ -28,7 +28,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueBalanceResult> GetBalance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "balance").WithParam("key", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "balance").WithParam("key", ApiKey))
             .ExecuteAsync<SimThueBalanceResult>(cancellationToken);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueServicesResult> GetAvailableServices(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "service").WithParam("key", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "service").WithParam("key", ApiKey))
             .ExecuteAsync<SimThueServicesResult>(cancellationToken);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueRequestResult> CreateRequest(SimThueServiceResult serviceResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "create").WithParam("key", ApiKey).WithParam("service_id",serviceResult.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "create").WithParam("key", ApiKey).WithParam("service_id",serviceResult.Id))
             .ExecuteAsync<SimThueRequestResult>(cancellationToken);
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueCheckResult> CheckRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "check").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "check").WithParam("key", ApiKey).WithParam("id", createResult.Id))
             .ExecuteAsync<SimThueCheckResult>(cancellationToken);
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueRequestResult> CancelRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "cancel").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "cancel").WithParam("key", ApiKey).WithParam("id", createResult.Id))
             .ExecuteAsync<SimThueRequestResult>(cancellationToken);
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<SimThueRequestResult> FinishRequest(SimThueRequestResult createResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "finish").WithParam("key", ApiKey).WithParam("id", createResult.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "finish").WithParam("key", ApiKey).WithParam("id", createResult.Id))
             .ExecuteAsync<SimThueRequestResult>(cancellationToken);
     }
 

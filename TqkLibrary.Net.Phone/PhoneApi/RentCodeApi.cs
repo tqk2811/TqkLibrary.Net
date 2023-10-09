@@ -34,7 +34,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
           RentCodeServiceProviderId? serviceProviderId = null,
           CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "order/request")
+            .WithUrlGet(new UrlBuilder(EndPoint, "order/request")
                 .WithParam("apiKey", ApiKey)
                 .WithParam("ServiceProviderId", (int)serviceProviderId)
                 .WithParamIfNotNull("NetworkProvider", (int?)networkProvider)
@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
           int Unit = 1,
           CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "order/request-holding")
+            .WithUrlGet(new UrlBuilder(EndPoint, "order/request-holding")
                 .WithParam("apiKey", ApiKey)
                 .WithParam("Duration", Duration)
                 .WithParam("Unit", Unit)
@@ -65,7 +65,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<RentCodeCheckOrderResults> Check(RentCodeResult rentCodeResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "order", rentCodeResult.Id, "check").WithParam("apiKey", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "order", rentCodeResult.Id, "check").WithParam("apiKey", ApiKey))
             .ExecuteAsync<RentCodeCheckOrderResults>(cancellationToken);
     }
 

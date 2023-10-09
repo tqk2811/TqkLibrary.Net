@@ -117,7 +117,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             if (serivce is null) throw new ArgumentNullException(nameof(serivce));
 
             return Build()
-                .WithUrlGet(new UriBuilder(apiEndPoint.Uri, "order", serivce.ServiceName, ApiKey)
+                .WithUrlGet(new UrlBuilder(apiEndPoint.Uri, "order", serivce.ServiceName, ApiKey)
                                 .WithParamIfNotNull("provider", networkProvider))
                 .ExecuteAsync<Response>(cancellationToken);
         }
@@ -128,7 +128,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         {
             if (response is null) throw new ArgumentNullException(nameof(response));
             return Build()
-                .WithUrlGet(new UriBuilder(apiEndPoint.Uri, "get-order", response.Id, ApiKey))
+                .WithUrlGet(new UrlBuilder(apiEndPoint.Uri, "get-order", response.Id, ApiKey))
                 .ExecuteAsync<Response>(cancellationToken);
         }
     }

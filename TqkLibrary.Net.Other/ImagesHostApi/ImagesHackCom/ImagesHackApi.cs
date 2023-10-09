@@ -32,7 +32,7 @@ namespace TqkLibrary.Net.ImagesHostApi
             requestContent.Add(imageContent_instructions, "file", "file.jpeg");
 
             return Build()
-                .WithUrlPost(new UriBuilder(EndPoint).WithParam("api_key", ApiKey), requestContent)
+                .WithUrlPost(new UrlBuilder(EndPoint).WithParam("api_key", ApiKey), requestContent)
                 .ExecuteAsync<ImagesHackResponse<ImagesHackUploadResult>>(cancellationToken);
         }
     }

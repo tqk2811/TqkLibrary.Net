@@ -32,7 +32,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<ProxyNo1ComResponse<ProxyNo1ComKeyInfo>> AllKeys(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "all-keys", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "all-keys", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComKeyInfo>>(cancellationToken);
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<ProxyNo1ComResponse<List<ProxyNo1ComPrice>>> ListPrice(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "list-price", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "list-price", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse<List<ProxyNo1ComPrice>>>(cancellationToken);
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace TqkLibrary.Net.Proxy
             data.plan = $"{plan}";
             if (allowIp != null) data.allowip = $"{allowIp}";
             return Build()
-               .WithUrlPostJson(new UriBuilder(EndPoint, "buy-key"), data)
+               .WithUrlPostJson(new UrlBuilder(EndPoint, "buy-key"), data)
                .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComProxyInfo>>(cancellationToken);
         }
 
@@ -128,7 +128,7 @@ namespace TqkLibrary.Net.Proxy
             }
             if (allowIp != null) data.allowip = allowIp.ToString();
             return Build()
-               .WithUrlPostJson(new UriBuilder(EndPoint, "edit-key"), data)
+               .WithUrlPostJson(new UrlBuilder(EndPoint, "edit-key"), data)
                .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
         }
 
@@ -140,7 +140,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>> GetLocation(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "get-location"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "get-location"))
             .ExecuteAsync<ProxyNo1ComResponse<List<ProxyNo1ComLocation>>>(cancellationToken);
     }
 
@@ -166,7 +166,7 @@ namespace TqkLibrary.Net.Proxy
         /// <exception cref="ArgumentNullException"></exception>
         public Task<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>> KeyStatus(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "key-status", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "key-status", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse<ProxyNo1ComKeyStatus>>(cancellationToken);
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace TqkLibrary.Net.Proxy
         /// <exception cref="ArgumentNullException"></exception>
         public Task<ProxyNo1ComResponse> ChangeKeyIp(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "change-key-ip", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "change-key-ip", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace TqkLibrary.Net.Proxy
         /// <exception cref="ArgumentNullException"></exception>
         public Task<ProxyNo1ComResponse> ReNew(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "renew", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "renew", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace TqkLibrary.Net.Proxy
         /// <exception cref="ArgumentNullException"></exception>
         public Task<ProxyNo1ComResponse> RebootKey(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "reboot-key", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint, "reboot-key", ApiKey))
             .ExecuteAsync<ProxyNo1ComResponse>(cancellationToken);
     }
 

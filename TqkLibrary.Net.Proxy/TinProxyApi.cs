@@ -40,7 +40,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<TinProxyResponse<TinProxyProxyData>> GetCurrentProxy(string[] authenIps = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(
-                new UriBuilder(EndPoint, "proxy", "get-current-proxy")
+                new UrlBuilder(EndPoint, "proxy", "get-current-proxy")
                 .WithParam("api_key", ApiKey)
                 .WithParamIfNotNull("authen_ips", authenIps.JoinIfNotNull(",")))
             .ExecuteAsync<TinProxyResponse<TinProxyProxyData>>(cancellationToken);
@@ -62,7 +62,7 @@ namespace TqkLibrary.Net.Proxy
         public Task<TinProxyResponse<TinProxyProxyData>> GetNewProxy(string[] authenIps = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(
-                new UriBuilder(EndPoint, "proxy", "get-new-proxy")
+                new UrlBuilder(EndPoint, "proxy", "get-new-proxy")
                 .WithParam("api_key", ApiKey)
                 .WithParamIfNotNull("authen_ips", authenIps.JoinIfNotNull(",")))
             .ExecuteAsync<TinProxyResponse<TinProxyProxyData>>(cancellationToken);

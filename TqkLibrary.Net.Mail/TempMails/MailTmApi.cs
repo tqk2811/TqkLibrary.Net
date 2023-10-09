@@ -27,7 +27,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmCollection<MailTmDomain>> Domains(int page = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "/domains").WithParam("page", page))
+            .WithUrlGet(new UrlBuilder(EndPoint, "/domains").WithParam("page", page))
             .WithHeader("Accept", "application/ld+json")
             .ExecuteAsync<MailTmCollection<MailTmDomain>>(cancellationToken);
 
@@ -37,7 +37,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmDomain> Domain(string id, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "/domains/", id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "/domains/", id))
             .ExecuteAsync<MailTmDomain>(cancellationToken);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmAccountResponse> AccountCreate(MailTmAccount mailTmAccount, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "/accounts"), mailTmAccount)
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "/accounts"), mailTmAccount)
             .ExecuteAsync<MailTmAccountResponse>(cancellationToken);
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmAccountResponse> AccountsDelete(MailTmAccountResponse account, MailTmToken token, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrl(new UriBuilder(EndPoint, "/accounts/", account.Id), HttpMethod.Delete)
+            .WithUrl(new UrlBuilder(EndPoint, "/accounts/", account.Id), HttpMethod.Delete)
             .WithHeader("Authorization", $"Bearer {token.Token}")
             .ExecuteAsync<MailTmAccountResponse>(cancellationToken);
 
@@ -65,7 +65,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmToken> Token(MailTmAccount account, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "/token"), account)
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "/token"), account)
             .ExecuteAsync<MailTmToken>(cancellationToken);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmAccountResponse> Me(MailTmToken token, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "/me"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "/me"))
             .WithHeader("Authorization", $"Bearer {token.Token}")
             .ExecuteAsync<MailTmAccountResponse>(cancellationToken);
 
@@ -84,7 +84,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmCollection<MailTmMessage>> Messages(MailTmToken token, int page = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "/messages").WithParam("page", page))
+            .WithUrlGet(new UrlBuilder(EndPoint, "/messages").WithParam("page", page))
             .WithHeader("Authorization", $"Bearer {token.Token}")
             .WithHeader("Accept", "application/ld+json")
             .ExecuteAsync<MailTmCollection<MailTmMessage>>(cancellationToken);
@@ -95,7 +95,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmMessageData> Message(MailTmToken token, MailTmMessage message, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "/messages/", message.Id))
+            .WithUrlGet(new UrlBuilder(EndPoint, "/messages/", message.Id))
             .WithHeader("Authorization", $"Bearer {token.Token}")
             .ExecuteAsync<MailTmMessageData>(cancellationToken);
 
@@ -105,7 +105,7 @@ namespace TqkLibrary.Net.Mail.TempMails
         /// <returns></returns>
         public Task<MailTmMessageData> MessageDelete(MailTmToken token, MailTmMessage message, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrl(new UriBuilder(EndPoint, "/messages/", message.Id), HttpMethod.Delete)
+            .WithUrl(new UrlBuilder(EndPoint, "/messages/", message.Id), HttpMethod.Delete)
             .WithHeader("Authorization", $"Bearer {token.Token}")
             .ExecuteAsync<MailTmMessageData>(cancellationToken);
     }

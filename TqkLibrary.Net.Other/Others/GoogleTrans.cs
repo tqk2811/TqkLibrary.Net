@@ -22,7 +22,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<string> Translate(string text, TransLanguage from, TransLanguage to, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder("https://translate.googleapis.com/translate_a/single")
+            .WithUrlGet(new UrlBuilder("https://translate.googleapis.com/translate_a/single")
                 .WithParam("client", "gtx")
                 .WithParam("sl", from)
                 .WithParam("tl", to)

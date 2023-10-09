@@ -32,7 +32,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccApiBalanceResponse> Balance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "v1/balance"), new ApiPost() { api_key = ApiKey })
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "v1/balance"), new ApiPost() { api_key = ApiKey })
             .ExecuteAsync<AllAccApiBalanceResponse>(cancellationToken);
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccData<AllAccCategory>> Categories(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "v1/categories"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "v1/categories"))
             .ExecuteAsync<AllAccData<AllAccCategory>>(cancellationToken);
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccData<AllAccProduct>> Product(AllAccCategory category, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "v1/category", category.Id.ToString()))
+            .WithUrlGet(new UrlBuilder(EndPoint, "v1/category", category.Id.ToString()))
             .ExecuteAsync<AllAccData<AllAccProduct>>(cancellationToken);
 
         class BuyPost : ApiPost
@@ -65,7 +65,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccApiBuyResponse> Buy(AllAccProduct product, int buyCount = 1, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "v1/buy"), new BuyPost() { api_key = ApiKey, id_product = product.Id, quantity = buyCount })
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "v1/buy"), new BuyPost() { api_key = ApiKey, id_product = product.Id, quantity = buyCount })
             .ExecuteAsync<AllAccApiBuyResponse>(cancellationToken);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccData<AllAccOrderItem>> Orders(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "v1/orders"), new ApiPost() { api_key = ApiKey })
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "v1/orders"), new ApiPost() { api_key = ApiKey })
             .ExecuteAsync<AllAccData<AllAccOrderItem>>(cancellationToken);
 
         class OrderPost : ApiPost
@@ -88,7 +88,7 @@ namespace TqkLibrary.Net.Others
         /// <returns></returns>
         public Task<AllAccOrderResponse<T>> Order<T>(AllAccOrderItem order, CancellationToken cancellationToken = default) where T : class, IAllAccOrderItem
             => Build()
-            .WithUrlPostJson(new UriBuilder(EndPoint, "v1/order"), new OrderPost() { api_key = ApiKey, order_id = order.Id })
+            .WithUrlPostJson(new UrlBuilder(EndPoint, "v1/order"), new OrderPost() { api_key = ApiKey, order_id = order.Id })
             .ExecuteAsync<AllAccOrderResponse<T>>(cancellationToken);
     }
 

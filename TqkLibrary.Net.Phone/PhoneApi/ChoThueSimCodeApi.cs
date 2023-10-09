@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>> GetAccountInfo(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint).WithParam("act", "account").WithParam("apik", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint).WithParam("act", "account").WithParam("apik", ApiKey))
             .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, ChoThueSimAccountInfo>>(cancellationToken);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>> GetAppRunning(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint).WithParam("act", "app").WithParam("apik", ApiKey))
+            .WithUrlGet(new UrlBuilder(EndPoint).WithParam("act", "app").WithParam("apik", ApiKey))
             .ExecuteAsync<ChoThueSimBaseResult<ChoThueSimResponseCode, List<ChoThueSimAppInfo>>>(cancellationToken);
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(
             ChoThueSimAppInfo app, ChoThueSimCarrier? carrier = null, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("act", "number")
                 .WithParam("apik", ApiKey)
                 .WithParam("appId", app.Id)
@@ -68,7 +68,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeGetPhoneNumber, ChoThueSimPhoneNumberResult>> GetPhoneNumber(int appId, string number, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("act", "number")
                 .WithParam("apik", ApiKey)
                 .WithParam("appId", appId)
@@ -83,7 +83,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeMessage, ChoThueSimMessageResult>> GetMessage(ChoThueSimPhoneNumberResult phoneNumberResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("act", "code")
                 .WithParam("apik", ApiKey)
                 .WithParam("id", phoneNumberResult.Id))
@@ -97,7 +97,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<ChoThueSimBaseResult<ChoThueSimResponseCodeCancelMessage, ChoThueSimRefundInfo>> CancelGetMessage(ChoThueSimPhoneNumberResult phoneNumberResult, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint)
+            .WithUrlGet(new UrlBuilder(EndPoint)
                 .WithParam("act", "expired")
                 .WithParam("apik", ApiKey)
                 .WithParam("id", phoneNumberResult.Id))

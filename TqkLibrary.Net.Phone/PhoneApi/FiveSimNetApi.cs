@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetBalance> GetBalance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "user", "profile"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "user", "profile"))
             .ExecuteAsync<FiveSimNetBalance>(cancellationToken);
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             string @operator = "any",
             CancellationToken cancellationToken = default)
            => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "guest", "products", country, @operator))
+           .WithUrlGet(new UrlBuilder(EndPoint, "guest", "products", country, @operator))
            .ExecuteAsync<Dictionary<string, FiveSimNetProduct>>(cancellationToken);
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<Dictionary<string, Dictionary<string, FiveSimNetPrice>>> Prices(CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "guest", "prices"))
+           .WithUrlGet(new UrlBuilder(EndPoint, "guest", "prices"))
            .ExecuteAsync<Dictionary<string, Dictionary<string, FiveSimNetPrice>>>(cancellationToken);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<Dictionary<string, Dictionary<string, FiveSimNetPrice>>> PricesByCountry(string country, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "guest", "prices").WithParam("country", country))
+           .WithUrlGet(new UrlBuilder(EndPoint, "guest", "prices").WithParam("country", country))
            .ExecuteAsync<Dictionary<string, Dictionary<string, FiveSimNetPrice>>>(cancellationToken);
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<Dictionary<string, Dictionary<string, FiveSimNetPrice>>> PricesByProduct(string product, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "guest", "prices").WithParam("product", product))
+           .WithUrlGet(new UrlBuilder(EndPoint, "guest", "prices").WithParam("product", product))
            .ExecuteAsync<Dictionary<string, Dictionary<string, FiveSimNetPrice>>>(cancellationToken);
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<Dictionary<string, Dictionary<string, FiveSimNetPrice>>> PricesByProduct(string country, string product, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "guest", "prices").WithParam("country", country).WithParam("product", product))
+           .WithUrlGet(new UrlBuilder(EndPoint, "guest", "prices").WithParam("country", country).WithParam("product", product))
            .ExecuteAsync<Dictionary<string, Dictionary<string, FiveSimNetPrice>>>(cancellationToken);
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> BuyActivationNumber(string country, string @operator, string product, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "user/buy/activation", country, @operator, product))
+           .WithUrlGet(new UrlBuilder(EndPoint, "user/buy/activation", country, @operator, product))
            .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> BuyHostingNumber(string country, string @operator, string product, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "user/buy/hosting", country, @operator, product))
+           .WithUrlGet(new UrlBuilder(EndPoint, "user/buy/hosting", country, @operator, product))
            .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<string> ReBuyNumber(string product, string number, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "user/reuse", product, number))
+           .WithUrlGet(new UrlBuilder(EndPoint, "user/reuse", product, number))
            .ExecuteAsync<string>(cancellationToken);
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> CheckOrder(FiveSimNetNumber order, CancellationToken cancellationToken = default)
             => Build()
-           .WithUrlGet(new UriBuilder(EndPoint, "user/check", order.Id.ToString()))
+           .WithUrlGet(new UrlBuilder(EndPoint, "user/check", order.Id.ToString()))
            .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> FinishOrder(FiveSimNetNumber order, CancellationToken cancellationToken = default)
            => Build()
-          .WithUrlGet(new UriBuilder(EndPoint, "user/finish", order.Id.ToString()))
+          .WithUrlGet(new UrlBuilder(EndPoint, "user/finish", order.Id.ToString()))
           .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> CancelOrder(FiveSimNetNumber order, CancellationToken cancellationToken = default)
            => Build()
-          .WithUrlGet(new UriBuilder(EndPoint, "user/cancel", order.Id.ToString()))
+          .WithUrlGet(new UrlBuilder(EndPoint, "user/cancel", order.Id.ToString()))
           .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetNumber> BanOrder(FiveSimNetNumber order, CancellationToken cancellationToken = default)
            => Build()
-          .WithUrlGet(new UriBuilder(EndPoint, "user/ban", order.Id.ToString()))
+          .WithUrlGet(new UrlBuilder(EndPoint, "user/ban", order.Id.ToString()))
           .ExecuteAsync<FiveSimNetNumber>(cancellationToken);
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<FiveSimNetList<FiveSimNetSms>> SmsInboxList(FiveSimNetNumber order, CancellationToken cancellationToken = default)
            => Build()
-          .WithUrlGet(new UriBuilder(EndPoint, "user/sms/inbox", order.Id.ToString()))
+          .WithUrlGet(new UrlBuilder(EndPoint, "user/sms/inbox", order.Id.ToString()))
           .ExecuteAsync<FiveSimNetList<FiveSimNetSms>>(cancellationToken);
     }
 

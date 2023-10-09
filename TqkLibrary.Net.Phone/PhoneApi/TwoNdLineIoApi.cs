@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<TwoLineIoResponseBalance> GetBalance(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "getbalance")
+            .WithUrlGet(new UrlBuilder(EndPoint, "getbalance")
                 .WithParam("apikey", ApiKey))
             .ExecuteAsync<TwoLineIoResponseBalance>(cancellationToken);
 
@@ -40,7 +40,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<List<TwoLineIoService>> GetServices(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availableservice"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "availableservice"))
             .ExecuteAsync<List<TwoLineIoService>>(cancellationToken);
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             bool? allowVoiceSms = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "order")
+            .WithUrlGet(new UrlBuilder(EndPoint, "order")
                 .WithParam("apikey", ApiKey)
                 .WithParam("serviceId", service.ServiceId)
                 .WithParamIfNotNull("networkId", netWorkId.HasValue ? (int?)netWorkId.Value : null)
@@ -74,7 +74,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoPurchaseOtpResponse purchaseOtpResponse,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "ordercheck")
+            .WithUrlGet(new UrlBuilder(EndPoint, "ordercheck")
                 .WithParam("apikey", ApiKey)
                 .WithParam("id", purchaseOtpResponse.Id))
             .ExecuteAsync<TwoLineIoData<TwoLineIoOrderData>>(cancellationToken);
@@ -89,7 +89,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoPurchaseOtpResponse purchaseOtpResponse,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "continueorder")
+            .WithUrlGet(new UrlBuilder(EndPoint, "continueorder")
                 .WithParam("apikey", ApiKey)
                 .WithParam("orderId", purchaseOtpResponse.Id))
             .ExecuteAsync<TwoLineIoPurchaseOtpResponse>(cancellationToken);
@@ -101,7 +101,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<List<TwoLineIoTimeHolding>> TimeHoldings(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availabletime")
+            .WithUrlGet(new UrlBuilder(EndPoint, "availabletime")
                 .WithParam("apikey", ApiKey))
             .ExecuteAsync<List<TwoLineIoTimeHolding>>(cancellationToken);
 
@@ -119,7 +119,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoHoldUnit holdUnit,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "keepsim")
+            .WithUrlGet(new UrlBuilder(EndPoint, "keepsim")
                 .WithParam("apikey", ApiKey)
                 .WithParam("orderId", purchaseOtpResponse.Id)
                 .WithParam("time", time)
@@ -133,7 +133,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<TwoLineIoData<List<TwoLineIoPhoneKept>>> PhoneKepts(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availablephone")
+            .WithUrlGet(new UrlBuilder(EndPoint, "availablephone")
                 .WithParam("apikey", ApiKey))
             .ExecuteAsync<TwoLineIoData<List<TwoLineIoPhoneKept>>>(cancellationToken);
 
@@ -151,7 +151,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             bool? allowVoiceSms = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "orderbyphone")
+            .WithUrlGet(new UrlBuilder(EndPoint, "orderbyphone")
                 .WithParam("apikey", ApiKey)
                 .WithParam("serviceId", service.ServiceId)
                 .WithParam("phone", phoneKept.Phone)
@@ -165,7 +165,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         /// <returns></returns>
         public Task<List<TwoLineIoCountry>> GetAvailableCountry(CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availablecountry"))
+            .WithUrlGet(new UrlBuilder(EndPoint, "availablecountry"))
             .ExecuteAsync<List<TwoLineIoCountry>>(cancellationToken);
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
         [Obsolete("Can't test")]
         public Task<TwoLineIoOperator> GetAvailableoperator(TwoLineIoCountry country, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availableoperator").WithParam("countryId", country.CountryId))
+            .WithUrlGet(new UrlBuilder(EndPoint, "availableoperator").WithParam("countryId", country.CountryId))
             .ExecuteAsync<TwoLineIoOperator>(cancellationToken);
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoOperator codeOperator = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availableservice")
+            .WithUrlGet(new UrlBuilder(EndPoint, "availableservice")
                 .WithParam("countryId", country.CountryId)
                 .WithParamIfNotNull("operatorId", codeOperator?.OperatorId))
             .ExecuteAsync<List<TwoLineIoService>>(cancellationToken);
@@ -211,7 +211,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi
             TwoLineIoOperator @operator = null,
             CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "availableservice")
+            .WithUrlGet(new UrlBuilder(EndPoint, "availableservice")
                 .WithParam("apikey", ApiKey)
                 .WithParam("countryId", country.CountryId)
                 .WithParam("serviceId", service.ServiceId)

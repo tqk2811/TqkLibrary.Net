@@ -27,7 +27,7 @@ namespace TqkLibrary.Net.Captcha
         /// <returns></returns>
         public Task<TwoCaptchaResponse> GetResponseJson(string id, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlGet(new UriBuilder(EndPoint, "res.php")
+            .WithUrlGet(new UrlBuilder(EndPoint, "res.php")
                 .WithParam("key", ApiKey)
                 .WithParam("id", id)
                 .WithParam("action", "get")
@@ -88,7 +88,7 @@ namespace TqkLibrary.Net.Captcha
 
             return Build()
                 .WithUrlPost(
-                    new UriBuilder(EndPoint, "in.php")
+                    new UrlBuilder(EndPoint, "in.php")
                         .WithParam("key", ApiKey)
                         .WithParam("method", "post")
                         .WithParam("json", 1)
@@ -110,7 +110,7 @@ namespace TqkLibrary.Net.Captcha
             requestContent.Add(imageContent_bitmap, "file", "file.jpg");
 
             return Build()
-                .WithUrlPost(new UriBuilder(EndPoint, "in.php")
+                .WithUrlPost(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "post")
                     .WithParam("json", 1),
@@ -127,7 +127,7 @@ namespace TqkLibrary.Net.Captcha
             string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null,
             CancellationToken cancellationToken = default)
             => Build()
-                .WithUrlGet(new UriBuilder(EndPoint, "in.php")
+                .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
@@ -146,7 +146,7 @@ namespace TqkLibrary.Net.Captcha
             string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null,
             CancellationToken cancellationToken = default)
             => Build()
-                .WithUrlGet(new UriBuilder(EndPoint, "in.php")
+                .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
@@ -165,7 +165,7 @@ namespace TqkLibrary.Net.Captcha
             string googleKey, string pageUrl, float minScore = 0.3f,
             CancellationToken cancellationToken = default)
             => Build()
-                .WithUrlGet(new UriBuilder(EndPoint, "in.php")
+                .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
@@ -186,7 +186,7 @@ namespace TqkLibrary.Net.Captcha
             ByteArrayContent byteArrayContent = new ByteArrayContent(bitmap);
             multipartFormDataContent.Add(byteArrayContent, "file");
             return Build()
-                .WithUrlPost(new UriBuilder(EndPoint, "in.php")
+                .WithUrlPost(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "post")
                     .WithParam("json", 1)
