@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TqkLibrary.Net.CloudStorage.GoogleDrive;
+
+namespace TestProject.CloudStorage
+{
+    [TestClass]
+    public class GoogleDriveTest
+    {
+        readonly GoogleDriveApiNonLogin _driveApiNonLogin = new GoogleDriveApiNonLogin();
+
+        public static IEnumerable<object[]> Folders
+        {
+            get
+            {
+                yield return new object[] { "0Bx154iMNwuyWR1FhbzFUX3VuT0E", "0-8tPJbWpik3QCtggrAEc-cA" };
+            }
+        }
+        public static IEnumerable<object[]> Files
+        {
+            get
+            {
+                yield return new object[] { "1TNjvaoiSxoR94Vfo_F4YDPqcEC-iOTPg" };
+                yield return new object[] { "1Yz7FGBDdH3sStSd1YGhnw6Xc3BPYmYj5" };
+                yield return new object[] { "1RWBqh_A_r5WRF9srwsBJVpcnLKHI4TAK" };
+            }
+        }
+
+
+
+        [TestMethod(), DynamicData(nameof(Folders))]
+        public async Task ListFolder(string folderId, string folderResourceKey)
+        {
+            var list = await _driveApiNonLogin.ListPublicFolderAsync(DriveFileListOption.CreateQueryFolder(folderId, folderResourceKey));
+        }
+
+
+        [TestMethod, DynamicData(nameof(Files))]
+        public async Task GetMetaData(string fileId)
+        {
+            var metadata = await _driveApiNonLogin.GetMetadataAsync(fileId);
+        }
+
+        [TestMethod, DynamicData(nameof(Files))]
+        public async Task Download(string fileId)
+        {
+            using Stream stream = await _driveApiNonLogin.DownloadFileAsync(fileId);
+            using MemoryStream memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+        }
+    }
+}
