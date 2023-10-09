@@ -24,6 +24,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.Other", "Tqk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{2B37C290-A977-48A7-A053-7BAA5E461DD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.CloudStorage.OneDrive", "TqkLibrary.Net.CloudStorage.OneDrive\TqkLibrary.Net.CloudStorage.OneDrive.csproj", "{850941B5-A443-4DA5-B61F-4A2EC49D387A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{DC4A1ADE-BB14-446D-8031-71F36E12B710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{2B37C290-A977-48A7-A053-7BAA5E461DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B37C290-A977-48A7-A053-7BAA5E461DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B37C290-A977-48A7-A053-7BAA5E461DD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{850941B5-A443-4DA5-B61F-4A2EC49D387A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850941B5-A443-4DA5-B61F-4A2EC49D387A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850941B5-A443-4DA5-B61F-4A2EC49D387A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850941B5-A443-4DA5-B61F-4A2EC49D387A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4A1ADE-BB14-446D-8031-71F36E12B710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4A1ADE-BB14-446D-8031-71F36E12B710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4A1ADE-BB14-446D-8031-71F36E12B710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4A1ADE-BB14-446D-8031-71F36E12B710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
