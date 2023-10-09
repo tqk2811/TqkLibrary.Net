@@ -16,7 +16,7 @@ namespace ConsoleTest.CloudStorage
         const string fileIdLarge = "1RWBqh_A_r5WRF9srwsBJVpcnLKHI4TAK";
         public static async Task Test()
         {
-            DriveApiNonLogin driveApiNonLogin = new DriveApiNonLogin();
+            GoogleDriveApiNonLogin driveApiNonLogin = new GoogleDriveApiNonLogin();
             int count = 0;
             while (true)
             {
