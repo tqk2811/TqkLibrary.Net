@@ -15,7 +15,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
     /// <summary>
     /// 
     /// </summary>
-    public class DriveApiNonLogin : IDisposable
+    public class GoogleDriveApiNonLogin : IDisposable
     {
         /// <summary>
         /// 
@@ -25,7 +25,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// <summary>
         /// 
         /// </summary>
-        public DriveApiNonLogin() : this(
+        public GoogleDriveApiNonLogin() : this(
             new HttpClient(
                 new HttpClientHandler()
                 {
@@ -41,14 +41,14 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// </summary>
         /// <param name="httpClient"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public DriveApiNonLogin(HttpClient httpClient)
+        public GoogleDriveApiNonLogin(HttpClient httpClient)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
         /// <summary>
         /// 
         /// </summary>
-        ~DriveApiNonLogin()
+        ~GoogleDriveApiNonLogin()
         {
             httpClient.Dispose();
         }
