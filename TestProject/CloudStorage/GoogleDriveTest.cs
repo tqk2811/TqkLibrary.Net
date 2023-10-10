@@ -32,7 +32,7 @@ namespace TestProject.CloudStorage
 
 
         [TestMethod(), DynamicData(nameof(Folders))]
-        public async Task ListFolder(string folderId, string folderResourceKey)
+        public async Task ListChildsInFolder(string folderId, string folderResourceKey)
         {
             var list = await _driveApiNonLogin.ListPublicFolderAsync(DriveFileListOption.CreateQueryFolder(folderId, folderResourceKey));
         }
