@@ -4,20 +4,37 @@ using static TqkLibrary.Net.Captcha.TwoCaptchaApi;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TwoCaptchaApiWrapper : ICaptchaWrapper
     {
         readonly TwoCaptchaApi twoCaptchaApi;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
         public TwoCaptchaApiWrapper(string apiKey) : this(new TwoCaptchaApi(apiKey))
         {
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="twoCaptchaApi"></param>
         public TwoCaptchaApiWrapper(TwoCaptchaApi twoCaptchaApi)
         {
             this.twoCaptchaApi = twoCaptchaApi;
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="siteKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(
             string url,
             string siteKey,
@@ -29,7 +46,12 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 cancellationToken: cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmapBuffer"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(
             byte[] bitmapBuffer,
             CancellationToken cancellationToken = default)
