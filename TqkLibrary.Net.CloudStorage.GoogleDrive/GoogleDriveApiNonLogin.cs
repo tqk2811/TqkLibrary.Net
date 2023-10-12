@@ -174,7 +174,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 else// if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
                 {
                     Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
-                    return new StreamWrapper(httpResponseMessage, stream);
+                    return new HttpResponseStreamWrapper(httpResponseMessage, stream);
                 }
                 //throw new InvalidDataException($"Can't find download link for fileId: {fileId}, {url}");
             }
