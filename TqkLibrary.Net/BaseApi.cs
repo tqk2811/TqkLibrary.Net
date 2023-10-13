@@ -11,7 +11,7 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        public HttpStatusCode StatusCode { get; internal set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         /// <summary>
         /// 
@@ -40,7 +40,7 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        public T Body { get; internal set; }
+        public T Body { get; set; }
     }
 
     /// <summary>

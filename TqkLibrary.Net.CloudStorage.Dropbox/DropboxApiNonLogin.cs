@@ -1,0 +1,242 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using TqkLibrary.Net;
+using TqkLibrary.Net.CloudStorage.Dropbox.Models;
+using TqkLibrary.Net.HttpClientHandles;
+
+namespace TqkLibrary.Net.CloudStorage.Dropbox
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class DropboxApiNonLogin : IDisposable
+    {
+        readonly HttpClient httpClient;
+        readonly CookieHandler cookieHandler;
+        /// <summary>
+        /// 
+        /// </summary>
+        public DropboxApiNonLogin() : this(
+            new CookieHandler(
+                new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    AllowAutoRedirect = true,
+                    UseCookies = false,
+                })
+            )
+        {
+
+        }
+        private DropboxApiNonLogin(CookieHandler cookieHandler) : this(new HttpClient(cookieHandler))
+        {
+            this.cookieHandler = cookieHandler ?? throw new ArgumentNullException(nameof(cookieHandler));
+        }
+        private DropboxApiNonLogin(HttpClient httpClient)
+        {
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+
+            //httpClient.DefaultRequestHeaders.Referrer = new Uri("https://www.dropbox.com/");
+            //httpClient.DefaultRequestHeaders.Add("Origin", "https://www.dropbox.com/");
+            //httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
+            //httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+            //httpClient.DefaultRequestHeaders.Add("Dnt", "1");
+            //httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
+            //httpClient.DefaultRequestHeaders.Add("X-Dropbox-Client-Yaps-Attribution", "atlasservlet.sharing-live:prod-pdx");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        ~DropboxApiNonLogin()
+        {
+            httpClient.Dispose();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose()
+        {
+            httpClient.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task GetCookieAsync(string url = "https://www.dropbox.com/", CancellationToken cancellationToken = default)
+            => GetCookieAsync(new Uri(url), cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task GetCookieAsync(Uri uri, CancellationToken cancellationToken = default)
+        {
+            if (!uri.ToString().StartsWith("https://www.dropbox.com"))
+                throw new InvalidOperationException($"url must be StartsWith 'https://www.dropbox.com'");
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+            //httpRequestMessage.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            //httpRequestMessage.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            //httpRequestMessage.Headers.Add("Accept-Language", "en");
+            //httpRequestMessage.Headers.Add("Cache-Control", "max-age=0");
+            //httpRequestMessage.Headers.Add("Dnt", "1");
+            //httpRequestMessage.Headers.Add("Sec-Ch-Ua", "\"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"");
+            //httpRequestMessage.Headers.Add("Sec-Ch-Ua-Mobile", "?0");
+            //httpRequestMessage.Headers.Add("Sec-Ch-Ua-Platform", "\"Windows\"");
+            //httpRequestMessage.Headers.Add("Sec-Fetch-Dest", "document");
+            //httpRequestMessage.Headers.Add("Sec-Fetch-Mode", "navigate");
+            //httpRequestMessage.Headers.Add("Sec-Fetch-Site", "none");
+            //httpRequestMessage.Headers.Add("Sec-Fetch-User", "?1");
+            //httpRequestMessage.Headers.Add("Upgrade-Insecure-Requests", "1");
+            //httpRequestMessage.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
+            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+            httpResponseMessage.EnsureSuccessStatusCode();
+        }
+
+        public string GetT()
+        {
+            var cookies = cookieHandler.CookieContainer.GetCookies(new Uri("https://www.dropbox.com"));
+            foreach (Cookie cookie in cookies)
+            {
+                if ("t".Equals(cookie.Name))
+                    return cookie.Value;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<ListSharedLinkFolderEntries> ListPublicFolderAsync(DropboxUriAnalyze folder, CancellationToken cancellationToken = default)
+        {
+            if (folder is null)
+                throw new ArgumentNullException(nameof(folder));
+            if (folder.LinkType != DropboxLinkType.Folder)
+                throw new InvalidOperationException($"This link folder is not support '{folder.Uri}'");
+
+            if (string.IsNullOrWhiteSpace(GetT()))
+            {
+                await GetCookieAsync(folder.Uri, cancellationToken);
+            }
+
+            var folderQuery = HttpUtility.ParseQueryString(folder.Uri.Query);
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://www.dropbox.com/list_shared_link_folder_entries");
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["is_xhr"] = "true";
+            query["t"] = GetT();
+            query["link_key"] = folder.Id;
+            query["link_type"] = "c";
+            query["secure_hash"] = folder.Name;
+            query["sub_path"] = string.Empty;
+            query["rlkey"] = folder.RlKey;
+            using StringContent form = new StringContent(query.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+            httpRequestMessage.Content = form;
+            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            string json_text = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            httpResponseMessage.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<ListSharedLinkFolderEntries>(json_text);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<string> GetMetadataAsync(DropboxUriAnalyze file, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+
+            if (file is null)
+                throw new ArgumentNullException(nameof(file));
+            if (file.LinkType != DropboxLinkType.File)
+                throw new InvalidOperationException($"This link file is not support '{file.Uri}'");
+
+            if (string.IsNullOrWhiteSpace(GetT()))
+            {
+                await GetCookieAsync(file.Uri, cancellationToken);
+            }
+
+            var folderQuery = HttpUtility.ParseQueryString(file.Uri.Query);
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://www.dropbox.com/2/files/get_file_content_metadata");
+            //httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
+            //httpRequestMessage.Headers.Add("Accept", "application/json");
+            //using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            //string json_text = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
+            //return JsonConvert.DeserializeObject<Google.Apis.Drive.v2.Data.File>(json_text);
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Stream> DownloadFileAsync(DropboxUriAnalyze file, CancellationToken cancellationToken = default)
+        {
+            if (file is null)
+                throw new ArgumentNullException(nameof(file));
+            if (file.LinkType != DropboxLinkType.File)
+                throw new InvalidOperationException($"This link file is not support '{file.Uri}'");
+
+            if (string.IsNullOrWhiteSpace(GetT()))
+            {
+                await GetCookieAsync(file.Uri, cancellationToken);
+            }
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://www.dropbox.com/sharing/fetch_user_content_link");
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["is_xhr"] = "true";
+            query["t"] = GetT();
+            query["url"] = file.Uri.ToString();
+            query["origin"] = "PREVIEW_PAGE";
+            using StringContent form = new StringContent(query.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+            httpRequestMessage.Content = form;
+            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
+
+            httpResponseMessage.EnsureSuccessStatusCode();
+            if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/plain"))
+            {
+                string content = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                using HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Get, content);
+                HttpResponseMessage res = await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                Stream stream = await res.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+                return new HttpResponseStreamWrapper(httpResponseMessage, stream);
+            }
+            else
+            {
+                string content = await httpResponseMessage.Content.ReadAsStringAsync();
+                throw new ApiException<string>()
+                {
+                    StatusCode = httpResponseMessage.StatusCode,
+                    Body = content,
+                };
+            }
+        }
+    }
+}

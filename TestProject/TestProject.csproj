@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TqkLibrary.Net.Captcha\TqkLibrary.Net.Captcha.csproj" />
+    <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.Dropbox\TqkLibrary.Net.CloudStorage.Dropbox.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.GoogleDrive\TqkLibrary.Net.CloudStorage.GoogleDrive.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.OneDrive\TqkLibrary.Net.CloudStorage.OneDrive.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Mail\TqkLibrary.Net.Mail.csproj" />
