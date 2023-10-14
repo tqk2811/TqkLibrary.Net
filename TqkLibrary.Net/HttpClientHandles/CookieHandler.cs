@@ -70,7 +70,7 @@ namespace TqkLibrary.Net.HttpClientHandles
         {
             request.Headers.Add("Cookie", CookieContainer.GetCookieHeader(request.RequestUri));
 
-            var response =  base.Send(request, cancellationToken);
+            var response = base.Send(request, cancellationToken);
 
             if (response.Headers.TryGetValues("Set-Cookie", out var newCookies))
             {
