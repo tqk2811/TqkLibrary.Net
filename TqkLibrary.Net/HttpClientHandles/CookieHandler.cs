@@ -60,6 +60,7 @@ namespace TqkLibrary.Net.HttpClientHandles
             return response;
         }
 
+#if NET5_0_OR_GREATER
         /// <summary>
         /// 
         /// </summary>
@@ -83,5 +84,6 @@ namespace TqkLibrary.Net.HttpClientHandles
 
             return response;
         }
+#endif
     }
 }
