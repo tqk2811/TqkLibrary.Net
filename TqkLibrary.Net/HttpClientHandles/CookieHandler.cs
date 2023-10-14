@@ -59,5 +59,29 @@ namespace TqkLibrary.Net.HttpClientHandles
 
             return response;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            request.Headers.Add("Cookie", CookieContainer.GetCookieHeader(request.RequestUri));
+
+            var response =  base.Send(request, cancellationToken);
+
+            if (response.Headers.TryGetValues("Set-Cookie", out var newCookies))
+            {
+                foreach (var item in SetCookieHeaderValue.ParseList(newCookies.ToList()))
+                {
+                    var uri = new Uri(request.RequestUri, item.Path.Value);
+                    CookieContainer.Add(uri, new Cookie(item.Name.Value, item.Value.Value, item.Path.Value));
+                }
+            }
+
+            return response;
+        }
     }
 }
