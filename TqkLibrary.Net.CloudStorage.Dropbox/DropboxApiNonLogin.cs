@@ -158,6 +158,7 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             return JsonConvert.DeserializeObject<ListSharedLinkFolderEntries>(json_text);
         }
 
+#if DEBUG
         /// <summary>
         /// 
         /// </summary>
@@ -166,8 +167,6 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
         /// <returns></returns>
         public async Task<string> GetMetadataAsync(DropboxUriAnalyze file, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-
             if (file is null)
                 throw new ArgumentNullException(nameof(file));
             if (file.LinkType != DropboxLinkType.File)
@@ -188,6 +187,7 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             //return JsonConvert.DeserializeObject<Google.Apis.Drive.v2.Data.File>(json_text);
             return null;
         }
+#endif
 
         /// <summary>
         /// 
