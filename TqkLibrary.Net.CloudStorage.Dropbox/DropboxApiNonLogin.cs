@@ -27,32 +27,41 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
         /// 
         /// </summary>
         public DropboxApiNonLogin() : this(
-            new CookieHandler(
-                new HttpClientHandler()
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                    AllowAutoRedirect = true,
-                    UseCookies = false,
-                })
-            )
+            new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                AllowAutoRedirect = true,
+                UseCookies = false,
+            }
+        )
         {
 
         }
-        private DropboxApiNonLogin(CookieHandler cookieHandler) : this(new HttpClient(cookieHandler))
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClientHandler"></param>
+        public DropboxApiNonLogin(HttpClientHandler httpClientHandler) : this(new CookieHandler(httpClientHandler))
+        {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cookieHandler"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected DropboxApiNonLogin(CookieHandler cookieHandler) : this(new HttpClient(cookieHandler))
         {
             this.cookieHandler = cookieHandler ?? throw new ArgumentNullException(nameof(cookieHandler));
         }
-        private DropboxApiNonLogin(HttpClient httpClient)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected DropboxApiNonLogin(HttpClient httpClient)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-
-            //httpClient.DefaultRequestHeaders.Referrer = new Uri("https://www.dropbox.com/");
-            //httpClient.DefaultRequestHeaders.Add("Origin", "https://www.dropbox.com/");
-            //httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
-            //httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-            //httpClient.DefaultRequestHeaders.Add("Dnt", "1");
-            //httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
-            //httpClient.DefaultRequestHeaders.Add("X-Dropbox-Client-Yaps-Attribution", "atlasservlet.sharing-live:prod-pdx");
         }
         /// <summary>
         /// 
@@ -90,24 +99,14 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             if (!uri.ToString().StartsWith("https://www.dropbox.com"))
                 throw new InvalidOperationException($"url must be StartsWith 'https://www.dropbox.com'");
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-            //httpRequestMessage.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-            //httpRequestMessage.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-            //httpRequestMessage.Headers.Add("Accept-Language", "en");
-            //httpRequestMessage.Headers.Add("Cache-Control", "max-age=0");
-            //httpRequestMessage.Headers.Add("Dnt", "1");
-            //httpRequestMessage.Headers.Add("Sec-Ch-Ua", "\"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"");
-            //httpRequestMessage.Headers.Add("Sec-Ch-Ua-Mobile", "?0");
-            //httpRequestMessage.Headers.Add("Sec-Ch-Ua-Platform", "\"Windows\"");
-            //httpRequestMessage.Headers.Add("Sec-Fetch-Dest", "document");
-            //httpRequestMessage.Headers.Add("Sec-Fetch-Mode", "navigate");
-            //httpRequestMessage.Headers.Add("Sec-Fetch-Site", "none");
-            //httpRequestMessage.Headers.Add("Sec-Fetch-User", "?1");
-            //httpRequestMessage.Headers.Add("Upgrade-Insecure-Requests", "1");
-            //httpRequestMessage.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
             httpResponseMessage.EnsureSuccessStatusCode();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string GetT()
         {
             var cookies = cookieHandler.CookieContainer.GetCookies(new Uri("https://www.dropbox.com"));
