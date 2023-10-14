@@ -99,7 +99,7 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             if (!uri.ToString().StartsWith("https://www.dropbox.com"))
                 throw new InvalidOperationException($"url must be StartsWith 'https://www.dropbox.com'");
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             httpResponseMessage.EnsureSuccessStatusCode();
         }
 
