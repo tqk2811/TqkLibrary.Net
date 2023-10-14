@@ -22,26 +22,36 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// </summary>
         public string ApiKey { get; set; } = "AIzaSyC1qbk75NzWBvSaDh6KnsjjA9pIrP4lYIE";
         readonly HttpClient httpClient;
+
         /// <summary>
         /// 
         /// </summary>
         public GoogleDriveApiNonLogin() : this(
-            new HttpClient(
-                new HttpClientHandler()
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                    AllowAutoRedirect = true,
-                }
-                ))
+            new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                AllowAutoRedirect = true,
+            },
+            true
+        )
         {
 
         }
         /// <summary>
         /// 
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        public GoogleDriveApiNonLogin(HttpClientHandler httpClientHandler, bool disposeHandler) : this(new HttpClient(httpClientHandler, disposeHandler))
+        {
+            if (!httpClientHandler.AllowAutoRedirect)
+                throw new InvalidOperationException($"{nameof(httpClientHandler)}.{nameof(httpClientHandler.AllowAutoRedirect)} must be set to true");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="httpClient"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public GoogleDriveApiNonLogin(HttpClient httpClient)
+        protected GoogleDriveApiNonLogin(HttpClient httpClient)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }

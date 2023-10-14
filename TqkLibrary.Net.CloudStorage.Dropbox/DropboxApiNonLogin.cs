@@ -32,7 +32,8 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 AllowAutoRedirect = true,
                 UseCookies = false,
-            }
+            },
+            true
         )
         {
 
@@ -40,17 +41,16 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="httpClientHandler"></param>
-        public DropboxApiNonLogin(HttpClientHandler httpClientHandler) : this(new CookieHandler(httpClientHandler))
+        /// <exception cref="ArgumentNullException"></exception>
+        public DropboxApiNonLogin(HttpClientHandler httpClientHandler, bool disposeHandler) : this(new CookieHandler(httpClientHandler), disposeHandler)
         {
 
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cookieHandler"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected DropboxApiNonLogin(CookieHandler cookieHandler) : this(new HttpClient(cookieHandler))
+        protected DropboxApiNonLogin(CookieHandler cookieHandler, bool disposeHandler) : this(new HttpClient(cookieHandler, disposeHandler))
         {
             this.cookieHandler = cookieHandler ?? throw new ArgumentNullException(nameof(cookieHandler));
         }

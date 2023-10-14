@@ -27,22 +27,21 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 AllowAutoRedirect = false,
-            }
+            },
+            true
         )
         {
 
         }
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="httpClientHandler"></param>
-        public OneDriveApiNonLogin(HttpClientHandler httpClientHandler) : this(new HttpClient(httpClientHandler))
+        /// <exception cref="ArgumentNullException"></exception>
+        public OneDriveApiNonLogin(HttpClientHandler httpClientHandler, bool disposeHandler) : this(new HttpClient(httpClientHandler, disposeHandler))
         {
             if (httpClientHandler.AllowAutoRedirect)
                 throw new InvalidOperationException($"{nameof(httpClientHandler)}.{nameof(httpClientHandler.AllowAutoRedirect)} must be set to false");
         }
-
         /// <summary>
         /// 
         /// </summary>
