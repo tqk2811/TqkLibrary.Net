@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -74,10 +75,9 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="uri"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<OneDriveLinkInfo> DecodeShortLinkAsync(Uri uri)
+        public async Task<OneDriveLinkInfo> DecodeShortLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri is null)
                 throw new ArgumentNullException(nameof(uri));
@@ -86,7 +86,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
                 throw new InvalidOperationException($"Short link host must be '1drv.ms', current is '{uri.Host}'");
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             if (httpResponseMessage.Headers.Location is null)
                 return null;
 
@@ -108,17 +108,14 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="oneDriveLinkInfo"></param>
         /// <returns></returns>
-        public Task<DriveItem> GetMetadataAsync(OneDriveLinkInfo oneDriveLinkInfo)
-            => GetMetadataAsync(oneDriveLinkInfo.ResourceId, oneDriveLinkInfo.AuthKey);
+        public Task<DriveItem> GetMetadataAsync(OneDriveLinkInfo oneDriveLinkInfo, CancellationToken cancellationToken = default)
+            => GetMetadataAsync(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="authKey"></param>
         /// <returns></returns>
-        public async Task<DriveItem> GetMetadataAsync(string itemId, string authKey)
+        public async Task<DriveItem> GetMetadataAsync(string itemId, string authKey, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(itemId))
                 throw new ArgumentNullException(nameof(itemId));
@@ -140,7 +137,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
             httpRequestMessage.Headers.Add("Origin", "https://onedrive.live.com");
             httpRequestMessage.Headers.Referrer = new Uri("https://onedrive.live.com");
 
-            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
             string text = await httpResponseMessage.Content.ReadAsStringAsync();
             httpResponseMessage.EnsureSuccessStatusCode();
@@ -152,27 +149,23 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="oneDriveLinkInfo"></param>
         /// <returns></returns>
-        public Task<Stream> DownloadFileAsync(OneDriveLinkInfo oneDriveLinkInfo)
-            => DownloadFileAsync(oneDriveLinkInfo.ResourceId, oneDriveLinkInfo.AuthKey);
+        public Task<Stream> DownloadFileAsync(OneDriveLinkInfo oneDriveLinkInfo, CancellationToken cancellationToken = default)
+            => DownloadFileAsync(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="authKey"></param>
         /// <returns></returns>
-        public async Task<Stream> DownloadFileAsync(string itemId, string authKey)
+        public async Task<Stream> DownloadFileAsync(string itemId, string authKey, CancellationToken cancellationToken = default)
         {
-            var driverItem = await GetMetadataAsync(itemId, authKey);
-            return await DownloadFileAsync(driverItem);
+            var driverItem = await GetMetadataAsync(itemId, authKey, cancellationToken);
+            return await DownloadFileAsync(driverItem, cancellationToken);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="driveItem"></param>
         /// <returns></returns>
-        public async Task<Stream> DownloadFileAsync(DriveItem driveItem)
+        public async Task<Stream> DownloadFileAsync(DriveItem driveItem, CancellationToken cancellationToken = default)
         {
             if (driveItem.AdditionalData.TryGetValue("@content.downloadUrl", out object val) && val is string url)
             {
@@ -180,7 +173,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
                 httpRequestMessage.Headers.Add("Origin", "https://onedrive.live.com");
                 httpRequestMessage.Headers.Referrer = new Uri("https://onedrive.live.com");
 
-                HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+                HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
                 return new HttpResponseStreamWrapper(httpResponseMessage, await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync());
             }
             return null;
@@ -190,19 +183,16 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="oneDriveLinkInfo"></param>
         /// <returns></returns>
-        public Task<DriveItemCollectionResponse> ListChildItems(OneDriveLinkInfo oneDriveLinkInfo)
-            => ListChildItems(oneDriveLinkInfo.ResourceId, oneDriveLinkInfo.AuthKey);
+        public Task<DriveItemCollectionResponse> ListChildItems(OneDriveLinkInfo oneDriveLinkInfo, CancellationToken cancellationToken = default)
+            => ListChildItems(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="authKey"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<DriveItemCollectionResponse> ListChildItems(string itemId, string authKey)
+        public async Task<DriveItemCollectionResponse> ListChildItems(string itemId, string authKey, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(itemId))
                 throw new ArgumentNullException(nameof(itemId));
@@ -226,7 +216,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
             httpRequestMessage.Headers.Add("Origin", "https://onedrive.live.com");
             httpRequestMessage.Headers.Referrer = new Uri("https://onedrive.live.com");
 
-            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead);
+            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
             string text = await httpResponseMessage.Content.ReadAsStringAsync();
             httpResponseMessage.EnsureSuccessStatusCode();
