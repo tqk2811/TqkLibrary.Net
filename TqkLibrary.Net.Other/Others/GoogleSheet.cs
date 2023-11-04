@@ -34,8 +34,16 @@ namespace TqkLibrary.Net.Other.Others
                     .WithParam("format", format)
                     .WithParam("id", fileId))
                 .ExecuteAsync(cancellationToken);
-            var stream = await res.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
-            return new HttpResponseStreamWrapper(res, stream);
+            try
+            {
+                var stream = await res.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+                return new HttpResponseStreamWrapper(res, stream);
+            }
+            catch
+            {
+                res.Dispose();
+                throw;
+            }
         }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
