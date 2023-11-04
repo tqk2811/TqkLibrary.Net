@@ -24,32 +24,6 @@ namespace TqkLibrary.Net.Other.Others
         }))
         {
             this.httpClient.DefaultRequestHeaders.Referrer = new Uri("https://docs.google.com");
-            //this.httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-            //this.httpClient.DefaultRequestHeaders.Add("Accept-Language", "en");
-            //this.httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-            //this.httpClient.DefaultRequestHeaders.Add("Dnt", "1");
-
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua", "\"Chromium\";v=\"118\", \"Google Chrome\";v=\"118\", \"Not=A?Brand\";v=\"99\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Arch", "\"x86\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Bitness", "\"64\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Full-Version-List", "\"Chromium\";v=\"118.0.5993.120\", \"Google Chrome\";v=\"118.0.5993.120\", \"Not=A?Brand\";v=\"99.0.0.0\"");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("", "");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Platform-Version", "\"10.0.0\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Mobile", "?0");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Model", "\"\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Ch-Ua-Platform", "\"Windows\"");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "iframe");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-            //this.httpClient.DefaultRequestHeaders.Add("Sec-Fetch-User", "?1");
-
-            //this.httpClient.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
-            //this.httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36");
         }
         readonly CookieHandler cookieHandler;
         private GoogleSheet(CookieHandler cookieHandler) : base(".", cookieHandler)
