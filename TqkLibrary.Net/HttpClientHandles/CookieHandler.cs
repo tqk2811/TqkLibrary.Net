@@ -44,7 +44,8 @@ namespace TqkLibrary.Net.HttpClientHandles
         /// <returns></returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
-            request.Headers.Add("Cookie", CookieContainer.GetCookieHeader(request.RequestUri));
+            string cookie = CookieContainer.GetCookieHeader(request.RequestUri);
+            if (!string.IsNullOrEmpty(cookie)) request.Headers.Add("Cookie", cookie);
 
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
@@ -69,7 +70,8 @@ namespace TqkLibrary.Net.HttpClientHandles
         /// <returns></returns>
         protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Add("Cookie", CookieContainer.GetCookieHeader(request.RequestUri));
+            string cookie = CookieContainer.GetCookieHeader(request.RequestUri);
+            if (!string.IsNullOrEmpty(cookie)) request.Headers.Add("Cookie", cookie);
 
             var response = base.Send(request, cancellationToken);
 
