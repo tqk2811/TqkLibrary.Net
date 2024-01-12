@@ -145,8 +145,8 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             return JsonConvert.DeserializeObject<Google.Apis.Drive.v2.Data.File>(json_text);
         }
 
-
-        static readonly Regex regex_confirmDriveDownload = new Regex("(?<=action=\")https:\\/\\/drive.google.com\\/uc?.*?(?=\")");
+        static readonly Regex regex_form = new Regex("form.*?action=\"(.*?)\" method=\"(.*?)\"");
+        static readonly Regex regex_formItem = new Regex("name=\"(.*?)\" value=\"(.*?)\"");
         /// <summary>
         /// 
         /// </summary>
@@ -157,8 +157,15 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         {
             string url = $"https://drive.google.com/uc?export=download&id={fileId}";
             HttpMethod method = HttpMethod.Get;
+            int tryCount = 0;
             while (true)
             {
+                tryCount++;
+                if (tryCount > 5)
+                {
+                    throw new Exception($"Can't download file {fileId}");
+                }
+
                 using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, url);
                 //httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
                 //httpRequestMessage.Headers.Add("Origin", "https://drive.google.com/");
@@ -166,19 +173,53 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 httpResponseMessage.EnsureSuccessStatusCode();
                 if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
                 {
-                    string content = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
-                    Match match = regex_confirmDriveDownload.Match(content);
-                    if (match.Success)//file large, can't scan virus, need confirm
+                    try
                     {
-                        url = HttpUtility.HtmlDecode(match.Value);
-                        method = HttpMethod.Post;
-                        httpResponseMessage.Dispose();
-                        continue;
-                    }
-                    else
-                    {
-                        httpResponseMessage.Dispose();
+                        string content = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+
+                        Match match = regex_form.Match(content);
+                        if (match.Success)
+                        {
+                            string method_str = match.Groups[2].Value.ToLower();
+                            switch (method_str)
+                            {
+                                case "get":
+                                    {
+                                        var matches = regex_formItem.Matches(content);
+                                        Uri uri = new Uri(HttpUtility.HtmlDecode(match.Groups[1].Value));
+                                        var q = HttpUtility.ParseQueryString(uri.Query);
+                                        foreach (Match m in matches)
+                                        {
+                                            q[m.Groups[1].Value] = HttpUtility.HtmlDecode(m.Groups[2].Value);
+                                        }
+                                        var q_str = q.ToString();
+                                        if (string.IsNullOrWhiteSpace(q_str))
+                                        {
+                                            url = uri.OriginalString;
+                                            method = HttpMethod.Get;
+                                        }
+                                        else
+                                        {
+                                            url = $"{uri.OriginalString.Replace(uri.Query, string.Empty)}?{q_str}";
+                                            method = HttpMethod.Get;
+                                        }
+                                        continue;
+                                    }
+
+                                case "post":
+                                    {
+                                        url = HttpUtility.HtmlDecode(match.Groups[1].Value);
+                                        method = HttpMethod.Post;
+                                        continue;
+                                    }
+                            }
+                        }
+
                         throw new Exception(content);
+                    }
+                    finally
+                    {
+                        httpResponseMessage.Dispose();
                     }
                 }
                 else// if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
