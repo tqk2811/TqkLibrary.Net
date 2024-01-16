@@ -200,7 +200,14 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                                         }
                                         else
                                         {
-                                            url = $"{uri.OriginalString.Replace(uri.Query, string.Empty)}?{q_str}";
+                                            if(string.IsNullOrWhiteSpace(uri.Query))
+                                            {
+                                                url = $"{uri.OriginalString}?{q_str}";
+                                            }
+                                            else
+                                            {
+                                                url = $"{uri.OriginalString.Replace(uri.Query, string.Empty)}?{q_str}";
+                                            }
                                             method = HttpMethod.Get;
                                         }
                                         continue;
