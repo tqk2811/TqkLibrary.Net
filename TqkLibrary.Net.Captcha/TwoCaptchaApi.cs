@@ -124,7 +124,7 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV2(
-            string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null,
+            string googleKey, string pageUrl, string? cookies = null, string? proxy = null, string? proxytype = null,
             CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
@@ -143,14 +143,14 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV2Invisible(
-            string googleKey, string pageUrl, string cookies = null, string proxy = null, string proxytype = null,
+            string googleKey, string pageUrl, string? cookies = null, string? proxy = null, string? proxytype = null,
             CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
                     .WithParam("key", ApiKey)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
-                    .WithParam("invisible",1)
+                    .WithParam("invisible", 1)
                     .WithParam("googlekey", googleKey)
                     .WithParam("pageurl", pageUrl)
                     .WithParamIfNotNull("cookies", cookies)
@@ -216,7 +216,7 @@ namespace TqkLibrary.Net.Captcha
             public int Status { get; set; }
 
             [JsonProperty("request")]
-            public string Request { get; set; }
+            public string? Request { get; set; }
 
             public override string ToString()
             {
@@ -226,7 +226,7 @@ namespace TqkLibrary.Net.Captcha
             public TwoCaptchaState CheckState()
             {
                 if (Status == 1) return TwoCaptchaState.Success;
-                if (Request.Contains("CAPCHA_NOT_READY")) return TwoCaptchaState.NotReady;
+                if ("CAPCHA_NOT_READY".Contains(Request)) return TwoCaptchaState.NotReady;
                 else return TwoCaptchaState.Error;
             }
         }

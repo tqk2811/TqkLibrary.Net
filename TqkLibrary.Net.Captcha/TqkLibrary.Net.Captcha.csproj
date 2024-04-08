@@ -3,6 +3,7 @@
 	<Import Project="..\ProjectBuildProperties.targets" />
 	
 	<PropertyGroup>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	
 	<ItemGroup>
