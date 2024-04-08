@@ -66,7 +66,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (ChoThueSimAppInfo == null) throw new InvalidOperationException($"{nameof(ChoThueSimAppInfo)} is null");
             var phone = await choThueSimCodeApi.GetPhoneNumber(ChoThueSimAppInfo, ChoThueSimCarrier, cancellationToken).ConfigureAwait(false);
@@ -93,12 +93,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
         public string Message => phone.Msg;
 
-        public Task CancelWaitSms(CancellationToken cancellationToken = default)
+        public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
             return choThueSimCodeApi.CancelGetMessage(phone.Result, cancellationToken);
         }
 
-        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
         {
             var message = await choThueSimCodeApi.GetMessage(phone.Result, cancellationToken).ConfigureAwait(false);
             return new ChoThueSimCodeWrapperSmsResult(false, new ChoThueSimCodeWrapperSms(message));

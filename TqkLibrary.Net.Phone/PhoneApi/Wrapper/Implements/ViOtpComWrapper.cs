@@ -67,7 +67,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (Service == null) throw new InvalidOperationException($"{nameof(Service)} must be set");
             var res = await viOtpComApi.RequestRent(Service, Networks, Prefixs, ExceptPrefixs, cancellationToken);
@@ -97,12 +97,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         public string Message => viOtpComSession?.Message;
         public bool IsSuccess => viOtpComSession?.Success == true;
 
-        public Task CancelWaitSms(CancellationToken cancellationToken = default)
+        public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
-        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
         {
             var res = await viOtpComApi.SessionGet(viOtpComSession.Data).ConfigureAwait(false);
             return new ViOtpComWrapperSmsResult(false, new ViOtpComWrapperSms(res.Data));

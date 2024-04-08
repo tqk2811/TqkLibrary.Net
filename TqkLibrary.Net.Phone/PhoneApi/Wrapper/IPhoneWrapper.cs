@@ -16,6 +16,6 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default);
+        Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default);
     }
 }

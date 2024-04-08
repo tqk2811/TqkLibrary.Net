@@ -68,7 +68,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (Service == null) throw new InvalidOperationException($"set {nameof(Service)} first");
             var res = await twoLineIoApi.PurchaseOTP(Service, NetWorkId, null, cancellationToken).ConfigureAwait(false);
@@ -122,12 +122,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
         public string Message => twoLineIoOrderData?.Message;
 
-        public Task CancelWaitSms(CancellationToken cancellationToken = default)
+        public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
-        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
         {
             var order = await twoLineIoApi.CheckOrder(twoLineIoPurchaseOtpResponse, cancellationToken).ConfigureAwait(false);
             return new TwoLineIoWrapperSmsResult(order.Data.StatusOrder != TwoLineIoStatusOrder.Wait, new TwoLineIoWrapperSms(order.Data));

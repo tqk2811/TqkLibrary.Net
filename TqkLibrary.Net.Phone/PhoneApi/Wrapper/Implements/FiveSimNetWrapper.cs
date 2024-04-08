@@ -63,7 +63,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             var res = await fiveSimNetApi.BuyActivationNumber(Country, Operator, Product, cancellationToken).ConfigureAwait(false);
             return new FiveSimNetWrapperSession(fiveSimNetApi, res);
@@ -85,12 +85,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
         public string Message => string.Empty;
 
-        public Task CancelWaitSms(CancellationToken cancellationToken = default)
+        public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
             return fiveSimNetApi.CancelOrder(fiveSimNetNumber, cancellationToken);
         }
 
-        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
         {
             var res = await fiveSimNetApi.CheckOrder(fiveSimNetNumber, cancellationToken).ConfigureAwait(false);
             return new FiveSimNetWrapperSmsResult(

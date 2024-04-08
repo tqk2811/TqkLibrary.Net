@@ -27,7 +27,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
             sellotpvnComApi.Dispose();
         }
 
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (Service is null) throw new InvalidOperationException($"{nameof(SellotpvnComApiWrapper)}.{nameof(Service)} musbe set");
             var response = await sellotpvnComApi.Order(Service, NetworkProvider, cancellationToken).ConfigureAwait(false);
@@ -56,12 +56,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
                 }
             }
 
-            public Task CancelWaitSms(CancellationToken cancellationToken = default)
+            public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
             {
                 return Task.CompletedTask;
             }
 
-            public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+            public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
             {
                 response = await sellotpvnComApi.GetOrder(response, cancellationToken);
                 if (response.Status == SellotpvnComApi.Status.Failed)

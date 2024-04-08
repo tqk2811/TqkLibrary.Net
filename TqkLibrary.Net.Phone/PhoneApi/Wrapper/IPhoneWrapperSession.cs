@@ -28,12 +28,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default);
+        Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        Task CancelWaitSms(CancellationToken cancellationToken = default);
+        Task CancelWaitSmsAsync(CancellationToken cancellationToken = default);
     }
 }

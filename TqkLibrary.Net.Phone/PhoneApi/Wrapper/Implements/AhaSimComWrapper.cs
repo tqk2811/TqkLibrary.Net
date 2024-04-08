@@ -70,7 +70,7 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IPhoneWrapperSession> RentPhone(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (AhaSimComService == null) throw new InvalidOperationException($"Set value to {nameof(AhaSimComService)} first");
             var session = await ahaSimComApi.PhoneNewSession(AhaSimComService, Networks, Prefixs, ExceptPrefixs, cancellationToken).ConfigureAwait(false);
@@ -94,12 +94,12 @@ namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper.Implements
 
         public string Message => ahaSimComSession.Message;
 
-        public Task CancelWaitSms(CancellationToken cancellationToken = default)
+        public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
             return ahaSimComApi.SessionCancel(ahaSimComSession.Data, cancellationToken);
         }
 
-        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSms(CancellationToken cancellationToken = default)
+        public async Task<IPhoneWrapperSmsResult<IPhoneWrapperSms>> GetSmsAsync(CancellationToken cancellationToken = default)
         {
             var messages = await ahaSimComApi.SessionGetOtp(ahaSimComSession.Data, cancellationToken).ConfigureAwait(false);
             return new AhaSimComWrapperSmsResult(false, new AhaSimComWrapperSms(messages.Data));
