@@ -7,28 +7,67 @@ using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
-    internal class AnticaptchaTopApiWrapper : ICaptchaWrapper
+    /// <summary>
+    /// 
+    /// </summary>
+    public class AnticaptchaTopApiWrapper : ICaptchaWrapper
     {
         readonly AnticaptchaTopApi _anticaptchaTopApi;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsInvisible { get; set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public AnticaptchaTopApi.ImageType ImageType { get; set; } = AnticaptchaTopApi.ImageType.Any;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsCalc { get; set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsNumeric { get; set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsCasesensitive { get; set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="anticaptchaTopApi"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public AnticaptchaTopApiWrapper(AnticaptchaTopApi anticaptchaTopApi)
         {
             this._anticaptchaTopApi = anticaptchaTopApi ?? throw new ArgumentNullException(nameof(anticaptchaTopApi));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
         public AnticaptchaTopApiWrapper(string apiKey)
         {
             this._anticaptchaTopApi = new AnticaptchaTopApi(apiKey);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="siteKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(string url, string siteKey, CancellationToken cancellationToken = default)
         {
             var task = await _anticaptchaTopApi.RecaptchaV2Async(siteKey, url, IsInvisible, cancellationToken);
             return new ReCaptchaTask(task, _anticaptchaTopApi);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmapBuffer"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
         {
             AnticaptchaTopApi.ImageToTextOption imageToTextOption = bitmapBuffer;
