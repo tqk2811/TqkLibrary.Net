@@ -43,51 +43,17 @@ namespace TqkLibrary.Net.Captcha
         /// <param name="isInvisible"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TaskResponse> RecaptchaV2Async(string googleKey, string pageUrl, bool isInvisible = false, CancellationToken cancellationToken = default)
+        public Task<RecaptchaV2Response> RecaptchaV2Async(string googleKey, string pageUrl, bool isInvisible = false, CancellationToken cancellationToken = default)
             => Build()
-                .WithUrlPostJson(new UrlBuilder(_Endpoint, "in.php"), new CreateTaskRecaptchaV2()
+                .WithUrlPostJson(new UrlBuilder(_Endpoint, "api", "captcha"), new RecaptchaV2Request()
                 {
                     ApiKey = ApiKey,
+                    Type = 11,
                     PageUrl = pageUrl,
-                    GoogleKey = googleKey,
-                    Invisible = isInvisible ? 1 : null,
+                    GoogleSiteKey = googleKey,
+                    Invisible = isInvisible ? 1 : 0,
                 })
-                .ExecuteAsync<TaskResponse>(cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<TaskResponse> GetTaskResponseAsync(string taskId, CancellationToken cancellationToken = default)
-            => Build()
-                .WithUrlGet(new UrlBuilder(_Endpoint, "res.php").WithParam("key", ApiKey).WithParam("id", taskId).WithParam("json", 1))
-                .ExecuteAsync<TaskResponse>(cancellationToken);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <param name="delay"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<TaskResponse> WaitUntilTaskResultAsync(string taskId, int delay = 3000, CancellationToken cancellationToken = default)
-        {
-            TaskResponse taskResponse;
-            while (true)
-            {
-                await Task.Delay(delay, cancellationToken);
-                taskResponse = await GetTaskResponseAsync(taskId, cancellationToken);
-                if (taskResponse.Status == 1)
-                    break;
-                if (!"CAPCHA_NOT_READY".Equals(taskResponse.Request))
-                {
-                    break;
-                }
-            }
-            return taskResponse;
-        }
+                .ExecuteAsync<RecaptchaV2Response>(cancellationToken);
 
 
 
@@ -173,30 +139,36 @@ namespace TqkLibrary.Net.Captcha
         }
 
 
-        class CreateTaskRecaptchaV2
+        class RecaptchaV2Request
         {
-            [JsonProperty("key")]
+            [JsonProperty("apikey")]
             public string? ApiKey { get; set; }
 
-            [JsonProperty("method")]
-            public string Method { get; set; } = "userrecaptcha";
+            [JsonProperty("type")]
+            public int Type { get; set; }
 
-            [JsonProperty("googlekey")]
-            public string? GoogleKey { get; set; }
+            [JsonProperty("googlesitekey")]
+            public string? GoogleSiteKey { get; set; }
 
             [JsonProperty("pageurl")]
             public string? PageUrl { get; set; }
 
-            [JsonProperty("status")]
-            public int? Invisible { get; set; } = null;
+            [JsonProperty("invi")]
+            public int Invisible { get; set; } = 0;
         }
-        public class TaskResponse
+        public class RecaptchaV2Response
         {
-            [JsonProperty("status")]
-            public int Status { get; set; }
+            [JsonProperty("success")]
+            public bool? Success { get; set; }
 
-            [JsonProperty("request")]
-            public string? Request { get; set; }
+            [JsonProperty("message")]
+            public string? Message { get; set; }
+
+            [JsonProperty("captcha")]
+            public string? Captcha { get; set; }
+
+            [JsonProperty("base64img")]
+            public string? Base64Img { get; set; }
         }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }

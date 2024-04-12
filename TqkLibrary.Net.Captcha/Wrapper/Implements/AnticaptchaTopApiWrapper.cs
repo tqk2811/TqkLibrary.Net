@@ -81,26 +81,21 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 
         class ReCaptchaTask : ICaptchaTask<BasicCaptchaTaskResult>
         {
-            readonly AnticaptchaTopApi.TaskResponse _taskResponse;
+            readonly AnticaptchaTopApi.RecaptchaV2Response _response;
             readonly AnticaptchaTopApi _anticaptchaTopApi;
-            public ReCaptchaTask(AnticaptchaTopApi.TaskResponse taskResponse, AnticaptchaTopApi anticaptchaTopApi)
+            public ReCaptchaTask(AnticaptchaTopApi.RecaptchaV2Response response, AnticaptchaTopApi anticaptchaTopApi)
             {
-                _taskResponse = taskResponse ?? throw new ArgumentNullException(nameof(taskResponse));
+                _response = response ?? throw new ArgumentNullException(nameof(response));
                 _anticaptchaTopApi = anticaptchaTopApi ?? throw new ArgumentNullException(nameof(anticaptchaTopApi));
             }
-            public async Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
-                AnticaptchaTopApi.TaskResponse taskResponse = _taskResponse;
-                if (!string.IsNullOrWhiteSpace(_taskResponse.Request))
+                return Task.FromResult(new BasicCaptchaTaskResult()
                 {
-                    taskResponse = await _anticaptchaTopApi.WaitUntilTaskResultAsync(_taskResponse.Request!, delay, cancellationToken);
-                }
-                return new BasicCaptchaTaskResult()
-                {
-                    IsSuccess = taskResponse.Status == 1,
-                    Value = taskResponse.Status == 1 ? taskResponse.Request! : string.Empty,
-                    ErrorMessage = taskResponse.Status == 1 ? string.Empty : taskResponse.Request!,
-                };
+                    IsSuccess = _response.Success == true,
+                    Value = _response.Captcha!,
+                    ErrorMessage = _response.Message!,
+                });
             }
         }
 
