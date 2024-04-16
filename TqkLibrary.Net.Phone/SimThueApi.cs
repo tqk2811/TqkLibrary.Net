@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Phone.PhoneApi
+namespace TqkLibrary.Net.Phone
 {
     /// <summary>
     /// https://simthue.com/vi/api/index

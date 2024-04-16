@@ -1,4 +1,4 @@
-﻿namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
+﻿namespace TqkLibrary.Net.Phone.Wrapper
 {
     /// <summary>
     /// 

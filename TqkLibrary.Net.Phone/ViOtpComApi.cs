@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace TqkLibrary.Net.Phone.PhoneApi
+namespace TqkLibrary.Net.Phone
 {
     /// <summary>
     /// https://viotp.com/Account/ApiDocument

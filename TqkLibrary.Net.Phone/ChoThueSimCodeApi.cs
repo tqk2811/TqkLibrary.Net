@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace TqkLibrary.Net.Phone.PhoneApi
+namespace TqkLibrary.Net.Phone
 {
     /// <summary>
     /// https://chothuesimcode.com/account/api

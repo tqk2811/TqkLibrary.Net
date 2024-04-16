@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Phone.PhoneApi.Wrapper
+namespace TqkLibrary.Net.Phone.Wrapper
 {
     /// <summary>
     /// 
