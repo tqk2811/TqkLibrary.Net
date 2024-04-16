@@ -48,7 +48,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <param name="isClear"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task Load(IProxyApiWrapper proxyApi, bool isClear = true)
+        public async Task LoadAsync(IProxyApiWrapper proxyApi, bool isClear = true)
         {
             using var l = await asyncLock.LockAsync().ConfigureAwait(false);
             if (isClear) _dicts.Clear();
@@ -58,7 +58,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        public async Task Load(IEnumerable<IProxyApiWrapper> proxyApis, bool isClear = true)
+        public async Task LoadAsync(IEnumerable<IProxyApiWrapper> proxyApis, bool isClear = true)
         {
             var apis = proxyApis?.ToList() ?? throw new ArgumentNullException(nameof(proxyApis));
             if (apis.Any(x => x == null)) throw new ArgumentNullException($"Have item in {nameof(proxyApis)} null");
@@ -71,7 +71,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task Clear()
+        public async Task ClearAsync()
         {
             using var l = await asyncLock.LockAsync().ConfigureAwait(false);
             _dicts.Clear();
