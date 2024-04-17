@@ -75,5 +75,14 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <returns></returns>
         protected RequestBuilder Build() => new RequestBuilder(this);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{this.GetType().Name}({ApiKey})";
+        }
     }
 }
