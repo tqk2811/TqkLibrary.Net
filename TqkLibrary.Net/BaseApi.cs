@@ -82,7 +82,14 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{this.GetType().Name}({ApiKey})";
+            if (string.IsNullOrWhiteSpace(ApiKey))
+            {
+                return base.ToString();
+            }
+            else
+            {
+                return $"{this.GetType().Name}({ApiKey})";
+            }
         }
     }
 }
