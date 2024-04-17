@@ -2,10 +2,6 @@
 
 	<Import Project="..\ProjectBuildProperties.targets" />
 	
-	<PropertyGroup>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-	
 	<ItemGroup>
 	  <ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
 	</ItemGroup>
