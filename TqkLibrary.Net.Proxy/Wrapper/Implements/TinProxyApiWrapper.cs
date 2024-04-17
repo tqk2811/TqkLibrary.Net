@@ -54,5 +54,13 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
                 Message = res.Message
             };
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return tinProxyApi.ToString();
+        }
     }
 }

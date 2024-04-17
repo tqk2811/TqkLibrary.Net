@@ -63,7 +63,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// <returns></returns>
         public override string ToString()
         {
-            return proxyNo1ComApi.ApiKey;
+            return proxyNo1ComApi.ToString();
         }
     }
 }

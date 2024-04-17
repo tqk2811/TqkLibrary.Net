@@ -66,19 +66,20 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         {
             return $"ObcProxy ({obcProxy?.GetProxy()})";
         }
+
+        class ObcProxyApiResponseWrapper : IProxyApiResponseWrapper
+        {
+            readonly ObcProxy obcProxy;
+            internal ObcProxyApiResponseWrapper(ObcProxy obcProxy)
+            {
+                this.obcProxy = obcProxy;
+            }
+            public bool IsSuccess => true;
+            public string Proxy => obcProxy?.GetProxy();
+            public DateTime NextTime => DateTime.Now.AddDays(-1);
+            public DateTime ExpiredTime => DateTime.Now.AddDays(365);
+            public string Message => string.Empty;
+        }
     }
 
-    internal class ObcProxyApiResponseWrapper : IProxyApiResponseWrapper
-    {
-        readonly ObcProxy obcProxy;
-        internal ObcProxyApiResponseWrapper(ObcProxy obcProxy)
-        {
-            this.obcProxy = obcProxy;
-        }
-        public bool IsSuccess => true;
-        public string Proxy => obcProxy?.GetProxy();
-        public DateTime NextTime => DateTime.Now.AddDays(-1);
-        public DateTime ExpiredTime => DateTime.Now.AddDays(365);
-        public string Message => string.Empty;
-    }
 }
