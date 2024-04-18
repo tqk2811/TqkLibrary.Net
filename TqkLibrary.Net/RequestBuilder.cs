@@ -259,36 +259,54 @@ namespace TqkLibrary.Net
             {
                 if (typeof(TResult).Equals(typeBuffer))
                 {
-                    return (await rep.Content.ReadAsByteArrayAsync()) as TResult;
+#if NETFRAMEWORK
+                    return ((await rep.Content.ReadAsByteArrayAsync()) as TResult)!;
+#else
+                    return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
+#endif
+                }
+            }
+
+            string? content_res = await rep.Content
+#if NETFRAMEWORK
+                        .ReadAsStringAsync()
+#else
+                    .ReadAsStringAsync(cancellationToken)
+#endif
+                    .ConfigureAwait(false);
+
+            if (rep.IsSuccessStatusCode)
+            {
+                if (typeof(TResult).Equals(typeString))
+                {
+                    return (content_res as TResult)!;
                 }
                 else
                 {
-                    string content_res = await rep.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    if (typeof(TResult).Equals(typeString))
+                    try
                     {
-                        return content_res as TResult;
+                        return JsonConvert.DeserializeObject<TResult>(content_res)!;
                     }
-                    else
-                        return JsonConvert.DeserializeObject<TResult>(content_res);
+                    catch
+                    {
+                        //jump to error
+                    }
                 }
             }
-            else
+
+            if (typeof(TException).Equals(typeString))
             {
-                string content_res = await rep.Content.ReadAsStringAsync().ConfigureAwait(false);
-                if (typeof(TException).Equals(typeString))
+                throw new ApiException<string>()
                 {
-                    throw new ApiException<string>()
-                    {
-                        Body = content_res,
-                        StatusCode = rep.StatusCode
-                    };
-                }
-                else throw new ApiException<TException>()
-                {
-                    Body = JsonConvert.DeserializeObject<TException>(content_res),
+                    Body = content_res,
                     StatusCode = rep.StatusCode
                 };
             }
+            else throw new ApiException<TException>()
+            {
+                Body = JsonConvert.DeserializeObject<TException>(content_res)!,
+                StatusCode = rep.StatusCode
+            };
         }
     }
 }
