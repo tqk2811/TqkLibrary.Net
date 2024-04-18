@@ -150,8 +150,11 @@ namespace TqkLibrary.Net.Captcha
         }
         public class TaskDataResult
         {
-            [JsonProperty("gRecaptchaResponse")]
-            public string? GRecaptchaResponse { get; set; }
+            //[JsonProperty("gRecaptchaResponse")]
+            //public string? GRecaptchaResponse { get; set; }
+
+            [JsonProperty("Token")]
+            public string? Token { get; set; }
         }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }

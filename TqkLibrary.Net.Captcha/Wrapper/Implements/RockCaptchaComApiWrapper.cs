@@ -89,7 +89,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 return new BasicCaptchaTaskResult()
                 {
                     IsSuccess = result.Status == RockCaptchaComApi.Status.SUCCESS,
-                    Value = result.Data?.GRecaptchaResponse!,
+                    Value = result.Data?.Token!,
                     ErrorMessage = result.Message!,
                 };
             }
