@@ -259,7 +259,7 @@ namespace TqkLibrary.Net
             {
                 if (typeof(TResult).Equals(typeBuffer))
                 {
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                     return ((await rep.Content.ReadAsByteArrayAsync()) as TResult)!;
 #else
                     return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
@@ -268,8 +268,8 @@ namespace TqkLibrary.Net
             }
 
             string? content_res = await rep.Content
-#if NETFRAMEWORK
-                        .ReadAsStringAsync()
+#if NETFRAMEWORK || NETSTANDARD
+                    .ReadAsStringAsync()
 #else
                     .ReadAsStringAsync(cancellationToken)
 #endif
