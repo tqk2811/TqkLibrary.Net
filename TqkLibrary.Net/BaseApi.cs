@@ -12,7 +12,7 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        public readonly string ApiKey;
+        public readonly string? ApiKey;
 
         /// <summary>
         /// 
@@ -26,11 +26,11 @@ namespace TqkLibrary.Net
         {
             this.httpClient = new HttpClient(NetSingleton.HttpClientHandler, false);
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="apiKey"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         protected BaseApi(string apiKey) : this()
         {
             if (string.IsNullOrEmpty(apiKey)) throw new ArgumentNullException(nameof(apiKey));
@@ -39,12 +39,25 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="httpMessageHandler"></param>
+        /// <param name="disposeHandler"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected BaseApi(string apiKey, HttpMessageHandler httpMessageHandler)
+        protected BaseApi(string apiKey, HttpMessageHandler httpMessageHandler, bool disposeHandler = false)
         {
             if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException(nameof(apiKey));
-            this.httpClient = new HttpClient(httpMessageHandler ?? throw new ArgumentNullException(nameof(httpClient)), false);
+            this.httpClient = new HttpClient(httpMessageHandler ?? throw new ArgumentNullException(nameof(httpMessageHandler)), disposeHandler);
             this.ApiKey = apiKey;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpMessageHandler"></param>
+        /// <param name="disposeHandler"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseApi(HttpMessageHandler httpMessageHandler, bool disposeHandler = false)
+        {
+            this.httpClient = new HttpClient(httpMessageHandler ?? throw new ArgumentNullException(nameof(httpMessageHandler)), disposeHandler);
         }
 
         /// <summary>
@@ -64,7 +77,7 @@ namespace TqkLibrary.Net
             GC.SuppressFinalize(this);
         }
 
-        void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             httpClient.Dispose();
         }
@@ -74,13 +87,13 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <returns></returns>
-        protected RequestBuilder Build() => new RequestBuilder(this);
+        protected virtual RequestBuilder Build() => new RequestBuilder(this);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string? ToString()
         {
             if (string.IsNullOrWhiteSpace(ApiKey))
             {
