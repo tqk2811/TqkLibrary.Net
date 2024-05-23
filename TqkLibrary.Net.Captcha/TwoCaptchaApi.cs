@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using TqkLibrary.Net.Captcha.Wrapper;
 
 namespace TqkLibrary.Net.Captcha
 {
@@ -28,7 +29,7 @@ namespace TqkLibrary.Net.Captcha
         public Task<TwoCaptchaResponse> GetResponseJson(string id, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "res.php")
-                .WithParam("key", ApiKey)
+                .WithParam("key", ApiKey!)
                 .WithParam("id", id)
                 .WithParam("action", "get")
                 .WithParam("json", 1))
@@ -102,7 +103,7 @@ namespace TqkLibrary.Net.Captcha
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TwoCaptchaResponse> Nomal(byte[] bitmap, CancellationToken cancellationToken = default)
+        public Task<TwoCaptchaResponse> ImageCaptchaAsync(byte[] bitmap, CancellationToken cancellationToken = default)
         {
             MultipartFormDataContent requestContent = new MultipartFormDataContent();
             ByteArrayContent imageContent_bitmap = new ByteArrayContent(bitmap);
@@ -111,62 +112,70 @@ namespace TqkLibrary.Net.Captcha
 
             return Build()
                 .WithUrlPost(new UrlBuilder(EndPoint, "in.php")
-                    .WithParam("key", ApiKey)
+                    .WithParam("key", ApiKey!)
                     .WithParam("method", "post")
                     .WithParam("json", 1),
                     requestContent)
                 .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
         }
 
+        public class RecaptchaV2Request : RecaptchaV2DataRequest
+        {
+            public RecaptchaV2Request(
+                [JsonProperty(nameof(DataSiteKey))] string dataSiteKey,
+                [JsonProperty(nameof(PageUrl))] string pageUrl
+                ) 
+                : base(dataSiteKey, pageUrl)
+            {
+            }
+            public int? SoftId { get; set; }
+
+            public static RecaptchaV2Request CloneFrom(RecaptchaV2DataRequest recaptchaV2DataRequest)
+            {
+                string json_text = JsonConvert.SerializeObject(recaptchaV2DataRequest);
+                return JsonConvert.DeserializeObject<RecaptchaV2Request>(json_text)!;
+            }
+        }
         //https://2captcha.com/2captcha-api#recaptchav2new_proxy
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TwoCaptchaResponse> RecaptchaV2(
-            string googleKey, string pageUrl, string? cookies = null, string? proxy = null, string? proxytype = null,
+        public Task<TwoCaptchaResponse> RecaptchaV2Async(
+            RecaptchaV2Request recaptchaV2Request,
             CancellationToken cancellationToken = default)
-            => Build()
+        {
+            if (recaptchaV2Request is null)
+                throw new ArgumentNullException(nameof(recaptchaV2Request));
+            return Build()
                 .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
-                    .WithParam("key", ApiKey)
+                    .WithParam("key", ApiKey!)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
-                    .WithParam("googlekey", googleKey)
-                    .WithParam("pageurl", pageUrl)
-                    .WithParamIfNotNull("cookies", cookies)
-                    .WithParamIfNotNull("proxy", proxy)
-                    .WithParamIfNotNull("proxytype", proxytype))
+                    .WithParam("googlekey", recaptchaV2Request.DataSiteKey!)
+                    .WithParam("pageurl", recaptchaV2Request.PageUrl!)
+                    .WithParamIfNotNull("cookies", recaptchaV2Request.Cookies)
+                    .WithParamIfNotNull("proxy", recaptchaV2Request.Proxy)
+                    .WithParamIfNotNull("proxytype", recaptchaV2Request.ProxyType)
+                    .WithParamIfNotNull("soft_id", recaptchaV2Request.SoftId)
+                    .WithParamIfNotNull("userAgent", recaptchaV2Request.UserAgent)
+                    .WithParamIfNotNull("data-s", recaptchaV2Request.DataS)
+                    .WithParamIfNotNull("invisible", recaptchaV2Request.IsInvisible == true ? 1 : null)
+                    .WithParamIfNotNull("domain", recaptchaV2Request.Domain)
+                    )
                 .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TwoCaptchaResponse> RecaptchaV2Invisible(
-            string googleKey, string pageUrl, string? cookies = null, string? proxy = null, string? proxytype = null,
-            CancellationToken cancellationToken = default)
-            => Build()
-                .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
-                    .WithParam("key", ApiKey)
-                    .WithParam("method", "userrecaptcha")
-                    .WithParam("json", 1)
-                    .WithParam("invisible", 1)
-                    .WithParam("googlekey", googleKey)
-                    .WithParam("pageurl", pageUrl)
-                    .WithParamIfNotNull("cookies", cookies)
-                    .WithParamIfNotNull("proxy", proxy)
-                    .WithParamIfNotNull("proxytype", proxytype))
-                .ExecuteAsync<TwoCaptchaResponse>(cancellationToken);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<TwoCaptchaResponse> RecaptchaV3(
+        public Task<TwoCaptchaResponse> RecaptchaV3Async(
             string googleKey, string pageUrl, float minScore = 0.3f,
             CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
-                    .WithParam("key", ApiKey)
+                    .WithParam("key", ApiKey!)
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
                     .WithParam("version", "v3")
@@ -180,14 +189,14 @@ namespace TqkLibrary.Net.Captcha
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<TwoCaptchaResponse> Coordinates(byte[] bitmap, CancellationToken cancellationToken = default)
+        public Task<TwoCaptchaResponse> CoordinatesAsync(byte[] bitmap, CancellationToken cancellationToken = default)
         {
             MultipartFormDataContent multipartFormDataContent = new MultipartFormDataContent();
             ByteArrayContent byteArrayContent = new ByteArrayContent(bitmap);
             multipartFormDataContent.Add(byteArrayContent, "file");
             return Build()
                 .WithUrlPost(new UrlBuilder(EndPoint, "in.php")
-                    .WithParam("key", ApiKey)
+                    .WithParam("key", ApiKey!)
                     .WithParam("method", "post")
                     .WithParam("json", 1)
                     .WithParam("coordinatescaptcha", "1"),

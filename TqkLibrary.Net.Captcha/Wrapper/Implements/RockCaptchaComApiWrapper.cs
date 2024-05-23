@@ -32,18 +32,25 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        public bool IsInvisible { get; set; } = false;
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="url"></param>
         /// <param name="siteKey"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(string url, string siteKey, CancellationToken cancellationToken = default)
+        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+            RecaptchaV2DataRequest recaptchaV2DataRequest, 
+            CancellationToken cancellationToken = default
+            )
         {
-            var task = await _rockCaptchaComApi.CreateTaskRecaptchaV2Async(siteKey, url, IsInvisible, null, null, cancellationToken);
+            if(recaptchaV2DataRequest is null) throw new ArgumentNullException(nameof(recaptchaV2DataRequest));
+            var task = await _rockCaptchaComApi.CreateTaskRecaptchaV2Async(
+                recaptchaV2DataRequest.DataSiteKey,
+                recaptchaV2DataRequest.PageUrl,
+                recaptchaV2DataRequest.IsInvisible == true, 
+                null, 
+                null, 
+                cancellationToken
+                );
             return new RecaptchaV2Task(_rockCaptchaComApi, task);
         }
 

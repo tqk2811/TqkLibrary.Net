@@ -68,7 +68,7 @@ namespace TqkLibrary.Net
         public UrlBuilder WithParam(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            string v = value?.ToString();
+            string? v = value?.ToString();
             if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
             _nameValueCollection[name] = v;
             return this;
@@ -95,7 +95,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParamIfNotNull(string name, string value)
+        public UrlBuilder WithParamIfNotNull(string name, string? value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (!string.IsNullOrWhiteSpace(value)) _nameValueCollection[name] = value;
@@ -109,7 +109,7 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParamIfNotNull(string name, object value)
+        public UrlBuilder WithParamIfNotNull(string name, object? value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (value != null)

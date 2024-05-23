@@ -57,9 +57,20 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="siteKey"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(string url, string siteKey, CancellationToken cancellationToken = default)
+        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+            RecaptchaV2DataRequest recaptchaV2DataRequest,
+            CancellationToken cancellationToken = default
+            )
         {
-            var task = await _anticaptchaTopApi.RecaptchaV2Async(siteKey, url, IsInvisible, cancellationToken);
+            if (recaptchaV2DataRequest is null)
+                throw new ArgumentNullException(nameof(recaptchaV2DataRequest));
+
+            var task = await _anticaptchaTopApi.RecaptchaV2Async(
+                recaptchaV2DataRequest.DataSiteKey,
+                recaptchaV2DataRequest.PageUrl,
+                recaptchaV2DataRequest.IsInvisible == true,
+                cancellationToken
+                );
             return new ReCaptchaTask(task, _anticaptchaTopApi);
         }
         /// <summary>

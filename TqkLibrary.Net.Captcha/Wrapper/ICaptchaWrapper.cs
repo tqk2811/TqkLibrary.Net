@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TqkLibrary.Net.Captcha.Wrapper
@@ -9,9 +10,8 @@ namespace TqkLibrary.Net.Captcha.Wrapper
             byte[] bitmapBuffer,
             CancellationToken cancellationToken = default);
 
-        Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(
-            string url,
-            string siteKey,
+        Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+            RecaptchaV2DataRequest recaptchaV2DataRequest,
             CancellationToken cancellationToken = default);
     }
 }

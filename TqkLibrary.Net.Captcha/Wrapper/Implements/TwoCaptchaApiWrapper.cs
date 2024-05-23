@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using static TqkLibrary.Net.Captcha.TwoCaptchaApi;
 
@@ -27,6 +28,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
             this.twoCaptchaApi = twoCaptchaApi;
         }
 
+        public int? SoftId { get; set; }
 
         /// <summary>
         /// 
@@ -35,14 +37,17 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="siteKey"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateGoogleRecaptchaV2TaskAsync(
-            string url,
-            string siteKey,
+        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+            RecaptchaV2DataRequest recaptchaV2DataRequest,
             CancellationToken cancellationToken = default)
         {
-            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.RecaptchaV2(
-                siteKey,
-                url,
+            if(recaptchaV2DataRequest is null)
+                throw new ArgumentNullException(nameof(recaptchaV2DataRequest));
+
+            TwoCaptchaApi.RecaptchaV2Request request = TwoCaptchaApi.RecaptchaV2Request.CloneFrom(recaptchaV2DataRequest);
+            request.SoftId = SoftId;
+            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.RecaptchaV2Async(
+                request,
                 cancellationToken: cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
         }
@@ -56,7 +61,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
             byte[] bitmapBuffer,
             CancellationToken cancellationToken = default)
         {
-            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.Nomal(bitmapBuffer, cancellationToken);
+            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.ImageCaptchaAsync(bitmapBuffer, cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
         }
 
