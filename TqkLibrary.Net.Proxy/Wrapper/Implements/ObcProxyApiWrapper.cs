@@ -29,16 +29,16 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
     /// </summary>
     public class ObcProxyApiWrapper : IProxyApiWrapper
     {
-        readonly BocProxyApi obcProxyApi;
-        readonly ObcProxy obcProxy;
+        readonly BocProxyApi _obcProxyApi;
+        readonly ObcProxy _obcProxy;
 
         /// <summary>
         /// 
         /// </summary>
         public ObcProxyApiWrapper(BocProxyApi obcProxyApi, ObcProxy obcProxy)
         {
-            this.obcProxyApi = obcProxyApi;
-            this.obcProxy = obcProxy;
+            this._obcProxyApi = obcProxyApi;
+            this._obcProxy = obcProxy;
         }
 
         /// <summary>
@@ -53,9 +53,18 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// <returns></returns>
         public async Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken)
         {
-            await obcProxyApi.Reset(obcProxy, cancellationToken).ConfigureAwait(false);
-            var list = await obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);
-            return new ObcProxyApiResponseWrapper(list.FirstOrDefault(x => x.ProxyPort == obcProxy.ProxyPort));
+            await _obcProxyApi.Reset(_obcProxy, cancellationToken).ConfigureAwait(false);
+            var list = await _obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);
+            ObcProxy? obcProxy = list.FirstOrDefault(x => x.ProxyPort == _obcProxy.ProxyPort);
+            return new ProxyApiResponseWrapper()
+            {
+                IsSuccess = obcProxy is not null,
+                Proxy = obcProxy?.GetProxy(),
+                NextTime = DateTime.Now.AddDays(-1),
+                ExpiredTime = DateTime.Now.AddDays(365),
+                ProxyType = ProxyType.Http,
+                Message = string.Empty,
+            };
         }
 
         /// <summary>
@@ -64,22 +73,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// <returns></returns>
         public override string ToString()
         {
-            return $"ObcProxy ({obcProxy?.GetProxy()})";
-        }
-
-        class ObcProxyApiResponseWrapper : IProxyApiResponseWrapper
-        {
-            readonly ObcProxy obcProxy;
-            internal ObcProxyApiResponseWrapper(ObcProxy obcProxy)
-            {
-                this.obcProxy = obcProxy;
-            }
-            public bool IsSuccess => true;
-            public string Proxy => obcProxy?.GetProxy();
-            public DateTime NextTime => DateTime.Now.AddDays(-1);
-            public DateTime ExpiredTime => DateTime.Now.AddDays(365);
-            public string Message => string.Empty;
+            return $"ObcProxy ({_obcProxy?.GetProxy()})";
         }
     }
-
 }

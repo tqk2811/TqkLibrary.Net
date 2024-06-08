@@ -15,6 +15,10 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <summary>
         /// 
         /// </summary>
+        public ProxyType ProxyType { get; }
+        /// <summary>
+        /// ip:port or host:port
+        /// </summary>
         public string Proxy { get; }
     }
 }

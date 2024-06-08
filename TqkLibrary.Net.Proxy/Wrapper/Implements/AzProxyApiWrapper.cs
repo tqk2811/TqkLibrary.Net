@@ -64,7 +64,8 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
                 IsSuccess = proxy.IsSuccess,
                 NextTime = nextTime,
                 ExpiredTime = nextTime.AddMinutes(20),
-                Message = proxy?.Message
+                Message = proxy?.Message,
+                ProxyType = ProxyType.Http,
             };
         }
         /// <summary>

@@ -11,17 +11,17 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// 
         /// </summary>
         bool IsSuccess { get; }
-        
+
         /// <summary>
         /// Next time request
         /// </summary>
-        string Proxy { get; }
+        string? Proxy { get; }
 
         /// <summary>
         /// 
         /// </summary>
         DateTime NextTime { get; }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +30,11 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        string Message { get; }
+        string? Message { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        ProxyType ProxyType { get; }
     }
     /// <summary>
     /// 
@@ -44,7 +48,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <summary>
         /// Next time request
         /// </summary>
-        public string Proxy { get; set; }
+        public string? Proxy { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -58,6 +62,10 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        public string Message { get; set; }
+        public string? Message { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ProxyType ProxyType { get; set; }
     }
 }

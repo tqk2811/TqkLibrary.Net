@@ -54,6 +54,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
                 NextTime = DateTime.Now.AddSeconds(res_status.Data.ChangeIpInterval),
                 ExpiredTime = expired_at == null ? DateTime.Now.AddHours(1) : expired_at.Value,
                 Message = res_changeIp.Message,
+                ProxyType = ProxyType.Http,
             };
         }
 

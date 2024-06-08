@@ -52,7 +52,8 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
                 Proxy = result?.data.https ?? string.Empty,
                 NextTime = DateTime.Now.AddSeconds(result?.data.next_request ?? 5),
                 ExpiredTime = result?.data.ExpiredAt ?? DateTime.Now,
-                Message = result?.message
+                Message = result?.message,
+                ProxyType = ProxyType.Http,
             };
         }
 

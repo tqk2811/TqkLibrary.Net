@@ -5,31 +5,32 @@ namespace TqkLibrary.Net.Proxy.Wrapper
 {
     internal class ProxyWrapper : IProxyWrapper
     {
-        readonly ProxyApiItemData proxyApiItemData;
+        readonly ProxyApiItemData _proxyApiItemData;
         internal ProxyWrapper(ProxyApiItemData proxyApiItemData)
         {
-            this.Proxy = proxyApiItemData.CurrentProxy;
-            this.proxyApiItemData = proxyApiItemData;
+            this._proxyApiItemData = proxyApiItemData ?? throw new ArgumentNullException(nameof(proxyApiItemData));
             proxyApiItemData.AddRef();
         }
         ~ProxyWrapper()
         {
-            proxyApiItemData.RemoveRef();
+            _proxyApiItemData.RemoveRef();
         }
 
-        public string Proxy { get; }
+        public string Proxy { get { return _proxyApiItemData.CurrentProxy; } }
+
+        public ProxyType ProxyType { get { return _proxyApiItemData.ProxyType; } }
 
 
 #if NET5_0_OR_GREATER
         public async ValueTask DisposeAsync()
         {
-            await proxyApiItemData.RemoveRefAsync();
+            await _proxyApiItemData.RemoveRefAsync();
             GC.SuppressFinalize(this);
         }
 #else
         public void Dispose()
         {
-            proxyApiItemData.RemoveRef();
+            _proxyApiItemData.RemoveRef();
             GC.SuppressFinalize(this);
         }
 #endif

@@ -51,7 +51,8 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
                 Proxy = res.Data.HttpIpv4,
                 NextTime = DateTime.Now.AddSeconds(res.Data.NextRequest),
                 ExpiredTime = DateTime.Now.AddSeconds(res.Data.Timeout),
-                Message = res.Message
+                Message = res.Message,
+                ProxyType = ProxyType.Http,
             };
         }
         /// <summary>
