@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
@@ -70,7 +71,34 @@ namespace TqkLibrary.Net
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             string? v = value?.ToString();
             if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
-            _nameValueCollection.Add(name, v);
+            return WithParam(name,v);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParam(string name, IEnumerable<string> values)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (values is null || !values.Any()) throw new ArgumentNullException(nameof(values));
+            foreach (string value in values) WithParam(name, value);
+            return this;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParam(string name, IEnumerable<object> values)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (values is null || !values.Any()) throw new ArgumentNullException(nameof(values));
+            foreach (object value in values) WithParam(name, value?.ToString()!);
             return this;
         }
         /// <summary>
@@ -117,6 +145,34 @@ namespace TqkLibrary.Net
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParamIfNotNull(string name, IEnumerable<string?>? values)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (values is null || !values.Any()) return this;
+            foreach (string? value in values) WithParamIfNotNull(name, value);
+            return this;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParamIfNotNull(string name, IEnumerable<object?>? values)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (values is null || !values.Any()) return this;
+            foreach (object? value in values) WithParamIfNotNull(name, value?.ToString());
+            return this;
+        }
         /// <summary>
         /// 
         /// </summary>
