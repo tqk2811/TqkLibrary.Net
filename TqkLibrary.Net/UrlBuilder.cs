@@ -40,7 +40,7 @@ namespace TqkLibrary.Net
         public UrlBuilder(params object[] urls)
         {
             if (urls == null || urls.Length == 0) throw new ArgumentNullException(nameof(urls));
-            this._url = string.Join("/", urls.Select(x => x.ToString().TrimStart('/').TrimEnd('/')));
+            this._url = string.Join("/", urls.Select(x => x.ToString()?.TrimStart('/').TrimEnd('/') ?? throw new ArgumentNullException($"Some element in {nameof(urls)} are null")));
             if (string.IsNullOrWhiteSpace(_url)) throw new ArgumentNullException(nameof(_url));
         }
 
@@ -55,7 +55,7 @@ namespace TqkLibrary.Net
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
-            _nameValueCollection[name] = value;
+            _nameValueCollection.Add(name, value);
             return this;
         }
         /// <summary>
@@ -65,12 +65,12 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParam(string name, object value)
+        public virtual UrlBuilder WithParam(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             string? v = value?.ToString();
             if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
-            _nameValueCollection[name] = v;
+            _nameValueCollection.Add(name, v);
             return this;
         }
         /// <summary>
@@ -79,13 +79,10 @@ namespace TqkLibrary.Net
         /// <param name="nameValueCollection"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParams(NameValueCollection nameValueCollection)
+        public virtual UrlBuilder WithParams(NameValueCollection nameValueCollection)
         {
             if (nameValueCollection is null) throw new ArgumentNullException(nameof(nameValueCollection));
-            foreach(var key in nameValueCollection.AllKeys)
-            {
-                this._nameValueCollection[key] = nameValueCollection[key];
-            }
+            this._nameValueCollection.Add(nameValueCollection);
             return this;
         }
         /// <summary>
@@ -95,10 +92,10 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParamIfNotNull(string name, string? value)
+        public virtual UrlBuilder WithParamIfNotNull(string name, string? value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (!string.IsNullOrWhiteSpace(value)) _nameValueCollection[name] = value;
+            if (!string.IsNullOrWhiteSpace(value)) _nameValueCollection.Add(name, value);
             return this;
         }
 
@@ -109,13 +106,13 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParamIfNotNull(string name, object? value)
+        public virtual UrlBuilder WithParamIfNotNull(string name, object? value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (value != null)
             {
-                string v = value.ToString();
-                if (!string.IsNullOrWhiteSpace(v)) _nameValueCollection[name] = v;
+                string? v = value.ToString();
+                if (!string.IsNullOrWhiteSpace(v)) _nameValueCollection.Add(name, v);
             }
             return this;
         }
@@ -126,7 +123,7 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public override string ToString()
         {
-            string query = _nameValueCollection.ToString();
+            string? query = _nameValueCollection.ToString();
             if (string.IsNullOrWhiteSpace(query)) return _url;
             else return $"{_url}?{_nameValueCollection}";
         }
