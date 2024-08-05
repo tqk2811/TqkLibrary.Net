@@ -57,7 +57,8 @@ namespace TqkLibrary.Net
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             string? v = value?.ToString();
             if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
-            return WithParam(name, v);
+            _nameValueCollection.Add(name, v);
+            return this;
         }
         /// <summary>
         /// 
