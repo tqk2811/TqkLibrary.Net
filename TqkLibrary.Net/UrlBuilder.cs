@@ -52,40 +52,12 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParam(string name, string value)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
-            _nameValueCollection.Add(name, value);
-            return this;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
         public virtual UrlBuilder WithParam(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             string? v = value?.ToString();
             if (string.IsNullOrWhiteSpace(v)) throw new ArgumentNullException(nameof(value));
-            return WithParam(name,v);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParam(string name, IEnumerable<string> values)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (values is null || !values.Any()) throw new ArgumentNullException(nameof(values));
-            foreach (string value in values) WithParam(name, value);
-            return this;
+            return WithParam(name, v);
         }
         /// <summary>
         /// 
@@ -120,20 +92,6 @@ namespace TqkLibrary.Net
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public virtual UrlBuilder WithParamIfNotNull(string name, string? value)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (!string.IsNullOrWhiteSpace(value)) _nameValueCollection.Add(name, value);
-            return this;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
         public virtual UrlBuilder WithParamIfNotNull(string name, object? value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
@@ -142,21 +100,6 @@ namespace TqkLibrary.Net
                 string? v = value.ToString();
                 if (!string.IsNullOrWhiteSpace(v)) _nameValueCollection.Add(name, v);
             }
-            return this;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public UrlBuilder WithParamIfNotNull(string name, IEnumerable<string?>? values)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (values is null || !values.Any()) return this;
-            foreach (string? value in values) WithParamIfNotNull(name, value);
             return this;
         }
         /// <summary>
@@ -176,6 +119,42 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="name"></param>
+        /// <param name="condition"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParamIf(string name, Func<bool> condition, object value)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (condition is null) throw new ArgumentNullException(nameof(condition));
+            if (condition.Invoke())
+            {
+                this.WithParam(name, value);
+            }
+            return this;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="condition"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UrlBuilder WithParamIf(string name, Func<bool> condition, IEnumerable<object> values)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (condition is null) throw new ArgumentNullException(nameof(condition));
+            if (condition.Invoke())
+            {
+                this.WithParam(name, values);
+            }
+            return this;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
@@ -189,5 +168,6 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <param name="builder"></param>
         public static explicit operator Uri(UrlBuilder builder) => new Uri(builder.ToString());
+
     }
 }
