@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 namespace TqkLibrary.Net
 {
 
@@ -88,6 +89,12 @@ namespace TqkLibrary.Net
         /// </summary>
         /// <returns></returns>
         protected virtual RequestBuilder Build() => new RequestBuilder(this);
+
+        protected internal virtual Task OnBeforeRequestAsync(HttpRequestMessage httpRequestMessage)
+        {
+            return Task.CompletedTask;
+        }
+
 
         /// <summary>
         /// 
