@@ -14,9 +14,10 @@ namespace TqkLibrary.Net
     /// </summary>
     public class RequestBuilder
     {
+        readonly BaseApi _baseApi;
         internal RequestBuilder(BaseApi baseApi)
         {
-            this.HttpClient = baseApi.httpClient;
+            this._baseApi = baseApi;
         }
         internal RequestBuilder(HttpClient httpClient)
         {
@@ -224,6 +225,7 @@ namespace TqkLibrary.Net
 
             if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(HttpClient.DefaultRequestHeaders.Host))
                 httpRequestMessage.Headers.Host = uri.Host;
+            await _baseApi.OnBeforeRequestAsync(httpRequestMessage);
 
             if (httpContent != null) httpRequestMessage.Content = httpContent;
             HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
