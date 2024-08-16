@@ -18,18 +18,15 @@ namespace TqkLibrary.Net
         internal RequestBuilder(BaseApi baseApi)
         {
             this._baseApi = baseApi;
+            this._httpClient = baseApi.httpClient;
         }
-        internal RequestBuilder(HttpClient httpClient)
-        {
-            this.HttpClient = httpClient;
-        }
-        HttpClient HttpClient { get; set; }
-        HttpContent httpContent = null;
-        bool httpContentDispose = true;
+        HttpClient _httpClient { get; set; }
+        HttpContent? _httpContent = null;
+        bool _httpContentDispose = true;
 
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        HttpMethod method = null;
-        Uri uri = null;
+        Dictionary<string, string> _headers = new Dictionary<string, string>();
+        HttpMethod? _method = null;
+        Uri? _uri = null;
 
         /// <summary>
         /// 
@@ -87,8 +84,8 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithUrl(Uri uri, HttpMethod method)
         {
-            this.uri = uri ?? throw new ArgumentNullException(nameof(uri));
-            this.method = method ?? throw new ArgumentNullException(nameof(method));
+            this._uri = uri ?? throw new ArgumentNullException(nameof(uri));
+            this._method = method ?? throw new ArgumentNullException(nameof(method));
             return this;
         }
         /// <summary>
@@ -163,8 +160,8 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithBody(HttpContent httpContent, bool dispose = true)
         {
-            this.httpContent = httpContent ?? throw new ArgumentNullException(nameof(httpContent));
-            this.httpContentDispose = dispose;
+            this._httpContent = httpContent ?? throw new ArgumentNullException(nameof(httpContent));
+            this._httpContentDispose = dispose;
             return this;
         }
 
@@ -189,8 +186,8 @@ namespace TqkLibrary.Net
         public RequestBuilder WithJsonBody(object obj, Encoding encoding)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            this.httpContent = new StringContent(JsonConvert.SerializeObject(obj), encoding, "application/json");
-            this.httpContentDispose = true;
+            this._httpContent = new StringContent(JsonConvert.SerializeObject(obj), encoding, "application/json");
+            this._httpContentDispose = true;
             return this;
         }
 
@@ -204,7 +201,7 @@ namespace TqkLibrary.Net
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
-            headers[key] = value;
+            _headers[key] = value;
             return this;
         }
 
@@ -215,32 +212,23 @@ namespace TqkLibrary.Net
         /// <exception cref="InvalidOperationException"></exception>
         public async Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken = default)
         {
-            if (method == null || uri == null) throw new InvalidOperationException($"method or uri is null");
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+            if (_method == null || _uri == null) throw new InvalidOperationException($"method or uri is null");
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(_method, _uri);
 
-            foreach (var header in headers) httpRequestMessage.Headers.Add(header.Key, header.Value);
+            foreach (var header in _headers) httpRequestMessage.Headers.Add(header.Key, header.Value);
 
-            if (httpRequestMessage.Headers.Accept.Count == 0 && HttpClient.DefaultRequestHeaders.Accept.Count == 0)
+            if (httpRequestMessage.Headers.Accept.Count == 0 && _httpClient.DefaultRequestHeaders.Accept.Count == 0)
                 httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(HttpClient.DefaultRequestHeaders.Host))
-                httpRequestMessage.Headers.Host = uri.Host;
+            if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(_httpClient.DefaultRequestHeaders.Host))
+                httpRequestMessage.Headers.Host = _uri.Host;
+
+            if (_httpContent != null) httpRequestMessage.Content = _httpContent;
             await _baseApi.OnBeforeRequestAsync(httpRequestMessage);
 
-            if (httpContent != null) httpRequestMessage.Content = httpContent;
-            HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
-            if (httpContentDispose) httpContent?.Dispose();
+            HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+            if (_httpContentDispose) _httpContent?.Dispose();
             return httpResponseMessage;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <returns></returns>
-        public Task<TResult> ExecuteAsync<TResult>(CancellationToken cancellationToken = default) where TResult : class
-        {
-            return ExecuteAsync<TResult, string>(cancellationToken);
         }
 
         static readonly Type typeString = typeof(string);
@@ -309,6 +297,16 @@ namespace TqkLibrary.Net
                 Body = JsonConvert.DeserializeObject<TException>(content_res)!,
                 StatusCode = rep.StatusCode
             };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public Task<TResult> ExecuteAsync<TResult>(CancellationToken cancellationToken = default) where TResult : class
+        {
+            return ExecuteAsync<TResult, string>(cancellationToken);
         }
     }
 }
