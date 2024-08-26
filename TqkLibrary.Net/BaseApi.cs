@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,6 +21,10 @@ namespace TqkLibrary.Net
         /// </summary>
         internal protected readonly HttpClient httpClient;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        internal protected JsonSerializerSettings? DefaultJsonSerializerSettings { get; set; } = NetSingleton.JsonSerializerSettings;
         /// <summary>
         /// 
         /// </summary>

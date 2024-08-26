@@ -186,7 +186,7 @@ namespace TqkLibrary.Net
         public RequestBuilder WithJsonBody(object obj, Encoding encoding)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            this._httpContent = new StringContent(JsonConvert.SerializeObject(obj), encoding, "application/json");
+            this._httpContent = new StringContent(JsonConvert.SerializeObject(obj, _baseApi.DefaultJsonSerializerSettings), encoding, "application/json");
             this._httpContentDispose = true;
             return this;
         }
@@ -275,7 +275,7 @@ namespace TqkLibrary.Net
                 {
                     try
                     {
-                        return JsonConvert.DeserializeObject<TResult>(content_res)!;
+                        return JsonConvert.DeserializeObject<TResult>(content_res, _baseApi.DefaultJsonSerializerSettings)!;
                     }
                     catch
                     {
