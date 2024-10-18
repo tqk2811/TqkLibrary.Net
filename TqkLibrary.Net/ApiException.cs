@@ -7,19 +7,20 @@ namespace TqkLibrary.Net
     /// </summary>
     public class ApiException : Exception
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public HttpStatusCode StatusCode { get; set; }
+        public ApiException()
+        {
+
+        }
+
+        public ApiException(string message) : base(message)
+        {
+
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{nameof(ApiException)}: {StatusCode}";
-        }
+        public HttpStatusCode? StatusCode { get; init; }
     }
     /// <summary>
     /// 
@@ -30,14 +31,12 @@ namespace TqkLibrary.Net
         /// <summary>
         /// 
         /// </summary>
-        public ApiException()
-        {
-
-        }
+        public ApiException() { }
+        public ApiException(string message) : base(message) { }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Body { get; set; }
+        public T? Body { get; init; }
     }
 }
