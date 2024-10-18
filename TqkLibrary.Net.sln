@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.CloudStorage
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF5ED793-F727-44ED-A755-A1977FB37974}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		IsExternalInit.cs = IsExternalInit.cs
 		ProjectBuildProperties.targets = ProjectBuildProperties.targets
 	EndProjectSection
 EndProject
