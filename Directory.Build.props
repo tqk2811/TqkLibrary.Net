@@ -2,5 +2,6 @@
 <Project>
 	<ItemGroup>
 		<Compile Include="$(MSBuildThisFileDirectory)IsExternalInit.cs" Visible="false" />
+		<Compile Include="$(MSBuildThisFileDirectory)SlnExtensions.cs" Visible="false" />
 	</ItemGroup>
 </Project>

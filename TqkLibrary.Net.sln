@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		IsExternalInit.cs = IsExternalInit.cs
 		ProjectBuildProperties.targets = ProjectBuildProperties.targets
+		SlnExtensions.cs = SlnExtensions.cs
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.Captcha", "TqkLibrary.Net.Captcha\TqkLibrary.Net.Captcha.csproj", "{17338BFF-909E-47F4-81B1-22F1B7E6A4CB}"
