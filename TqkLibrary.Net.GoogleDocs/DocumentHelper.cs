@@ -16,7 +16,7 @@ namespace TqkLibrary.Net.GoogleDocs
             docx,
             odt,
             rtf,
-            pdf,
+            //pdf,
             txt,
             [ExportType("zip")] ziphtml,
             epub,
