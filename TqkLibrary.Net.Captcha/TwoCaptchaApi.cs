@@ -124,7 +124,7 @@ namespace TqkLibrary.Net.Captcha
             public RecaptchaV2Request(
                 [JsonProperty(nameof(DataSiteKey))] string dataSiteKey,
                 [JsonProperty(nameof(PageUrl))] string pageUrl
-                ) 
+                )
                 : base(dataSiteKey, pageUrl)
             {
             }
@@ -171,7 +171,7 @@ namespace TqkLibrary.Net.Captcha
         /// </summary>
         /// <returns></returns>
         public Task<TwoCaptchaResponse> RecaptchaV3Async(
-            string googleKey, string pageUrl, float minScore = 0.3f,
+            string googleKey, string pageUrl, string action, float minScore = 0.3f,
             CancellationToken cancellationToken = default)
             => Build()
                 .WithUrlGet(new UrlBuilder(EndPoint, "in.php")
@@ -179,7 +179,7 @@ namespace TqkLibrary.Net.Captcha
                     .WithParam("method", "userrecaptcha")
                     .WithParam("json", 1)
                     .WithParam("version", "v3")
-                    .WithParam("action", "verify")
+                    .WithParam("action", action)
                     .WithParam("min_score", minScore)
                     .WithParam("googlekey", googleKey)
                     .WithParam("pageurl", pageUrl))
