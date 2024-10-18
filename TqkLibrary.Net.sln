@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.CloudStorage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{DC4A1ADE-BB14-446D-8031-71F36E12B710}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.CloudStorage.Dropbox", "TqkLibrary.Net.CloudStorage.Dropbox\TqkLibrary.Net.CloudStorage.Dropbox.csproj", "{F407E8FF-B43B-454E-91F1-39733ACE60FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.CloudStorage.Dropbox", "TqkLibrary.Net.CloudStorage.Dropbox\TqkLibrary.Net.CloudStorage.Dropbox.csproj", "{F407E8FF-B43B-454E-91F1-39733ACE60FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.GoogleDocs", "TqkLibrary.Net.GoogleDocs\TqkLibrary.Net.GoogleDocs.csproj", "{152FDE9B-3851-4A37-9DA9-F2676620FC5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +84,10 @@ Global
 		{F407E8FF-B43B-454E-91F1-39733ACE60FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F407E8FF-B43B-454E-91F1-39733ACE60FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F407E8FF-B43B-454E-91F1-39733ACE60FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
