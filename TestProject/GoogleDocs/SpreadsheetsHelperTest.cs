@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Other.Others;
-namespace TestProject
+using TqkLibrary.Net.GoogleDocs;
+
+namespace TestProject.GoogleDocs
 {
     [TestClass]
-    public class GoogleSheetTest
+    public class SpreadsheetsHelperTest
     {
-        readonly GoogleSheet _googleSheet = new GoogleSheet();
+        readonly SpreadsheetsHelper _spreadsheetsHelper = new();
         public static IEnumerable<object[]> Ids
         {
             get
@@ -22,7 +23,7 @@ namespace TestProject
         [TestMethod(), DynamicData(nameof(Ids))]
         public async Task ExportTest(string id)
         {
-            using var stream = await _googleSheet.ExportAsync(id);
+            using var stream = await _spreadsheetsHelper.ExportAsync(SpreadsheetsHelper.ExportFormat.xlsx, id);
             using MemoryStream memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
         }
