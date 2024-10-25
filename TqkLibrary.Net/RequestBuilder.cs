@@ -201,7 +201,7 @@ namespace TqkLibrary.Net
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
-            _headers[key] = value;
+            _headers.Add(key, value);
             return this;
         }
 
