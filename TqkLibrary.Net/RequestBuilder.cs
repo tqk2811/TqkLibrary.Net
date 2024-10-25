@@ -251,7 +251,8 @@ sec-ch-ua-form-factors:
             if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(_httpClient.DefaultRequestHeaders.Host))
                 httpRequestMessage.Headers.Host = _uri.Host;
 
-            if (_httpContent != null) httpRequestMessage.Content = _httpContent;
+            if (_httpContent != null)
+                httpRequestMessage.Content = _httpContent;
             await _baseApi.OnBeforeRequestAsync(httpRequestMessage);
 
             HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
