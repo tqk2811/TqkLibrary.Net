@@ -21,6 +21,7 @@
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.Dropbox\TqkLibrary.Net.CloudStorage.Dropbox.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.GoogleDrive\TqkLibrary.Net.CloudStorage.GoogleDrive.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.OneDrive\TqkLibrary.Net.CloudStorage.OneDrive.csproj" />
+    <ProjectReference Include="..\TqkLibrary.Net.GoogleDocs\TqkLibrary.Net.GoogleDocs.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Mail\TqkLibrary.Net.Mail.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Other\TqkLibrary.Net.Other.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Phone\TqkLibrary.Net.Phone.csproj" />

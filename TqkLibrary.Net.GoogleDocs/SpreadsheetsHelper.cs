@@ -29,7 +29,7 @@ namespace TqkLibrary.Net.GoogleDocs
         public async Task<Stream> ExportAsync(ExportFormat format, string id, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
-            string f = format.GetType().GetCustomAttribute<ExportTypeAttribute>()?.TypeName ?? format.ToString();
+            string f = format.GetAttribute<ExportTypeAttribute>()?.TypeName ?? format.ToString();
 
             HttpResponseMessage httpResponseMessage = await Build()
                 .WithUrlGet(new UrlBuilder("https://docs.google.com/spreadsheets/export")

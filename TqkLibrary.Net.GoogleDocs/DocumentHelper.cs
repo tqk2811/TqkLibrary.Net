@@ -25,14 +25,15 @@ namespace TqkLibrary.Net.GoogleDocs
         public async Task<Stream> ExportAsync(ExportFormat format, string id, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
-            string f = format.GetType().GetCustomAttribute<ExportTypeAttribute>()?.TypeName ?? format.ToString();
+            string f = format.GetAttribute< ExportTypeAttribute>()?.TypeName ?? format.ToString();
 
             HttpResponseMessage httpResponseMessage = await Build()
                 .WithUrlGet(new UrlBuilder("https://docs.google.com/document/export")
                     .WithParam("format", f)
                     .WithParam("id", id)
                     )
-                .WithHeader("Accept", "*/*")
+                .WithHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
+                .WithHeader("Referer", $"https://docs.google.com/document/d/{id}/edit")
                 .ExecuteAsync(cancellationToken);
             if (httpResponseMessage.IsSuccessStatusCode)
             {
