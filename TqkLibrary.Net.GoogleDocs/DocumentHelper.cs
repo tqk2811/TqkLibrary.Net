@@ -31,10 +31,6 @@ namespace TqkLibrary.Net.GoogleDocs
                 .WithUrlGet(new UrlBuilder("https://docs.google.com/document/export")
                     .WithParam("format", f)
                     .WithParam("id", id)
-                    .WithParam("includes_info_params", "true")
-                    .WithParam("cros_files", "false")
-                    .WithParam("tab", "t.0")
-                    .WithParam("inspectorResult", "{\"pc\":3,\"lplc\":7}")
                     )
                 .WithHeader("Accept", "*/*")
                 .ExecuteAsync(cancellationToken);
