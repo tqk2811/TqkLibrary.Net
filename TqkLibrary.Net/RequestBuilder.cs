@@ -204,6 +204,34 @@ namespace TqkLibrary.Net
             _headers.Add(key, value);
             return this;
         }
+        public RequestBuilder ParseHeadersFromChrome(string headers)
+        {
+            if (string.IsNullOrEmpty(headers)) throw new ArgumentNullException(nameof(headers));
+            /*
+sec-ch-ua:
+"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"
+sec-ch-ua-arch:
+"x86"
+sec-ch-ua-bitness:
+"64"
+sec-ch-ua-form-factors:
+"Desktop"
+             */
+            using StringReader stringReader = new StringReader(headers);
+            while(true)
+            {
+                string? header = stringReader.ReadLine()?.TrimEnd(':');
+                if (string.IsNullOrWhiteSpace(header)) 
+                    break;
+
+                string? data = stringReader.ReadLine();
+                if (string.IsNullOrWhiteSpace(data))
+                    throw new InvalidOperationException($"invalid data format");
+
+                _headers.Add(header!, data);
+            }
+            return this;
+        }
 
         /// <summary>
         /// 
