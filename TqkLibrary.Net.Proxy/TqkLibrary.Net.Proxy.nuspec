@@ -11,27 +11,27 @@
 		<license type="expression">MIT</license>
 		<dependencies>
 			<group targetFramework="net462">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20241025161220"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20241207163139"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20241025161220"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20241207163139"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
 			<group targetFramework="net5.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20241025161220"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20241207163139"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
 			<group targetFramework="net6.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20241025161220"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20241207163139"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
 			<group targetFramework="net7.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20241025161220"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20241207163139"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
