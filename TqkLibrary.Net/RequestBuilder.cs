@@ -220,10 +220,10 @@ sec-ch-ua-form-factors:
 "Desktop"
              */
             using StringReader stringReader = new StringReader(headers);
-            while(true)
+            while (true)
             {
                 string? header = stringReader.ReadLine()?.TrimEnd(':');
-                if (string.IsNullOrWhiteSpace(header)) 
+                if (string.IsNullOrWhiteSpace(header))
                     break;
 
                 string? data = stringReader.ReadLine();
@@ -258,7 +258,11 @@ sec-ch-ua-form-factors:
             await _baseApi.OnBeforeRequestAsync(httpRequestMessage);
 
             HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+
             if (_httpContentDispose) _httpContent?.Dispose();
+
+            await _baseApi.OnAfterRequestAsync(httpResponseMessage);
+
             return httpResponseMessage;
         }
 

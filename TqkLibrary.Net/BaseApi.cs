@@ -99,7 +99,10 @@ namespace TqkLibrary.Net
         {
             return Task.CompletedTask;
         }
-
+        protected internal virtual Task OnAfterRequestAsync(HttpResponseMessage httpResponseMessage)
+        {
+            return Task.CompletedTask;
+        }
 
         /// <summary>
         /// 
