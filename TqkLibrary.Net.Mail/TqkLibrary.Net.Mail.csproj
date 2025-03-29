@@ -3,11 +3,10 @@
 	<Import Project="..\ProjectBuildProperties.targets" />
 
 	<ItemGroup>
-		<PackageReference Include="MailKit" Version="3.2.0" />
-		<PackageReference Include="MimeKit" Version="3.2.0" />
+		<PackageReference Include="MailKit" Version="4.11.0" />
 		<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
 	</ItemGroup>
