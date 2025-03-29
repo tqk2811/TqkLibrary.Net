@@ -4,10 +4,6 @@
 	<PropertyGroup>
 	</PropertyGroup>
 
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-		<Reference Include="System.Web" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
 	</ItemGroup>
