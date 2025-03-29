@@ -11,19 +11,14 @@
 		<license type="expression">MIT</license>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="Microsoft.Net.Http.Headers" version="2.2.8" />
+				<dependency id="Microsoft.Net.Http.Headers" version="2.3.0" />
+				<dependency id="Newtonsoft.Json" version="13.0.3" />
 				<dependency id="System.Net.Http" version="4.3.4" />
-				<dependency id="Newtonsoft.Json" version="13.0.1" />
-			</group>
-			<group targetFramework="net6.0">
-				<dependency id="Microsoft.Net.Http.Headers" version="2.2.8" />
-				<dependency id="System.Net.Http" version="4.3.4" />
-				<dependency id="Newtonsoft.Json" version="13.0.1" />
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="Microsoft.Net.Http.Headers" version="2.2.8" />
+				<dependency id="Microsoft.Net.Http.Headers" version="8.0.14" />
+				<dependency id="Newtonsoft.Json" version="13.0.3" />
 				<dependency id="System.Net.Http" version="4.3.4" />
-				<dependency id="Newtonsoft.Json" version="13.0.1" />
 			</group>
 		</dependencies>
 	</metadata>
