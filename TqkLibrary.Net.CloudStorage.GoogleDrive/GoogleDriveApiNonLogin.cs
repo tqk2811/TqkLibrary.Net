@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// 
         /// </summary>
         public string ApiKey { get; set; } = "AIzaSyC1qbk75NzWBvSaDh6KnsjjA9pIrP4lYIE";
-        readonly HttpClient httpClient;
+        readonly HttpClient _httpClient;
 
         /// <summary>
         /// 
@@ -53,21 +54,21 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// <exception cref="ArgumentNullException"></exception>
         protected GoogleDriveApiNonLogin(HttpClient httpClient)
         {
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this._httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
         /// <summary>
         /// 
         /// </summary>
         ~GoogleDriveApiNonLogin()
         {
-            httpClient.Dispose();
+            _httpClient.Dispose();
         }
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            httpClient.Dispose();
+            _httpClient.Dispose();
             GC.SuppressFinalize(this);
         }
         /// <summary>
@@ -80,15 +81,15 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         public async Task<FileList> ListPublicFolderAsync(DriveFileListOption option, CancellationToken cancellationToken = default)
         {
             if (option == null) throw new ArgumentNullException(nameof(option));
-            string url = option.NextLink;
+            string? url = option.NextLink;
 
             if (string.IsNullOrEmpty(url))
             {
-                if (string.IsNullOrWhiteSpace(option.Query)) throw new ArgumentNullException(option.Query.GetType().FullName);
-                if (string.IsNullOrWhiteSpace(option.Fields)) throw new ArgumentNullException(option.Fields.GetType().FullName);
-                if (string.IsNullOrWhiteSpace(option.OrderBy)) throw new ArgumentNullException(option.OrderBy.GetType().FullName);
+                if (string.IsNullOrWhiteSpace(option.Query)) throw new ArgumentNullException(nameof(option.Query));
+                if (string.IsNullOrWhiteSpace(option.Fields)) throw new ArgumentNullException(nameof(option.Fields));
+                if (string.IsNullOrWhiteSpace(option.OrderBy)) throw new ArgumentNullException(nameof(option.OrderBy));
 
-                var queryBuilder = HttpUtility.ParseQueryString(string.Empty);
+                NameValueCollection queryBuilder = HttpUtility.ParseQueryString(string.Empty);
                 queryBuilder.Add("openDrive", "false");
                 queryBuilder.Add("reason", "102");
                 queryBuilder.Add("syncType", "0");
@@ -106,16 +107,17 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 queryBuilder.Add("orderBy", option.OrderBy);
                 if (!string.IsNullOrEmpty(option.PageToken)) queryBuilder.Add("pageToken", option.PageToken);
 
-                url = $"https://clients6.google.com/drive/v2beta/files?{queryBuilder.ToString().Replace("+", "%20")}";
+                url = $"https://clients6.google.com/drive/v2beta/files?{queryBuilder.ToString()!.Replace("+", "%20")}";
             }
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
             httpRequestMessage.Headers.Add("Accept", "application/json");
-            httpRequestMessage.Headers.Add("x-goog-drive-resource-keys", $"{option.FolderId}/{option.Resourcekey}");
-            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(option.Resourcekey)) 
+                httpRequestMessage.Headers.Add("x-goog-drive-resource-keys", $"{option.FolderId}/{option.Resourcekey}");
+            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
             string json_text = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<FileList>(json_text);
+            return JsonConvert.DeserializeObject<FileList>(json_text)!;
         }
 
         /// <summary>
@@ -140,9 +142,9 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
             httpRequestMessage.Headers.Add("Accept", "application/json");
-            using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
             string json_text = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<Google.Apis.Drive.v2.Data.File>(json_text);
+            return JsonConvert.DeserializeObject<Google.Apis.Drive.v2.Data.File>(json_text)!;
         }
 
         static readonly Regex regex_form = new Regex("form.*?action=\"(.*?)\" method=\"(.*?)\"");
@@ -169,9 +171,9 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, url);
                 //httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
                 //httpRequestMessage.Headers.Add("Origin", "https://drive.google.com/");
-                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
                 httpResponseMessage.EnsureSuccessStatusCode();
-                if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/html"))
+                if (httpResponseMessage.Content.Headers.ContentType?.MediaType?.Contains("text/html") == true)
                 {
                     try
                     {
@@ -200,7 +202,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                                         }
                                         else
                                         {
-                                            if(string.IsNullOrWhiteSpace(uri.Query))
+                                            if (string.IsNullOrWhiteSpace(uri.Query))
                                             {
                                                 url = $"{uri.OriginalString}?{q_str}";
                                             }
@@ -231,7 +233,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
                 }
                 else// if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("application"))
                 {
-                    Stream stream = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+                    Stream stream = await httpResponseMessage.Content.ReadAsStreamAsync();
                     return new HttpResponseStreamWrapper(httpResponseMessage, stream);
                 }
                 //throw new InvalidDataException($"Can't find download link for fileId: {fileId}, {url}");
