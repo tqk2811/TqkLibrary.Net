@@ -66,21 +66,5 @@ namespace TqkLibrary.Net.HttpClientHandles
                 }
             }
         }
-
-#if NET5_0_OR_GREATER
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            var response = base.Send(request, cancellationToken);
-
-
-            return response;
-        }
-#endif
     }
 }
