@@ -10,29 +10,41 @@
             /// <summary>
             /// 
             /// </summary>
-            public string ResourceId { get; internal set; }
+            public string? Id { get; set; }
             /// <summary>
             /// 
             /// </summary>
-            public string AuthKey { get; internal set; }
+            public string? ResourceId { get; set; }
             /// <summary>
             /// 
             /// </summary>
-            public string E { get; internal set; }
+            public string? AuthKey { get; set; }
             /// <summary>
             /// 
             /// </summary>
-            public string Cid { get; internal set; }
+            public string? E { get; set; }
             /// <summary>
             /// 
             /// </summary>
-            public string ItHint { get; internal set; }
+            public string? Cid { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            public string? ItHint { get; set; }
             /// <summary>
             /// f folder<br></br>
             /// v video<br></br>
             /// u unknow<br></br>
             /// </summary>
-            public string Type { get; internal set; }
+            public string? Type { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            public string? Redeem { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            public string? MigratedTospo { get; set; }
         }
     }
 }
