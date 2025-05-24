@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace TqkLibrary.Net.Mail.TempMails
+namespace TqkLibrary.Net.Mail.Services.TempMails
 {
     /// <summary>
     /// https://api.mail.tm/

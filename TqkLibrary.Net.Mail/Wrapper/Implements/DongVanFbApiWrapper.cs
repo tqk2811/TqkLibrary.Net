@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Mail.BuyMailApi;
+using TqkLibrary.Net.Mail.Services.BuyMailApi;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
