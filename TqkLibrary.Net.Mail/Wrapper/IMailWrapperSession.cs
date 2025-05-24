@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mail.TempMails.Wrapper
+namespace TqkLibrary.Net.Mail.Wrapper
 {
     /// <summary>
     /// 

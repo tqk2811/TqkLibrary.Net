@@ -11,7 +11,7 @@ using MailKit.Security;
 using MailKit;
 using MailKit.Search;
 
-namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
+namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
     /// <summary>
     /// 

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace TqkLibrary.Net.Mail.TempMails.Wrapper
+namespace TqkLibrary.Net.Mail.Wrapper
 {
     /// <summary>
     /// 

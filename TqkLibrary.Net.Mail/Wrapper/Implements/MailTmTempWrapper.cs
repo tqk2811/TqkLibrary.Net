@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Mail.TempMails.Wrapper.Implements
+namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
     /// <summary>
     /// 
