@@ -9,4 +9,9 @@
 		<!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="TqkLibrary.CompilerServices" Version="1.0.0" />
+	</ItemGroup>
+	
 </Project>
