@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-namespace TqkLibrary.Net.Proxy
+namespace TqkLibrary.Net.Proxy.Services
 {
     /// <summary>
     /// https://github.com/bocproxy/dcom-proxy/wiki/API-Documentation

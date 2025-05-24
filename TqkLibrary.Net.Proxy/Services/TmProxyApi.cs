@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy
+namespace TqkLibrary.Net.Proxy.Services
 {
     /// <summary>
     /// 
@@ -45,7 +45,7 @@ namespace TqkLibrary.Net.Proxy
         /// <returns></returns>
         public Task<TMProxyResponse<TMProxyProxyResponse>> GetNewProxy(int id_location = 0, CancellationToken cancellationToken = default)
             => Build()
-            .WithUrlPostJson(EndPoint + "get-new-proxy", new { api_key = ApiKey, id_location = id_location })
+            .WithUrlPostJson(EndPoint + "get-new-proxy", new { api_key = ApiKey, id_location })
             .ExecuteAsync<TMProxyResponse<TMProxyProxyResponse>>(cancellationToken);
 
     }

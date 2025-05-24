@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Proxy;
+using TqkLibrary.Net.Proxy.Services;
 
 namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {

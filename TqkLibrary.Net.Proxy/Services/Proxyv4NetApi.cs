@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy
+namespace TqkLibrary.Net.Proxy.Services
 {
     /// <summary>
     /// 
@@ -73,7 +73,7 @@ namespace TqkLibrary.Net.Proxy
             => Build()
                 .WithUrlPostJson(
                     new UrlBuilder(EndPoint + "/api/buy-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
-                    new { count = count, period = proxyV4Price?.Period ?? throw new ArgumentNullException(nameof(proxyV4Price)), country = proxyV4Price?.Country })
+                    new { count, period = proxyV4Price?.Period ?? throw new ArgumentNullException(nameof(proxyV4Price)), country = proxyV4Price?.Country })
                 .ExecuteAsync<Proxyv4NetResponse<List<ProxyV4Proxy>>>(cancellationToken);
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace TqkLibrary.Net.Proxy
             => Build()
                 .WithUrlPostJson(
                     new UrlBuilder(EndPoint + "/api/update-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
-                    new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), autoRenew = autoRenew, comment = comment })
+                    new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), autoRenew, comment })
                 .ExecuteAsync<Proxyv4NetResponse>(cancellationToken);
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace TqkLibrary.Net.Proxy
             => Build()
                 .WithUrlPostJson(
                     new UrlBuilder(EndPoint + "/api/renew-list-proxy").WithParam("api_key", ApiKey).WithParamIfNotNull("authIp", authIp),
-                    new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), period = period })
+                    new { listProxyId = proxy_ids?.ToList() ?? throw new ArgumentNullException(nameof(proxy_ids)), period })
                 .ExecuteAsync<Proxyv4NetResponse>(cancellationToken);
     }
 

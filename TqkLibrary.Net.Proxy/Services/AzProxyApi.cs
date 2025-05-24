@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 //https://documenter.getpostman.com/view/11108442/TzecCQHG
-namespace TqkLibrary.Net.Proxy
+namespace TqkLibrary.Net.Proxy.Services
 {
     /// <summary>
     /// 
