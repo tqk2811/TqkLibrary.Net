@@ -107,7 +107,7 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
         /// 
         /// </summary>
         /// <returns></returns>
-        public string GetT()
+        public string? GetT()
         {
             var cookies = cookieHandler.CookieContainer.GetCookies(new Uri("https://www.dropbox.com"));
             foreach (Cookie cookie in cookies)
@@ -149,12 +149,12 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             query["secure_hash"] = folder.Name;
             query["sub_path"] = string.Empty;
             query["rlkey"] = folder.RlKey;
-            using StringContent form = new StringContent(query.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+            using StringContent form = new StringContent(query.ToString()!, Encoding.UTF8, "application/x-www-form-urlencoded");
             httpRequestMessage.Content = form;
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
             string json_text = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
             httpResponseMessage.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<ListSharedLinkFolderEntries>(json_text);
+            return JsonConvert.DeserializeObject<ListSharedLinkFolderEntries>(json_text)!;
         }
 
 #if DEBUG
@@ -213,12 +213,12 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
             query["t"] = GetT();
             query["url"] = file.Uri.ToString();
             query["origin"] = "PREVIEW_PAGE";
-            using StringContent form = new StringContent(query.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+            using StringContent form = new StringContent(query.ToString()!, Encoding.UTF8, "application/x-www-form-urlencoded");
             httpRequestMessage.Content = form;
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
             httpResponseMessage.EnsureSuccessStatusCode();
-            if (httpResponseMessage.Content.Headers.ContentType.MediaType.Contains("text/plain"))
+            if (httpResponseMessage.Content.Headers.ContentType?.MediaType?.Contains("text/plain") == true)
             {
                 string content = await httpResponseMessage.Content.ReadAsStringAsync();
 

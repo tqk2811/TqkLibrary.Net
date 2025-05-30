@@ -31,12 +31,12 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
     public class ObcProxyApiWrapper : IProxyApiWrapper
     {
         readonly BocProxyApi _obcProxyApi;
-        readonly ObcProxy _obcProxy;
+        readonly BocProxyApi.ObcProxy _obcProxy;
 
         /// <summary>
         /// 
         /// </summary>
-        public ObcProxyApiWrapper(BocProxyApi obcProxyApi, ObcProxy obcProxy)
+        public ObcProxyApiWrapper(BocProxyApi obcProxyApi, BocProxyApi.ObcProxy obcProxy)
         {
             this._obcProxyApi = obcProxyApi;
             this._obcProxy = obcProxy;

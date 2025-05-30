@@ -81,7 +81,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<OneDriveLinkInfo> DecodeShortLinkAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async Task<OneDriveLinkInfo?> DecodeShortLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri is null)
                 throw new ArgumentNullException(nameof(uri));
@@ -131,7 +131,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// </summary>
         /// <returns></returns>
         public Task<DriveItem> GetMetadataAsync(OneDriveLinkInfo oneDriveLinkInfo, CancellationToken cancellationToken = default)
-            => GetMetadataAsync(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
+            => GetMetadataAsync(oneDriveLinkInfo?.ResourceId!, oneDriveLinkInfo?.AuthKey!, cancellationToken);
         /// <summary>
         /// 
         /// </summary>
@@ -172,7 +172,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// </summary>
         /// <returns></returns>
         public Task<Stream> DownloadFileAsync(OneDriveLinkInfo oneDriveLinkInfo, CancellationToken cancellationToken = default)
-            => DownloadFileAsync(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
+            => DownloadFileAsync(oneDriveLinkInfo?.ResourceId!, oneDriveLinkInfo?.AuthKey!, cancellationToken);
         /// <summary>
         /// 
         /// </summary>
@@ -188,7 +188,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// <returns></returns>
         public async Task<Stream> DownloadFileAsync(DriveItem driveItem, CancellationToken cancellationToken = default)
         {
-            if (driveItem.AdditionalData.TryGetValue("@content.downloadUrl", out object val) && val is string url)
+            if (driveItem.AdditionalData.TryGetValue("@content.downloadUrl", out object? val) && val is string url)
             {
                 using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                 httpRequestMessage.Headers.Add("Origin", "https://onedrive.live.com");
@@ -197,7 +197,7 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
                 HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
                 return new HttpResponseStreamWrapper(httpResponseMessage, await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStreamAsync());
             }
-            return null;
+            else throw new InvalidOperationException($"invalid downloadUrl");
         }
 
 
@@ -209,12 +209,12 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         {
             if (!string.IsNullOrWhiteSpace(oneDriveLinkInfo?.AuthKey))
             {
-                return await ListChildItems(oneDriveLinkInfo?.ResourceId, oneDriveLinkInfo?.AuthKey, cancellationToken);
+                return await ListChildItems(oneDriveLinkInfo?.ResourceId!, oneDriveLinkInfo?.AuthKey!, cancellationToken);
             }
             else
             {
                 TokenApiV2Data tokenApiV2Data = await GetTokenApiV2(cancellationToken);
-                return await ListChildItemsV2(oneDriveLinkInfo?.ResourceId, tokenApiV2Data, cancellationToken);
+                return await ListChildItemsV2(oneDriveLinkInfo?.ResourceId!, tokenApiV2Data, cancellationToken);
             }
         }
         /// <summary>

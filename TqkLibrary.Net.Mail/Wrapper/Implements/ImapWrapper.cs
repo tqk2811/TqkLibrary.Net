@@ -33,7 +33,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        public event Action<ImapWrapper> OnDequeue;
+        public event Action<ImapWrapper>? OnDequeue;
         /// <summary>
         /// 
         /// </summary>
@@ -57,7 +57,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailWrapperSession> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public async Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             using (await _asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
             {
@@ -102,11 +102,11 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
             /// <summary>
             /// 
             /// </summary>
-            public string UserName { get; set; }
+            public required string UserName { get; set; }
             /// <summary>
             /// 
             /// </summary>
-            public string Password { get; set; }
+            public required string Password { get; set; }
             /// <summary>
             /// 
             /// </summary>
@@ -174,10 +174,10 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 this.mimeMessage = mimeMessage ?? throw new ArgumentNullException(nameof(mimeMessage));
             }
 
-            public string FromAddress => mimeMessage.From?.First()?.Name;
-            public string Subject => mimeMessage.Subject;
-            public string RawBody => mimeMessage.HtmlBody;
-            public string Code => string.Empty;
+            public string? FromAddress => mimeMessage.From?.First()?.Name;
+            public string? Subject => mimeMessage.Subject;
+            public string? RawBody => mimeMessage.HtmlBody;
+            public string? Code => string.Empty;
             public DateTime? ReceivedTime => mimeMessage?.Date.DateTime;
         }
     }

@@ -53,7 +53,7 @@ namespace TqkLibrary.Net.Phone
         public Task<ViOtpComResponse<List<ViOtpComService>>> GetServices(CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "service", "get")
-                .WithParam("token", ApiKey))
+                .WithParam("token", ApiKey!))
             .ExecuteAsync<ViOtpComResponse<List<ViOtpComService>>>(cancellationToken);
 
         /// <summary>
@@ -62,13 +62,13 @@ namespace TqkLibrary.Net.Phone
         /// <returns></returns>
         public Task<ViOtpComResponse<ViOtpComSession>> RequestRent(
             ViOtpComService service,
-            IEnumerable<ViOtpComNetwork> networks = null,
-            IEnumerable<string> prefix = null,
-            IEnumerable<string> exceptPrefix = null,
+            IEnumerable<ViOtpComNetwork>? networks = null,
+            IEnumerable<string>? prefix = null,
+            IEnumerable<string>? exceptPrefix = null,
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "request", "get")
-                .WithParam("token", ApiKey)
+                .WithParam("token", ApiKey!)
                 .WithParam("serviceId", service.Id)
                 .WithParamIfNotNull("networks", networks?.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)).Join("|"))
                 .WithParamIfNotNull("prefix", prefix?.Join("|"))
@@ -88,7 +88,7 @@ namespace TqkLibrary.Net.Phone
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "request", "get")
-                .WithParam("token", ApiKey)
+                .WithParam("token", ApiKey!)
                 .WithParam("serviceId", service.Id)
                 .WithParam("number", number))
             .ExecuteAsync<ViOtpComResponse<ViOtpComSession>>(cancellationToken);
@@ -104,7 +104,7 @@ namespace TqkLibrary.Net.Phone
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "session", "get")
-                .WithParam("token", ApiKey)
+                .WithParam("token", ApiKey!)
                 .WithParam("service", session.RequestId))
             .ExecuteAsync<ViOtpComResponse<ViOtpComSessionGet>>(cancellationToken);
 
@@ -119,7 +119,7 @@ namespace TqkLibrary.Net.Phone
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<ViOtpComResponse<ViOtpComSessionGet>> SessionHistory(
-            ViOtpComService service = null,
+            ViOtpComService? service = null,
             int status = 2,
             int limit = 100,
             DateTime? fromDate = null,
@@ -127,7 +127,7 @@ namespace TqkLibrary.Net.Phone
             CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(new UrlBuilder(EndPoint, "session", "history")
-                .WithParam("token", ApiKey)
+                .WithParam("token", ApiKey!)
                 .WithParamIfNotNull("service", service?.Id)
                 .WithParamIfNotNull("status", status)
                 .WithParamIfNotNull("limit", limit)

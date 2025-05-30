@@ -22,7 +22,7 @@ namespace TqkLibrary.Net.Phone.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        string Message { get; }
+        string? Message { get; }
 
         /// <summary>
         /// 

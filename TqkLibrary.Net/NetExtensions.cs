@@ -18,7 +18,7 @@ namespace TqkLibrary.Net
         /// <param name="strings"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        public static string JoinIfNotNull(this IEnumerable<string> strings, string separator)
+        public static string? JoinIfNotNull(this IEnumerable<string> strings, string? separator)
         {
             if (strings == null || strings.Count() == 0) return null;
             return string.Join(separator, strings);
@@ -29,7 +29,7 @@ namespace TqkLibrary.Net
         /// <param name="strings"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        public static string JoinIfNotNull(this string[] strings, string separator)
+        public static string? JoinIfNotNull(this string[] strings, string? separator)
         {
             if (strings == null || strings.Count() == 0) return null;
             return string.Join(separator, strings);
@@ -44,7 +44,7 @@ namespace TqkLibrary.Net
             using HttpClient httpClient = new HttpClient(NetSingleton.HttpClientHandler, false);
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://api.myip.com");
             using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<MyIp>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false));
+            return JsonConvert.DeserializeObject<MyIp>(await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false))!;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace TqkLibrary.Net
         /// <param name="separator"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static string Join(this IEnumerable<string> enumerable, string separator)
+        public static string? Join(this IEnumerable<string> enumerable, string separator)
         {
             if (string.IsNullOrWhiteSpace(separator)) throw new ArgumentNullException(nameof(separator));
             if (enumerable == null) return null;

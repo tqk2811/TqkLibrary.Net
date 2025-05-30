@@ -21,7 +21,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
             /// <summary>
             /// 
             /// </summary>
-            public string UserName { get; set; }
+            public required string UserName { get; set; }
             /// <summary>
             /// 
             /// </summary>
@@ -48,9 +48,9 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<IMailWrapperSession> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<IMailWrapperSession>(new MailTmTempManagedSession(_accountCallback()));
+            return Task.FromResult<IMailWrapperSession?>(new MailTmTempManagedSession(_accountCallback()));
         }
         /// <summary>
         /// 
@@ -70,9 +70,9 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
             readonly Random _random = new Random();
             readonly MailTmApi _mailTmApi = new MailTmApi();
             readonly TmAccount _tmAccount;
-            MailTmToken _token;
-            MailTmAccount _mailTmAccount;
-            MailTmAccountResponse _mailTmAccountResponse;
+            MailTmToken? _token;
+            MailTmAccount? _mailTmAccount;
+            MailTmAccountResponse? _mailTmAccountResponse;
             readonly Dictionary<string, MailTmMessageData> _dict_messageDatas = new Dictionary<string, MailTmMessageData>();
 
             internal MailTmTempManagedSession(TmAccount tmAccount)
@@ -89,7 +89,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 _mailTmApi.Dispose();
                 GC.SuppressFinalize(this);
             }
-            public string Email => _mailTmAccount?.Address;
+            public string Email => _mailTmAccount?.Address!;
 
             public string Password => string.Empty;
 
@@ -133,7 +133,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 this.mailTmMessageData = mailTmMessageData ?? throw new ArgumentNullException(nameof(mailTmMessageData));
             }
 
-            public string FromAddress
+            public string? FromAddress
             {
                 get
                 {
@@ -141,7 +141,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 }
             }
 
-            public string Subject
+            public string? Subject
             {
                 get
                 {
@@ -149,14 +149,14 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 }
             }
 
-            public string RawBody
+            public string? RawBody
             {
                 get
                 {
                     return string.Join("\r\n\r\n", mailTmMessageData.Html);
                 }
             }
-            public string Code => string.Empty;
+            public string? Code => string.Empty;
 
             public DateTime? ReceivedTime => mailTmMessageData?.RetentionDate;
         }

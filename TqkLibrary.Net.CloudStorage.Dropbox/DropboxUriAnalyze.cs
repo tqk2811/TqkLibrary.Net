@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.CloudStorage.Dropbox
         /// <summary>
         /// 
         /// </summary>
-        public string RlKey => _query["rlkey"];
+        public string? RlKey => _query["rlkey"];
 
         /// <summary>
         /// 

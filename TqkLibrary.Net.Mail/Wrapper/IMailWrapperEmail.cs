@@ -9,20 +9,20 @@ namespace TqkLibrary.Net.Mail.Wrapper
         /// <summary>
         /// 
         /// </summary>
-        string FromAddress { get; }
+        string? FromAddress { get; }
         /// <summary>
         /// 
         /// </summary>
-        string Subject { get; }
+        string? Subject { get; }
         /// <summary>
         /// 
         /// </summary>
-        string RawBody { get; }
+        string? RawBody { get; }
         
         /// <summary>
         /// 
         /// </summary>
-        string Code { get; }
+        string? Code { get; }
 
         /// <summary>
         /// 

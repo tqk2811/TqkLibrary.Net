@@ -19,7 +19,7 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        public TwoLineIoService Service { get; set; }
+        public TwoLineIoService? Service { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -29,14 +29,14 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
 
 
 
-        readonly TwoNdLineIoApi twoLineIoApi;
+        readonly TwoNdLineIoApi _twoLineIoApi;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="twoLineIoApi"></param>
         public TwoNdLineIoWrapper(TwoNdLineIoApi twoLineIoApi)
         {
-            this.twoLineIoApi = twoLineIoApi;
+            this._twoLineIoApi = twoLineIoApi;
         }
         /// <summary>
         /// 
@@ -44,21 +44,21 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
         /// <param name="apiKey"></param>
         public TwoNdLineIoWrapper(string apiKey)
         {
-            this.twoLineIoApi = new TwoNdLineIoApi(apiKey);
+            this._twoLineIoApi = new TwoNdLineIoApi(apiKey);
         }
         /// <summary>
         /// 
         /// </summary>
         ~TwoNdLineIoWrapper()
         {
-            twoLineIoApi.Dispose();
+            _twoLineIoApi.Dispose();
         }
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            twoLineIoApi.Dispose();
+            _twoLineIoApi.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -71,18 +71,18 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
         public async Task<IPhoneWrapperSession> RentPhoneAsync(CancellationToken cancellationToken = default)
         {
             if (Service == null) throw new InvalidOperationException($"set {nameof(Service)} first");
-            var res = await twoLineIoApi.PurchaseOTP(Service, NetWorkId, null, cancellationToken).ConfigureAwait(false);
+            var res = await _twoLineIoApi.PurchaseOTP(Service, NetWorkId, null, cancellationToken).ConfigureAwait(false);
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(WaitPhoneTimeout))
             {
                 while (true)
                 {
                     await Task.Delay(1000, cancellationToken);
-                    var check = await twoLineIoApi.CheckOrder(res, cancellationToken).ConfigureAwait(false);
+                    var check = await _twoLineIoApi.CheckOrder(res, cancellationToken).ConfigureAwait(false);
 
                     if (res.Status != 1 || check.Status != 1 || check.Data.StatusOrder != TwoLineIoStatusOrder.Wait)
-                        return new TwoLineIoWrapperSession(twoLineIoApi, res, check);
-                    if (!string.IsNullOrWhiteSpace(check?.Data?.Phone))
-                        return new TwoLineIoWrapperSession(twoLineIoApi, res, check);
+                        return new TwoLineIoWrapperSession(_twoLineIoApi, res, check);
+                    if (!string.IsNullOrWhiteSpace(check.Data?.Phone))
+                        return new TwoLineIoWrapperSession(_twoLineIoApi, res, check);
                     if (cancellationTokenSource.IsCancellationRequested)
                         throw new TimeoutException($"WaitPhoneTimeout: {WaitPhoneTimeout}");
                 }
@@ -112,7 +112,7 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
             {
                 if (string.IsNullOrWhiteSpace(twoLineIoOrderData?.Data?.Phone))
                     return string.Empty;
-                if (twoLineIoOrderData.Data.Phone.Length == 10 && twoLineIoOrderData.Data.Phone.StartsWith("0"))
+                if (twoLineIoOrderData!.Data.Phone.Length == 10 && twoLineIoOrderData.Data.Phone.StartsWith("0"))
                     return twoLineIoOrderData.Data.Phone.Substring(1);
                 return twoLineIoOrderData.Data.Phone;
             }
@@ -120,7 +120,7 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
 
         public bool IsSuccess => twoLineIoOrderData.Data.StatusOrder == TwoLineIoStatusOrder.Wait;// twoLineIoOrderData?.Status == 1 && twoLineIoPurchaseOtpResponse?.Status == 1;
 
-        public string Message => twoLineIoOrderData?.Message;
+        public string? Message => twoLineIoOrderData?.Message;
 
         public Task CancelWaitSmsAsync(CancellationToken cancellationToken = default)
         {
@@ -150,9 +150,9 @@ namespace TqkLibrary.Net.Phone.Wrapper.Implements
             this.twoLineIoOrderData = twoLineIoOrderData;
         }
 
-        public string Text => twoLineIoOrderData?.Message;
+        public string Text => twoLineIoOrderData?.Message ?? string.Empty;
 
-        public string Code => twoLineIoOrderData?.Code;
+        public string Code => twoLineIoOrderData?.Code ?? string.Empty;
     }
 
 

@@ -105,12 +105,12 @@ namespace TqkLibrary.Net.Proxy.Services
         /// <exception cref="ArgumentException"></exception>
         public Task<ProxyNo1ComResponse> EditKey(
             ProxyNo1ComKeyInfo keyInfo,
-            IPAddress allowIp = null,
-            string userName = null,
-            string passWord = null,
+            IPAddress? allowIp = null,
+            string? userName = null,
+            string? passWord = null,
             CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(keyInfo?.Key)) throw new ArgumentNullException(nameof(keyInfo));
+            if (string.IsNullOrWhiteSpace(keyInfo?.Key)) throw new ArgumentNullException($"{nameof(keyInfo)}.{nameof(keyInfo.Key)}");
 
             if ((string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(passWord)) && allowIp == null)
             {

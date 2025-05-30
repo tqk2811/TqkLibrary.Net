@@ -75,166 +75,173 @@ namespace TqkLibrary.Net.Mail.Services.BuyMailApi
                 .WithParam("mail", mailAccount.Email)
                 .WithParam("pass", mailAccount.Password))
             .ExecuteAsync<DongVanFbGetMessageResponse>(cancellationToken);
-    }
+
+
+
+
+
+
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public class DongVanFbResponse
-    {
-        [JsonProperty("error_code")]
-        public int ErrorCode { get; set; }
-
-        [JsonProperty("status")]
-        public bool Status { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
-    }
-    public class DongVanFbResponse<T> : DongVanFbResponse
-    {
-        [JsonProperty("data")]
-        public T Data { get; set; }
-    }
-    public class DongVanFbBalanceResponse : DongVanFbResponse
-    {
-        [JsonProperty("balance")]
-        public double Balance { get; set; }
-    }
-    public class DongVanFbAccountType
-    {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("quality")]
-        public int Quality { get; set; }
-
-        [JsonProperty("price")]
-        public double Price { get; set; }
-    }
-    public class DongVanFbAccountTypeResponse : DongVanFbResponse<List<DongVanFbAccountType>>
-    {
-
-    }
-    public class DongVanFbBuyMail
-    {
-        [JsonProperty("order_code")]
-        public string OrderCode { get; set; }
-
-        [JsonProperty("account_type")]
-        public string AccountType { get; set; }
-
-        [JsonProperty("quality")]
-        public int Quality { get; set; }
-
-        [JsonProperty("price")]
-        public int Price { get; set; }
-
-        [JsonProperty("total_amount")]
-        public int TotalAmount { get; set; }
-
-        [JsonProperty("balance")]
-        public int Balance { get; set; }
-
-        [JsonProperty("list_data")]
-        public List<string> ListData { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<DongVanFbMailAccount> ListDataAccount
+        public class DongVanFbResponse
         {
-            get { return ListData.Select(x => new DongVanFbMailAccount(x)); }
+            [JsonProperty("error_code")]
+            public int ErrorCode { get; set; }
+
+            [JsonProperty("status")]
+            public bool Status { get; set; }
+
+            [JsonProperty("message")]
+            public string? Message { get; set; }
         }
-
-    }
-    public class DongVanFbBuyMailResponse : DongVanFbResponse<DongVanFbBuyMail>
-    {
-
-    }
-    public class DongVanFbMailAccount
-    {
-        public DongVanFbMailAccount(string text)
+        public class DongVanFbResponse<T> : DongVanFbResponse
         {
-            if (!string.IsNullOrWhiteSpace(text))
+            [JsonProperty("data")]
+            public T? Data { get; set; }
+        }
+        public class DongVanFbBalanceResponse : DongVanFbResponse
+        {
+            [JsonProperty("balance")]
+            public double Balance { get; set; }
+        }
+        public class DongVanFbAccountType
+        {
+            [JsonProperty("id")]
+            public int Id { get; set; }
+
+            [JsonProperty("name")]
+            public string? Name { get; set; }
+
+            [JsonProperty("quality")]
+            public int Quality { get; set; }
+
+            [JsonProperty("price")]
+            public double Price { get; set; }
+        }
+        public class DongVanFbAccountTypeResponse : DongVanFbResponse<List<DongVanFbAccountType>>
+        {
+
+        }
+        public class DongVanFbBuyMail
+        {
+            [JsonProperty("order_code")]
+            public string? OrderCode { get; set; }
+
+            [JsonProperty("account_type")]
+            public string? AccountType { get; set; }
+
+            [JsonProperty("quality")]
+            public int Quality { get; set; }
+
+            [JsonProperty("price")]
+            public int Price { get; set; }
+
+            [JsonProperty("total_amount")]
+            public int TotalAmount { get; set; }
+
+            [JsonProperty("balance")]
+            public int Balance { get; set; }
+
+            [JsonProperty("list_data")]
+            public List<string>? ListData { get; set; }
+
+            [JsonIgnore]
+            public IEnumerable<DongVanFbMailAccount> ListDataAccount
             {
-                var arr = text.Split('|');
-                if (arr.Length >= 2)
+                get { return ListData?.Select(x => new DongVanFbMailAccount(x)) ?? Enumerable.Empty<DongVanFbMailAccount>(); }
+            }
+
+        }
+        public class DongVanFbBuyMailResponse : DongVanFbResponse<DongVanFbBuyMail>
+        {
+
+        }
+        public class DongVanFbMailAccount
+        {
+            public DongVanFbMailAccount(string text)
+            {
+                if (!string.IsNullOrWhiteSpace(text))
                 {
-                    this.Email = arr[0];
-                    this.Password = arr[1];
+                    var arr = text.Split('|');
+                    if (arr.Length >= 2)
+                    {
+                        this.Email = arr[0];
+                        this.Password = arr[1];
+                    }
                 }
             }
+            public string? Email { get; set; }
+            public string? Password { get; set; }
         }
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
 
 
-    
-    public class DongVanFbToolResponse
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
 
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        public class DongVanFbToolResponse
+        {
+            [JsonProperty("email")]
+            public string? Email { get; set; }
 
-        [JsonProperty("status")]
-        public bool Status { get; set; }
+            [JsonProperty("password")]
+            public string? Password { get; set; }
 
-        [JsonProperty("code")]
-        public string Code { get; set; }
-    }
-    public class DongVanFbGetCodeMailResponse : DongVanFbToolResponse
-    {
+            [JsonProperty("status")]
+            public bool Status { get; set; }
 
-        [JsonProperty("content")]
-        public string Content { get; set; }
+            [JsonProperty("code")]
+            public string? Code { get; set; }
+        }
+        public class DongVanFbGetCodeMailResponse : DongVanFbToolResponse
+        {
 
-        [JsonProperty("date")]
-        public string Date { get; set; }
-    }
-    public enum MailFrom
-    {
-        Facebook,
-        Instagram,
-        Twitter,
-    }
+            [JsonProperty("content")]
+            public string? Content { get; set; }
+
+            [JsonProperty("date")]
+            public string? Date { get; set; }
+        }
+        public enum MailFrom
+        {
+            Facebook,
+            Instagram,
+            Twitter,
+        }
 
 
-    public class DongVanFbGetMessageResponse : DongVanFbToolResponse
-    {
-        [JsonProperty("messages")]
-        public List<DongVanFbMessage> Messages { get; set; }
-    }
-    public class DongVanFbMessage
-    {
-        [JsonProperty("uid")]
-        public int Uid { get; set; }
+        public class DongVanFbGetMessageResponse : DongVanFbToolResponse
+        {
+            [JsonProperty("messages")]
+            public List<DongVanFbMessage>? Messages { get; set; }
+        }
+        public class DongVanFbMessage
+        {
+            [JsonProperty("uid")]
+            public int Uid { get; set; }
 
-        [JsonProperty("date")]
-        public DateTime Date { get; set; }
+            [JsonProperty("date")]
+            public DateTime Date { get; set; }
 
-        [JsonProperty("from")]
-        public List<DongVanFbMessageFrom> From { get; set; }
+            [JsonProperty("from")]
+            public List<DongVanFbMessageFrom>? From { get; set; }
 
-        [JsonProperty("subject")]
-        public string Subject { get; set; }
+            [JsonProperty("subject")]
+            public string? Subject { get; set; }
 
-        [JsonProperty("code")]
-        public string Code { get; set; }
+            [JsonProperty("code")]
+            public string? Code { get; set; }
 
-        [JsonProperty("message")]
-        public string Message { get; set; }
-    }
-    public class DongVanFbMessageFrom
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+            [JsonProperty("message")]
+            public string? Message { get; set; }
+        }
+        public class DongVanFbMessageFrom
+        {
+            [JsonProperty("name")]
+            public string? Name { get; set; }
 
-        [JsonProperty("address")]
-        public string Address { get; set; }
-    }
+            [JsonProperty("address")]
+            public string? Address { get; set; }
+        }
 
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+    }
+
 }
