@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Captcha.Wrapper;
 
-namespace TqkLibrary.Net.Captcha
+namespace TqkLibrary.Net.Captcha.Services
 {
     /// <summary>
     /// 

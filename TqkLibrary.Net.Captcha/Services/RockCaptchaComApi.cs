@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Captcha
+namespace TqkLibrary.Net.Captcha.Services
 {
     /// <summary>
     /// 

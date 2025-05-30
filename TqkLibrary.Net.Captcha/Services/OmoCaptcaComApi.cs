@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Captcha
+namespace TqkLibrary.Net.Captcha.Services
 {
     public class OmoCaptcaComApi : BaseApi
     {
@@ -40,7 +40,7 @@ namespace TqkLibrary.Net.Captcha
         public Task<BalanceResponse> GetBalanceAsync(CancellationToken cancellationToken = default)
         {
             return Build()
-                .WithUrlPostJson(new UrlBuilder(_EndPoint, "getBalance"), new { clientKey = base.ApiKey })
+                .WithUrlPostJson(new UrlBuilder(_EndPoint, "getBalance"), new { clientKey = ApiKey })
                 .ExecuteAsync<BalanceResponse>(cancellationToken);
         }
     }

@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Captcha
+namespace TqkLibrary.Net.Captcha.Services
 {
     /// <summary>
     /// https://anti-captcha.com/apidoc/image
@@ -43,7 +43,7 @@ namespace TqkLibrary.Net.Captcha
         /// <summary>
         ///
         /// </summary>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <param name="ApiKey">ApiKey</param>
         public AntiCaptchaApi(string ApiKey) : base(ApiKey)
         {
