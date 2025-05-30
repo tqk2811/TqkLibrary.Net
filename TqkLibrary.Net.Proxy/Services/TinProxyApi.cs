@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TqkLibrary.Utils;
 
 namespace TqkLibrary.Net.Proxy.Services
 {
@@ -37,12 +38,12 @@ namespace TqkLibrary.Net.Proxy.Services
         /// <param name="authenIps"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TinProxyResponse<TinProxyProxyData>> GetCurrentProxy(string[] authenIps = null, CancellationToken cancellationToken = default)
+        public Task<TinProxyResponse<TinProxyProxyData>> GetCurrentProxy(IEnumerable<string>? authenIps = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(
                 new UrlBuilder(EndPoint, "proxy", "get-current-proxy")
                 .WithParam("api_key", ApiKey!)
-                .WithParamIfNotNull("authen_ips", authenIps.JoinIfNotNull(",")))
+                .WithParamIfNotNull("authen_ips", authenIps?.Join(",")))
             .ExecuteAsync<TinProxyResponse<TinProxyProxyData>>(cancellationToken);
 
         /// <summary>
@@ -59,12 +60,12 @@ namespace TqkLibrary.Net.Proxy.Services
         /// <param name="authenIps"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TinProxyResponse<TinProxyProxyData>> GetNewProxy(string[] authenIps = null, CancellationToken cancellationToken = default)
+        public Task<TinProxyResponse<TinProxyProxyData>> GetNewProxy(IEnumerable<string>? authenIps = null, CancellationToken cancellationToken = default)
             => Build()
             .WithUrlGet(
                 new UrlBuilder(EndPoint, "proxy", "get-new-proxy")
                 .WithParam("api_key", ApiKey!)
-                .WithParamIfNotNull("authen_ips", authenIps.JoinIfNotNull(",")))
+                .WithParamIfNotNull("authen_ips", authenIps?.Join(",")))
             .ExecuteAsync<TinProxyResponse<TinProxyProxyData>>(cancellationToken);
     }
 

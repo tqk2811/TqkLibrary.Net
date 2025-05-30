@@ -14,11 +14,13 @@
 				<dependency id="Microsoft.Net.Http.Headers" version="2.3.0" />
 				<dependency id="Newtonsoft.Json" version="13.0.3" />
 				<dependency id="System.Net.Http" version="4.3.4" />
+				<dependency id="TqkLibrary.Utils" version="1.0.0-build20250530165659" />
 			</group>
 			<group targetFramework="net8.0">
 				<dependency id="Microsoft.Net.Http.Headers" version="8.0.14" />
 				<dependency id="Newtonsoft.Json" version="13.0.3" />
 				<dependency id="System.Net.Http" version="4.3.4" />
+				<dependency id="TqkLibrary.Utils" version="1.0.0-build20250530165659" />
 			</group>
 		</dependencies>
 	</metadata>

@@ -56,7 +56,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         {
             await _obcProxyApi.Reset(_obcProxy, cancellationToken).ConfigureAwait(false);
             var list = await _obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);
-            ObcProxy? obcProxy = list.FirstOrDefault(x => x.ProxyPort == _obcProxy.ProxyPort);
+            BocProxyApi.ObcProxy? obcProxy = list.FirstOrDefault(x => x.ProxyPort == _obcProxy.ProxyPort);
             return new ProxyApiResponseWrapper()
             {
                 IsSuccess = obcProxy is not null,
