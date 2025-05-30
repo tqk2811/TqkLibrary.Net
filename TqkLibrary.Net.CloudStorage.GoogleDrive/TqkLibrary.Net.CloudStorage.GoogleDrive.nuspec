@@ -11,11 +11,11 @@
 		<license type="expression">MIT</license>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250329142711"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
 				<dependency id="Google.Apis.Drive.v2" version="1.69.0.3699" />
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250329142711"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
 				<dependency id="Google.Apis.Drive.v2" version="1.69.0.3699" />
 			</group>
 		</dependencies>

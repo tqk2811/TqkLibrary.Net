@@ -11,12 +11,12 @@
 		<license type="expression">MIT</license>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250329142711"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
 				<dependency id="MailKit" version="4.11.0" />
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250329142711"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
 				<dependency id="MailKit" version="4.11.0" />
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 			</group>
