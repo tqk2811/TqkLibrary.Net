@@ -32,7 +32,7 @@ namespace TqkLibrary.Net.Captcha.Services
             {
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
                 var data2 = await GetTaskResultAsync(data).ConfigureAwait(false);
-                if(data2.Status == State.Error || "CAPCHA_NOT_READY".Equals(data2.Request,StringComparison.OrdinalIgnoreCase))
+                if (data2.Status == State.Error && "CAPCHA_NOT_READY".Equals(data2.Request, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
