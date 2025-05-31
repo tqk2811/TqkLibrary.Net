@@ -12,11 +12,11 @@
 		<readme>docs\README.MD</readme>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250531110600"/>
 				<dependency id="Microsoft.Graph" version="5.75.0" />
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250530173239"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250531110600"/>
 				<dependency id="Microsoft.Graph" version="5.75.0" />
 			</group>
 		</dependencies>
