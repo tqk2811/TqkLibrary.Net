@@ -9,6 +9,12 @@ namespace TqkLibrary.Net.Other
 {
     public static class IpAddressGetters
     {
+        public class MyIp
+        {
+            public string ip { get; set; }
+            public string country { get; set; }
+            public string cc { get; set; }
+        }
         /// <summary>
         /// 
         /// </summary>
