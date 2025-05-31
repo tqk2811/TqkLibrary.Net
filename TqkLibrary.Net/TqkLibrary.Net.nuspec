@@ -26,7 +26,7 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\README.MD" target="docs\" />
+		<file src="..\README.MD" target="docs\README.MD" />
 		<file src="bin\Release\**\$id$.dll" target="lib\" />
 		<file src="bin\Release\**\$id$.pdb" target="lib\" />
 		<file src="bin\Release\**\$id$.xml" target="lib\" />
