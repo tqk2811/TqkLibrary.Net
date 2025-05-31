@@ -31,15 +31,14 @@ namespace TqkLibrary.Net.Captcha.Services
             while (true)
             {
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
-                data = await GetTaskResultAsync(data).ConfigureAwait(false);
-                switch (data.Status)
+                var data2 = await GetTaskResultAsync(data).ConfigureAwait(false);
+                if(data2.Status == State.Error || "CAPCHA_NOT_READY".Equals(data2.Request,StringComparison.OrdinalIgnoreCase))
                 {
-                    case State.Error:
-                    case State.Success:
-                        return data;
-
-                    default:
-                        continue;
+                    continue;
+                }
+                else
+                {
+                    return data2;
                 }
             }
         }
