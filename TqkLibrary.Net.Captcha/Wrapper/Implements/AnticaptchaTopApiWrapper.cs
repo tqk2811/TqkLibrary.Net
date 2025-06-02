@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Captcha.Services;
+using TqkLibrary.Net.Captcha.Wrapper.Classes;
+using TqkLibrary.Net.Captcha.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
     /// <summary>
     /// 
     /// </summary>
-    public class AnticaptchaTopApiWrapper : ICaptchaWrapper
+    public class AnticaptchaTopApiWrapper : IImageToTextWrapper, IRecaptchaV2TokenWrapper
     {
         readonly AnticaptchaTopApi _anticaptchaTopApi;
         /// <summary>
@@ -58,7 +60,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="siteKey"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateRecaptchaV2TokenTaskAsync(
             RecaptchaV2DataRequest recaptchaV2DataRequest,
             CancellationToken cancellationToken = default
             )
@@ -80,7 +82,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="bitmapBuffer"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateImageToTextTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
         {
             AnticaptchaTopApi.ImageToTextOption imageToTextOption = bitmapBuffer;
             imageToTextOption.ImageType = ImageType;
@@ -91,7 +93,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
             return new ImageToTextCaptchaTask(result);
         }
 
-        class ReCaptchaTask : ICaptchaTask<BasicCaptchaTaskResult>
+        class ReCaptchaTask : ICaptchaTask<CaptchaTaskTextResult>
         {
             readonly AnticaptchaTopApi.RecaptchaV2Response _response;
             readonly AnticaptchaTopApi _anticaptchaTopApi;
@@ -100,9 +102,9 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 _response = response ?? throw new ArgumentNullException(nameof(response));
                 _anticaptchaTopApi = anticaptchaTopApi ?? throw new ArgumentNullException(nameof(anticaptchaTopApi));
             }
-            public Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
-                return Task.FromResult(new BasicCaptchaTaskResult()
+                return Task.FromResult(new CaptchaTaskTextResult()
                 {
                     IsSuccess = _response.Success == true,
                     Value = _response.Captcha!,
@@ -111,16 +113,16 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
             }
         }
 
-        class ImageToTextCaptchaTask : ICaptchaTask<BasicCaptchaTaskResult>
+        class ImageToTextCaptchaTask : ICaptchaTask<CaptchaTaskTextResult>
         {
             readonly AnticaptchaTopApi.ImageToTextResponse _imageToTextResponse;
             public ImageToTextCaptchaTask(AnticaptchaTopApi.ImageToTextResponse imageToTextResponse)
             {
                 this._imageToTextResponse = imageToTextResponse ?? throw new ArgumentNullException(nameof(imageToTextResponse));
             }
-            public Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
-                return Task.FromResult(new BasicCaptchaTaskResult()
+                return Task.FromResult(new CaptchaTaskTextResult()
                 {
                     IsSuccess = _imageToTextResponse.Success,
                     Value = _imageToTextResponse.Captcha!,

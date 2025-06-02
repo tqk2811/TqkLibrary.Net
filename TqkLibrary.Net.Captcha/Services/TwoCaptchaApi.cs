@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Captcha.Wrapper;
+using TqkLibrary.Net.Captcha.Wrapper.Classes;
 
 namespace TqkLibrary.Net.Captcha.Services
 {
@@ -121,13 +121,6 @@ namespace TqkLibrary.Net.Captcha.Services
 
         public class RecaptchaV2Request : RecaptchaV2DataRequest
         {
-            public RecaptchaV2Request(
-                [JsonProperty(nameof(DataSiteKey))] string dataSiteKey,
-                [JsonProperty(nameof(PageUrl))] string pageUrl
-                )
-                : base(dataSiteKey, pageUrl)
-            {
-            }
             public int? SoftId { get; set; }
 
             public static RecaptchaV2Request CloneFrom(RecaptchaV2DataRequest recaptchaV2DataRequest)

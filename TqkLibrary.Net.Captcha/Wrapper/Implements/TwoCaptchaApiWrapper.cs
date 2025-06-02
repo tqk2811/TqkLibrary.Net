@@ -2,14 +2,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Captcha.Services;
-using static TqkLibrary.Net.Captcha.Services.TwoCaptchaApi;
+using TqkLibrary.Net.Captcha.Wrapper.Classes;
+using TqkLibrary.Net.Captcha.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TwoCaptchaApiWrapper : ICaptchaWrapper
+    public class TwoCaptchaApiWrapper : IImageToTextWrapper, IRecaptchaV2TokenWrapper
     {
         readonly TwoCaptchaApi twoCaptchaApi;
         /// <summary>
@@ -38,7 +39,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="siteKey"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateRecaptchaV2TokenTaskAsync(
             RecaptchaV2DataRequest recaptchaV2DataRequest,
             CancellationToken cancellationToken = default)
         {
@@ -47,7 +48,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 
             TwoCaptchaApi.RecaptchaV2Request request = TwoCaptchaApi.RecaptchaV2Request.CloneFrom(recaptchaV2DataRequest);
             request.SoftId = SoftId;
-            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.RecaptchaV2Async(
+            TwoCaptchaApi.TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.RecaptchaV2Async(
                 request,
                 cancellationToken: cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
@@ -58,32 +59,32 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="bitmapBuffer"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateImageToTextTaskAsync(
             byte[] bitmapBuffer,
             CancellationToken cancellationToken = default)
         {
-            TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.ImageCaptchaAsync(bitmapBuffer, cancellationToken);
+            TwoCaptchaApi.TwoCaptchaResponse twoCaptchaResponse = await twoCaptchaApi.ImageCaptchaAsync(bitmapBuffer, cancellationToken);
             return new CaptchaTask(twoCaptchaApi, twoCaptchaResponse);
         }
 
-        class CaptchaTask : ICaptchaTask<BasicCaptchaTaskResult>
+        class CaptchaTask : ICaptchaTask<CaptchaTaskTextResult>
         {
             readonly TwoCaptchaApi twoCaptchaApi;
-            readonly TwoCaptchaResponse twoCaptchaResponse;
-            public CaptchaTask(TwoCaptchaApi twoCaptchaApi, TwoCaptchaResponse twoCaptchaResponse)
+            readonly TwoCaptchaApi.TwoCaptchaResponse twoCaptchaResponse;
+            public CaptchaTask(TwoCaptchaApi twoCaptchaApi, TwoCaptchaApi.TwoCaptchaResponse twoCaptchaResponse)
             {
                 this.twoCaptchaApi = twoCaptchaApi;
                 this.twoCaptchaResponse = twoCaptchaResponse;
             }
 
-            public async Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public async Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
                 var response = await twoCaptchaApi
-                    .WaitResponseJsonCompleted(twoCaptchaResponse.Request, delay, cancellationToken)
+                    .WaitResponseJsonCompleted(twoCaptchaResponse.Request!, delay, cancellationToken)
                     .ConfigureAwait(false);
-                if (response.CheckState() == TwoCaptchaState.Success)
+                if (response.CheckState() == TwoCaptchaApi.TwoCaptchaState.Success)
                 {
-                    return new BasicCaptchaTaskResult()
+                    return new CaptchaTaskTextResult()
                     {
                         IsSuccess = true,
                         Value = response.Request
@@ -91,7 +92,7 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 }
                 else
                 {
-                    return new BasicCaptchaTaskResult()
+                    return new CaptchaTaskTextResult()
                     {
                         IsSuccess = false,
                         Value = response.Request,

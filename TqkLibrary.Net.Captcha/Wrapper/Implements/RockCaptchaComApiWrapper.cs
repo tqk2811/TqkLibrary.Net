@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Captcha.Services;
+using TqkLibrary.Net.Captcha.Wrapper.Classes;
+using TqkLibrary.Net.Captcha.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Captcha.Wrapper.Implements
 {
     /// <summary>
     /// 
     /// </summary>
-    public class RockCaptchaComApiWrapper : ICaptchaWrapper
+    public class RockCaptchaComApiWrapper : IImageToTextWrapper, IRecaptchaV2TokenWrapper
     {
         readonly RockCaptchaComApi _rockCaptchaComApi;
         /// <summary>
@@ -38,18 +40,18 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateRecaptchaV2TaskAsync(
-            RecaptchaV2DataRequest recaptchaV2DataRequest, 
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateRecaptchaV2TokenTaskAsync(
+            RecaptchaV2DataRequest recaptchaV2DataRequest,
             CancellationToken cancellationToken = default
             )
         {
-            if(recaptchaV2DataRequest is null) throw new ArgumentNullException(nameof(recaptchaV2DataRequest));
+            if (recaptchaV2DataRequest is null) throw new ArgumentNullException(nameof(recaptchaV2DataRequest));
             var task = await _rockCaptchaComApi.CreateTaskRecaptchaV2Async(
                 recaptchaV2DataRequest.DataSiteKey,
                 recaptchaV2DataRequest.PageUrl,
-                recaptchaV2DataRequest.IsInvisible == true, 
-                null, 
-                null, 
+                recaptchaV2DataRequest.IsInvisible == true,
+                null,
+                null,
                 cancellationToken
                 );
             return new RecaptchaV2Task(_rockCaptchaComApi, task);
@@ -63,21 +65,21 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ICaptchaTask<BasicCaptchaTaskResult>> CreateImageCaptchaTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
+        public async Task<ICaptchaTask<CaptchaTaskTextResult>> CreateImageToTextTaskAsync(byte[] bitmapBuffer, CancellationToken cancellationToken = default)
         {
             var task = await _rockCaptchaComApi.CreateTaskImageToTextAsync(bitmapBuffer, cancellationToken);
             return new ImageToTextTask(_rockCaptchaComApi, task);
         }
 
 
-        abstract class CaptchaTask : ICaptchaTask<BasicCaptchaTaskResult>
+        abstract class CaptchaTask : ICaptchaTask<CaptchaTaskTextResult>
         {
             protected readonly RockCaptchaComApi _rockCaptchaComApi;
             public CaptchaTask(RockCaptchaComApi rockCaptchaComApi)
             {
                 this._rockCaptchaComApi = rockCaptchaComApi ?? throw new ArgumentNullException(nameof(rockCaptchaComApi));
             }
-            public abstract Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default);
+            public abstract Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default);
         }
         class RecaptchaV2Task : CaptchaTask
         {
@@ -90,11 +92,11 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
             {
                 _createTaskResponse = createTaskResponse ?? throw new ArgumentNullException(nameof(createTaskResponse));
             }
-            public override async Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public override async Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
                 var result = await _rockCaptchaComApi.WaitUntilResultAsync(_createTaskResponse, cancellationToken: cancellationToken);
 
-                return new BasicCaptchaTaskResult()
+                return new CaptchaTaskTextResult()
                 {
                     IsSuccess = result.Status == RockCaptchaComApi.Status.SUCCESS,
                     Value = result.Data?.Token!,
@@ -113,11 +115,11 @@ namespace TqkLibrary.Net.Captcha.Wrapper.Implements
                 _createTaskResponse = createTaskResponse ?? throw new ArgumentNullException(nameof(createTaskResponse));
             }
 
-            public override async Task<BasicCaptchaTaskResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
+            public override async Task<CaptchaTaskTextResult> GetTaskResultAsync(int delay = 2000, CancellationToken cancellationToken = default)
             {
                 var result = await _rockCaptchaComApi.WaitUntilResultAsync(_createTaskResponse, cancellationToken: cancellationToken);
 
-                return new BasicCaptchaTaskResult()
+                return new CaptchaTaskTextResult()
                 {
                     IsSuccess = result.Status == RockCaptchaComApi.Status.SUCCESS,
                     Value = result.Data,
