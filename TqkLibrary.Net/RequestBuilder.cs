@@ -265,6 +265,13 @@ sec-ch-ua-form-factors:
 
             return httpResponseMessage;
         }
+        bool isCheckStatusCode = true;
+        public RequestBuilder WithCheckStatusCode(bool isCheck)
+        {
+            isCheckStatusCode = isCheck;
+            return this;
+        }
+
 
         static readonly Type typeString = typeof(string);
         static readonly Type typeBuffer = typeof(byte[]);
@@ -280,7 +287,7 @@ sec-ch-ua-form-factors:
             where TException : class
         {
             using HttpResponseMessage rep = await ExecuteAsync(cancellationToken);
-            if (rep.IsSuccessStatusCode)
+            if (!isCheckStatusCode || rep.IsSuccessStatusCode)
             {
                 if (typeof(TResult).Equals(typeBuffer))
                 {
@@ -300,7 +307,7 @@ sec-ch-ua-form-factors:
 #endif
                     .ConfigureAwait(false);
 
-            if (rep.IsSuccessStatusCode)
+            if (!isCheckStatusCode || rep.IsSuccessStatusCode)
             {
                 if (typeof(TResult).Equals(typeString))
                 {
