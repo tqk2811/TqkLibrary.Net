@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,10 @@ namespace TqkLibrary.Net.Mail.Services.TempMails
     {
         const string _Endpoint = "https://hunght1890.com";
         public Hunght1890Com()
+        {
+
+        }
+        public Hunght1890Com(HttpMessageHandler httpMessageHandler, bool disposeHandler = false) : base(httpMessageHandler, disposeHandler)
         {
 
         }
