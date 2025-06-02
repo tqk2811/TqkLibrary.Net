@@ -12,18 +12,19 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
     public class Hunght1890ComWrapper : IMailWrapper
     {
-        readonly Hunght1890Com _hunght1890Com = new();
+        readonly Hunght1890Com _hunght1890Com;
         readonly List<string> _domains = new List<string>();
-        readonly Random _random;
+        readonly Random _random
+#if NET6_0_OR_GREATER
+            = Random.Shared;//from net6
+#else
+            = new Random(DateTime.Now.GetHashCode());
+#endif
         public Hunght1890ComWrapper()
         {
-#if NET6_0_OR_GREATER
-            _random = Random.Shared;//from net6
-#else
-            _random = new Random(DateTime.Now.GetHashCode());
-#endif
+            _hunght1890Com = new();
         }
-        public Hunght1890ComWrapper(Hunght1890Com hunght1890Com) : this()
+        public Hunght1890ComWrapper(Hunght1890Com hunght1890Com)
         {
             this._hunght1890Com = hunght1890Com ?? throw new ArgumentNullException(nameof(hunght1890Com));
         }
