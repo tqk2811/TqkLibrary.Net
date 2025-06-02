@@ -52,7 +52,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken)
+        public async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             await _obcProxyApi.Reset(_obcProxy, cancellationToken).ConfigureAwait(false);
             var list = await _obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);

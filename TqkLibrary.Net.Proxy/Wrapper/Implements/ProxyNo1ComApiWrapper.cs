@@ -43,7 +43,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken)
+        public async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             var res_changeIp = await proxyNo1ComApi.ChangeKeyIp(cancellationToken).ConfigureAwait(false);
             var res_status = await proxyNo1ComApi.KeyStatus(cancellationToken).ConfigureAwait(false);

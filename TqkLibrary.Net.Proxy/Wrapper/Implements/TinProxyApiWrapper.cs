@@ -42,7 +42,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken)
+        public async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             var res = await tinProxyApi.GetNewProxy(cancellationToken).ConfigureAwait(false);
 

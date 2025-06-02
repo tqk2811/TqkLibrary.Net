@@ -46,7 +46,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken)
+        public async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             var result = await tinsoftProxyApi.ChangeProxy(Location).ConfigureAwait(false);
             if (!result.Success && result.Description?.Contains("expired") == true)

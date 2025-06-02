@@ -12,7 +12,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<IProxyApiResponseWrapper> GetNewProxyAsync(CancellationToken cancellationToken);
+        public Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken);
         /// <summary>
         /// true for allow get new proxy/reset api when some one are using it.<br>
         /// </br>Example: dcom proxy hub, reset will make current device using proxy disconnect. 

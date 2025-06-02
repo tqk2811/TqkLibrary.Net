@@ -102,7 +102,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                     if (pair.Key != null)
                     {
                         ThreadPool.QueueUserWorkItem((o) => LogCallback?.Invoke("ProxyManaged.GetNewProxyAsync"));
-                        IProxyApiResponseWrapper proxyApiResponse = await pair.Key.GetNewProxyAsync(cancellationToken).ConfigureAwait(false);
+                        IProxyApiResponseWrapper? proxyApiResponse = await pair.Key.GetNewProxyAsync(cancellationToken).ConfigureAwait(false);
                         if (proxyApiResponse == null) throw new InvalidOperationException(nameof(proxyApiResponse));
                         pair.Value.Reset(proxyApiResponse);
 
