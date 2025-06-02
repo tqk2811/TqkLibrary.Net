@@ -12,12 +12,12 @@
 		<readme>docs\README.MD</readme>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250531110600"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250602112209"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250531110600"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250602112209"/>
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 				<dependency id="Microsoft.CSharp" version="4.7.0" />
 			</group>
