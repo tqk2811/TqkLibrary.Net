@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.Services;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
@@ -46,21 +48,25 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         {
             var res = await tinProxyApi.GetNewProxy(cancellationToken).ConfigureAwait(false);
 
-            return new ProxyApiResponseWrapper()
+            ProxyApiResponseWrapper result = new ProxyApiResponseWrapper()
             {
                 IsSuccess = res.Code == 1,
-                Proxy = res.Data.HttpIpv4,
                 NextTime = DateTime.Now.AddSeconds(res.Data.NextRequest),
                 ExpiredTime = DateTime.Now.AddSeconds(res.Data.Timeout),
                 Message = res.Message,
-                ProxyType = ProxyType.Http,
             };
+            if (result.IsSuccess)
+            {
+                result.Proxy = ProxyInfo.ParseHttpProxy(res.Data.HttpIpv4);
+                result.IsSuccess = result.Proxy is not null;
+            }
+            return result;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return tinProxyApi.ToString();
         }

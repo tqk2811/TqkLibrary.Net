@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.Services;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
@@ -48,15 +50,20 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
             var res_changeIp = await proxyNo1ComApi.ChangeKeyIp(cancellationToken).ConfigureAwait(false);
             var res_status = await proxyNo1ComApi.KeyStatus(cancellationToken).ConfigureAwait(false);
             DateTime? expired_at = res_status.Data.GetExpiredAt;
-            return new ProxyApiResponseWrapper()
+            ProxyApiResponseWrapper result = new ProxyApiResponseWrapper()
             {
                 IsSuccess = res_changeIp.IsSuccess,
-                Proxy = $"{res_status.Data.Proxy.Ip}:{res_status.Data.Proxy.HTTPIPv4}",
                 NextTime = DateTime.Now.AddSeconds(res_status.Data.ChangeIpInterval),
                 ExpiredTime = expired_at == null ? DateTime.Now.AddHours(1) : expired_at.Value,
                 Message = res_changeIp.Message,
+            };
+            result.Proxy = new ProxyInfo()
+            {
+                Address = res_status.Data.Proxy.Ip,
+                Port = res_status.Data.Proxy.HTTPIPv4,
                 ProxyType = ProxyType.Http,
             };
+            return result;
         }
 
         /// <summary>

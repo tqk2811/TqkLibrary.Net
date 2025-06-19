@@ -38,7 +38,7 @@ namespace TqkLibrary.Net.Proxy.Services
             => base.Build()
                 .WithUrlGet(
                     new UrlBuilder($"{EndPoint}getNewProxy")
-                        .WithParam("access_token", ApiKey)
+                        .WithParam("access_token", ApiKey!)
                         .WithParamIfNotNull("location", location)
                         .WithParamIfNotNull("provider", provider))
                 .ExecuteAsync<AzProxyResponse>(cancellationToken);
@@ -52,62 +52,66 @@ namespace TqkLibrary.Net.Proxy.Services
            => base.Build()
                .WithUrlGet(
                    new UrlBuilder($"{EndPoint}getCurrentProxy")
-                       .WithParam("access_token", ApiKey))
+                       .WithParam("access_token", ApiKey!))
                .ExecuteAsync<AzProxyResponse>(cancellationToken);
-    }
+
+
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public enum AzProxyLocation
-    {
-        qn, hcm, hd, hue, bn
-    }
-    public enum AzProxyProvider
-    {
-        vnpt, viettel, fpt
-    }
-    public class AzProxyResponse
-    {
-        /// <summary>
-        /// error, success
-        /// </summary>
-        [JsonProperty("status")]
-        public string Status { get; set; }
-
-        [JsonProperty("mess")]
-        public string Message { get; set; }
-
-        [JsonProperty("data")]
-        public AzProxyData Data { get; set; }
-
-        [JsonIgnore]
-        public TimeSpan? NextTime
+        public enum AzProxyLocation
         {
-            get
+            qn, hcm, hd, hue, bn
+        }
+        public enum AzProxyProvider
+        {
+            vnpt, viettel, fpt
+        }
+        public class AzProxyResponse
+        {
+            /// <summary>
+            /// error, success
+            /// </summary>
+            [JsonProperty("status")]
+            public string? Status { get; set; }
+
+            [JsonProperty("mess")]
+            public string? Message { get; set; }
+
+            [JsonProperty("data")]
+            public AzProxyData? Data { get; set; }
+
+            [JsonIgnore]
+            public TimeSpan? NextTime
             {
-                if ("error".Contains(Status) && !string.IsNullOrWhiteSpace(Message))
+                get
                 {
-                    Match match = Regex.Match(Message, @"\d+");
-                    if (match.Success) return TimeSpan.FromSeconds(int.Parse(match.Value));
+                    if ("error".Contains(Status) && !string.IsNullOrWhiteSpace(Message))
+                    {
+                        Match match = Regex.Match(Message, @"\d+");
+                        if (match.Success) return TimeSpan.FromSeconds(int.Parse(match.Value));
+                    }
+                    return null;
                 }
-                return null;
             }
+
+            [JsonIgnore]
+            public bool IsSuccess => "success".Contains(Status);
+        }
+        public class AzProxyData
+        {
+            [JsonProperty("location")]
+            public string? Location { get; set; }
+
+            [JsonProperty("proxy")]
+            public string? Proxy { get; set; }
+
+            [JsonProperty("auth")]
+            public string? Auth { get; set; }
         }
 
-        [JsonIgnore]
-        public bool IsSuccess => "success".Contains(Status);
-    }
-    public class AzProxyData
-    {
-        [JsonProperty("location")]
-        public string Location { get; set; }
-
-        [JsonProperty("proxy")]
-        public string Proxy { get; set; }
-
-        [JsonProperty("auth")]
-        public string Auth { get; set; }
-    }
-
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+    }
+
+
 }

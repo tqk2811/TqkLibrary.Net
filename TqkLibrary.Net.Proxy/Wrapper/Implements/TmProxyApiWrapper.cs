@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.Services;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
@@ -46,15 +48,20 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
         public async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
             var result = await tmProxyApi.GetNewProxy(Location).ConfigureAwait(false);
-            return new ProxyApiResponseWrapper()
+            ProxyApiResponseWrapper responseWrapper = new ProxyApiResponseWrapper()
             {
                 IsSuccess = result.code == 0,
-                Proxy = result?.data.https ?? string.Empty,
                 NextTime = DateTime.Now.AddSeconds(result?.data.next_request ?? 5),
                 ExpiredTime = result?.data.ExpiredAt ?? DateTime.Now,
                 Message = result?.message,
-                ProxyType = ProxyType.Http,
             };
+            if (responseWrapper.IsSuccess)
+            {
+                responseWrapper.Proxy = ProxyInfo.ParseHttpProxy(result!.data.https);
+                responseWrapper.IsSuccess = responseWrapper.Proxy is not null;
+            }
+
+            return responseWrapper;
         }
 
         /// <summary>

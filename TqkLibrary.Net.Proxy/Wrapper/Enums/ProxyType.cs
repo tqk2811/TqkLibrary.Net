@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.Net.Proxy.Wrapper
+namespace TqkLibrary.Net.Proxy.Wrapper.Enums
 {
     [Flags]
     public enum ProxyType

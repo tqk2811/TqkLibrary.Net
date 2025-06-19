@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.Services;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 {
@@ -57,15 +59,24 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
             await _obcProxyApi.Reset(_obcProxy, cancellationToken).ConfigureAwait(false);
             var list = await _obcProxyApi.ProxyList(cancellationToken).ConfigureAwait(false);
             BocProxyApi.ObcProxy? obcProxy = list.FirstOrDefault(x => x.ProxyPort == _obcProxy.ProxyPort);
-            return new ProxyApiResponseWrapper()
+            ProxyApiResponseWrapper proxyApiResponseWrapper = new ProxyApiResponseWrapper()
             {
                 IsSuccess = obcProxy is not null,
-                Proxy = obcProxy?.GetProxy(),
                 NextTime = DateTime.Now.AddDays(-1),
                 ExpiredTime = DateTime.Now.AddDays(365),
-                ProxyType = ProxyType.Http,
                 Message = string.Empty,
             };
+            if(obcProxy is not null)
+            {
+                proxyApiResponseWrapper.Proxy = new ProxyInfo()
+                {
+                    Address = obcProxy.System!,
+                    Port = obcProxy.ProxyPort,
+                    ProxyType = ProxyType.Http,
+                };
+            }
+
+            return proxyApiResponseWrapper;
         }
 
         /// <summary>

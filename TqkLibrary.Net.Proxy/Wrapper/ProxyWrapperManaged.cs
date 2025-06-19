@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper
 {
@@ -121,7 +122,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                     else
                     {
                         //check is item allow using more times
-                        pair = _dicts.FirstOrDefault(x => MaxUseCountPerApi > x.Value.UsedCount && !string.IsNullOrWhiteSpace(x.Value.CurrentProxy));
+                        pair = _dicts.FirstOrDefault(x => MaxUseCountPerApi > x.Value.UsedCount && x.Value.CurrentProxy is not null);
                         if (pair.Key != null)
                         {
                             string log = $"ProxyManaged key {pair.Key} re-use {pair.Value.CurrentProxy}";

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper
 {
@@ -16,9 +18,8 @@ namespace TqkLibrary.Net.Proxy.Wrapper
             _proxyApiItemData.RemoveRef();
         }
 
-        public string Proxy { get { return _proxyApiItemData.CurrentProxy; } }
+        public IProxyInfo? ProxyInfo => _proxyApiItemData.CurrentProxy;
 
-        public ProxyType ProxyType { get { return _proxyApiItemData.ProxyType; } }
 
 
 #if NET5_0_OR_GREATER
@@ -27,12 +28,11 @@ namespace TqkLibrary.Net.Proxy.Wrapper
             await _proxyApiItemData.RemoveRefAsync();
             GC.SuppressFinalize(this);
         }
-#else
+#endif
         public void Dispose()
         {
             _proxyApiItemData.RemoveRef();
             GC.SuppressFinalize(this);
         }
-#endif
     }
 }
