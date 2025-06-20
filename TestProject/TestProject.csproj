@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -22,6 +22,7 @@
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.GoogleDrive\TqkLibrary.Net.CloudStorage.GoogleDrive.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.CloudStorage.OneDrive\TqkLibrary.Net.CloudStorage.OneDrive.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.GoogleDocs\TqkLibrary.Net.GoogleDocs.csproj" />
+    <ProjectReference Include="..\TqkLibrary.Net.Mail.OutlookGraphApi\TqkLibrary.Net.Mail.OutlookGraphApi.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Mail\TqkLibrary.Net.Mail.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Other\TqkLibrary.Net.Other.csproj" />
     <ProjectReference Include="..\TqkLibrary.Net.Phone\TqkLibrary.Net.Phone.csproj" />
