@@ -16,11 +16,11 @@ namespace TqkLibrary.Net.Mail.Wrapper
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default);
+        Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default);
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        Task ReQueueSessionAsync(IMailWrapperSession mailSession, CancellationToken cancellationToken = default);
+        Task ReQueueAccountAsync(IMailWrapperAccount mailSession, CancellationToken cancellationToken = default);
     }
 }

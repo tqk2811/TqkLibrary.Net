@@ -48,17 +48,17 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         }
 
 
-        public Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<IMailWrapperSession?>(new MailWrapperSession(GenerateEmail(), _hunght1890Com));
+            return Task.FromResult<IMailWrapperAccount?>(new MailWrapperSession(GenerateEmail(), _hunght1890Com));
         }
 
-        public Task ReQueueSessionAsync(IMailWrapperSession mailSession, CancellationToken cancellationToken = default)
+        public Task ReQueueAccountAsync(IMailWrapperAccount mailSession, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
-        class MailWrapperSession : IMailWrapperSession
+        class MailWrapperSession : IMailWrapperAccount
         {
             readonly Hunght1890Com _hunght1890Com;
             public MailWrapperSession(string email, Hunght1890Com hunght1890Com)

@@ -8,21 +8,24 @@ namespace TqkLibrary.Net.Mail.Wrapper
     /// <summary>
     /// 
     /// </summary>
-    public interface IMailWrapperSession : IDisposable
+    public interface IMailWrapperAccount : IDisposable
     {
         /// <summary>
         /// 
         /// </summary>
-        public string Email { get; }
+        string Email { get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string Password { get; }
+        string? Password { get; }
+
         /// <summary>
-        /// 
+        /// Login or connect to mail server
         /// </summary>
         /// <returns>Email</returns>
         Task<string> InitAsync(CancellationToken cancellationToken = default);
+
         /// <summary>
         /// 
         /// </summary>

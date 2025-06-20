@@ -46,7 +46,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public async Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
         {
             if (AccountType == null) throw new InvalidOperationException($"{AccountType} was null");
             var acc = await _dongVanFbApi.BuyMail(AccountType, Amount, cancellationToken).ConfigureAwait(false);
@@ -62,14 +62,14 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task ReQueueSessionAsync(IMailWrapperSession mailSession, CancellationToken cancellationToken = default)
+        public Task ReQueueAccountAsync(IMailWrapperAccount mailSession, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
 
 
-        internal class DongVanFbApiWrapperSession : IMailWrapperSession
+        internal class DongVanFbApiWrapperSession : IMailWrapperAccount
         {
             readonly DongVanFbApi _dongVanFbApi;
             readonly DongVanFbApi.DongVanFbBuyMailResponse _dongVanFbBuyMailResponse;

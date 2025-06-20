@@ -48,9 +48,9 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<IMailWrapperSession?>(new MailTmTempManagedSession(_accountCallback()));
+            return Task.FromResult<IMailWrapperAccount?>(new MailTmTempManagedSession(_accountCallback()));
         }
         /// <summary>
         /// 
@@ -58,14 +58,14 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="mailSession"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task ReQueueSessionAsync(IMailWrapperSession mailSession, CancellationToken cancellationToken = default)
+        public Task ReQueueAccountAsync(IMailWrapperAccount mailSession, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
 
 
 
-        internal class MailTmTempManagedSession : IMailWrapperSession
+        internal class MailTmTempManagedSession : IMailWrapperAccount
         {
             readonly Random _random = new Random();
             readonly MailTmApi _mailTmApi = new MailTmApi();

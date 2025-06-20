@@ -57,7 +57,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IMailWrapperSession?> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public async Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
         {
             using (await _asyncLock.LockAsync(cancellationToken).ConfigureAwait(false))
             {
@@ -81,7 +81,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <param name="mailSession"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task ReQueueSessionAsync(IMailWrapperSession mailSession, CancellationToken cancellationToken = default)
+        public async Task ReQueueAccountAsync(IMailWrapperAccount mailSession, CancellationToken cancellationToken = default)
         {
             if (mailSession is ImapSession imapSession)
             {
@@ -116,7 +116,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 return $"{UserName}|{Password}";
             }
         }
-        internal class ImapSession : IMailWrapperSession
+        internal class ImapSession : IMailWrapperAccount
         {
             readonly string host;
             readonly int port;
