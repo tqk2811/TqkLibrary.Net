@@ -53,7 +53,35 @@ namespace TqkLibrary.Net.Mail.OutlookGraphApi
             _httpClient.Dispose();
         }
 
-        async Task<AuthenticationResponse> RefreshTokenAsync(CancellationToken cancellationToken = default)
+        public async Task<AuthenticationResponse> ForceRefreshTokenAsync(CancellationToken cancellationToken = default)
+        {
+            using (var l = await _asyncLock.LockAsync(cancellationToken))
+            {
+                Authentication = await _RefreshTokenAsync(cancellationToken);
+                return Authentication;
+            }
+        }
+
+        public async Task AuthenticateRequestAsync(
+            RequestInformation request,
+            Dictionary<string, object>? additionalAuthenticationContext = null,
+            CancellationToken cancellationToken = default
+            )
+        {
+            using (var l = await _asyncLock.LockAsync(cancellationToken))
+            {
+                if (Authentication is null || Authentication.IsExpired)
+                {
+                    Authentication = await _RefreshTokenAsync(cancellationToken);
+                }
+            }
+            request.Headers.Add("Authorization", $"{Authentication.TokenType} {Authentication.AccessToken}");
+        }
+
+
+
+
+        async Task<AuthenticationResponse> _RefreshTokenAsync(CancellationToken cancellationToken = default)
         {
             var values = new Dictionary<string, string>
             {
@@ -68,24 +96,5 @@ namespace TqkLibrary.Net.Mail.OutlookGraphApi
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<AuthenticationResponse>(responseString)!;
         }
-
-
-
-        public async Task AuthenticateRequestAsync(
-            RequestInformation request,
-            Dictionary<string, object>? additionalAuthenticationContext = null,
-            CancellationToken cancellationToken = default
-            )
-        {
-            using (var l = await _asyncLock.LockAsync(cancellationToken))
-            {
-                if (Authentication is null || Authentication.IsExpired)
-                {
-                    Authentication = await RefreshTokenAsync(cancellationToken);
-                }
-            }
-            request.Headers.Add("Authorization", $"{Authentication.TokenType} {Authentication.AccessToken}");
-        }
-
     }
 }
