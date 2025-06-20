@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\ProjectBuildProperties.targets" />
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Graph" Version="5.82.0" />
+	  <PackageReference Include="Microsoft.Identity.Client" Version="4.73.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TqkLibrary.Net.Mail\TqkLibrary.Net.Mail.csproj" />
+	</ItemGroup>
+
+</Project>

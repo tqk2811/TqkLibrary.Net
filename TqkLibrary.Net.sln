@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TqkLibrary.Net.CloudStorage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.GoogleDocs", "TqkLibrary.Net.GoogleDocs\TqkLibrary.Net.GoogleDocs.csproj", "{152FDE9B-3851-4A37-9DA9-F2676620FC5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqkLibrary.Net.Mail.OutlookGraphApi", "TqkLibrary.Net.Mail.OutlookGraphApi\TqkLibrary.Net.Mail.OutlookGraphApi.csproj", "{B176BD45-7EC8-9A8B-9673-9867373996B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{152FDE9B-3851-4A37-9DA9-F2676620FC5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B176BD45-7EC8-9A8B-9673-9867373996B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B176BD45-7EC8-9A8B-9673-9867373996B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B176BD45-7EC8-9A8B-9673-9867373996B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B176BD45-7EC8-9A8B-9673-9867373996B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
