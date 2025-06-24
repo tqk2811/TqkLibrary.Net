@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Mail.Services.TempMails;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
@@ -107,7 +108,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 return messages.Members.Select(x => new MailTmTempManagedMail(_dict_messageDatas[x.Id]));
             }
 
-            public async Task<string> InitAsync(CancellationToken cancellationToken = default)
+            public async Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default)
             {
                 if (_token != null) throw new InvalidOperationException();
                 var domains = await _mailTmApi.Domains().ConfigureAwait(false);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Mail.Services.BuyMailApi;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
@@ -99,7 +100,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 return messages.Messages?.Select(x => new DongVanFbApiWrapperEmail(x)) ?? Enumerable.Empty<IMailWrapperEmail>();
             }
 
-            public Task<string> InitAsync(CancellationToken cancellationToken = default)
+            public Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default)
             {
                 return Task.FromResult(string.Empty);
             }

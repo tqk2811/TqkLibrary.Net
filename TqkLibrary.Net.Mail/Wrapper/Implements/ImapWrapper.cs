@@ -10,6 +10,7 @@ using Nito.AsyncEx;
 using MailKit.Security;
 using MailKit;
 using MailKit.Search;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
@@ -157,7 +158,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
             }
 
 
-            public async Task<string> InitAsync(CancellationToken cancellationToken = default)
+            public async Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default)
             {
                 await imapClient.ConnectAsync(host, port, SecureSocketOptions.Auto, cancellationToken).ConfigureAwait(false);
                 await imapClient.AuthenticateAsync(account.UserName, account.Password, cancellationToken).ConfigureAwait(false);

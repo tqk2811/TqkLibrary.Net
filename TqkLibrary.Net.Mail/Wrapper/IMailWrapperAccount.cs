@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Mail.Wrapper
 {
@@ -24,7 +25,7 @@ namespace TqkLibrary.Net.Mail.Wrapper
         /// Login or connect to mail server
         /// </summary>
         /// <returns>Email</returns>
-        Task<string> InitAsync(CancellationToken cancellationToken = default);
+        Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 

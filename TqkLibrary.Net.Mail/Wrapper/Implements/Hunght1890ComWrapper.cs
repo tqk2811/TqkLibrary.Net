@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Mail.Services.TempMails;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 using TqkLibrary.Utils;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
@@ -77,7 +78,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
 
             public string Password => string.Empty;
 
-            public Task<string> InitAsync(CancellationToken cancellationToken = default)
+            public Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default)
             {
                 return Task.FromResult<string>(this.Email);
             }

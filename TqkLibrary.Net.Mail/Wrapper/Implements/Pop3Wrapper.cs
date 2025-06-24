@@ -72,7 +72,7 @@
 //            throw new NotImplementedException();
 //        }
 
-//        public Task<string> InitAsync(CancellationToken cancellationToken = default)
+//        public Task<string> InitAsync(IProxyInfo? proxyInfo,CancellationToken cancellationToken = default)
 //        {
 //            throw new NotImplementedException();
 //        }

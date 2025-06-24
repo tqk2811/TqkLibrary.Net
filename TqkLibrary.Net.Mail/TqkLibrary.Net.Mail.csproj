@@ -8,6 +8,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\TqkLibrary.Net.Proxy\TqkLibrary.Net.Proxy.csproj" />
 	  <ProjectReference Include="..\TqkLibrary.Net\TqkLibrary.Net.csproj" />
 	</ItemGroup>
 	

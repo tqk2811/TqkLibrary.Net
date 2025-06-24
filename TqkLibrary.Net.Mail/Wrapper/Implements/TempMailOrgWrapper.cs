@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Mail.Services.TempMails;
+using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Mail.Wrapper.Implements
 {
@@ -83,7 +84,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
                 return mesageDatas.Select(x => new TempMailOrgWrapperMail(x));
             }
 
-            public async Task<string> InitAsync(CancellationToken cancellationToken = default)
+            public async Task<string> InitAsync(IProxyInfo? proxyInfo, CancellationToken cancellationToken = default)
             {
                 token = await tempMailOrg.InitToken(cancellationToken).ConfigureAwait(false);
                 return token.MailBox;
