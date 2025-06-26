@@ -23,6 +23,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         readonly int _port;
         readonly Queue<ImapAccount> _imapAccounts;
         readonly AsyncLock _asyncLock = new AsyncLock();
+        public virtual int AccountAvailablesCount => -1;
         /// <summary>
         /// 
         /// </summary>

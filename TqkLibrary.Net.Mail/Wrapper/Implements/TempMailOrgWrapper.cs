@@ -15,6 +15,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
     public class TempMailOrgWrapper : IMailWrapper
     {
         TempMailOrgEndPoint _endPoint = TempMailOrg.Web2;
+        public virtual int AccountAvailablesCount => -1;
         /// <summary>
         /// 
         /// </summary>
@@ -31,10 +32,9 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public Task<IMailWrapperAccount> GetAccountAsync(CancellationToken cancellationToken = default)
+        public Task<IMailWrapperAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<IMailWrapperAccount>(new TempMailOrgWrapperSession(EndPoint));
+            return Task.FromResult<IMailWrapperAccount?>(new TempMailOrgWrapperSession(EndPoint));
         }
         /// <summary>
         /// 

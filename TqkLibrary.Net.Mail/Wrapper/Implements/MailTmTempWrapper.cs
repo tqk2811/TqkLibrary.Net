@@ -36,6 +36,8 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         }
 
 
+        public virtual int AccountAvailablesCount => -1;
+
         readonly Func<TmAccount> _accountCallback;
         /// <summary>
         /// 

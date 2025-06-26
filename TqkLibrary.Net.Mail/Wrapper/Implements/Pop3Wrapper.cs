@@ -17,6 +17,7 @@
 //        readonly int port;
 //        readonly Queue<ImapAccount> imapAccounts;
 //        readonly AsyncLock asyncLock = new AsyncLock();
+//        public virtual int AccountAvailablesCount => -1;
 //        /// <summary>
 //        /// 
 //        /// </summary>

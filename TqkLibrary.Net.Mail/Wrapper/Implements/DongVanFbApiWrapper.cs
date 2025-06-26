@@ -23,6 +23,8 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
         /// </summary>
         public int Amount { get; } = 1;
 
+        public virtual int AccountAvailablesCount => -1;
+
         readonly DongVanFbApi _dongVanFbApi;
         /// <summary>
         /// 

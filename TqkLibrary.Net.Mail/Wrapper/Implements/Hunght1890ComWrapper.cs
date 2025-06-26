@@ -21,6 +21,7 @@ namespace TqkLibrary.Net.Mail.Wrapper.Implements
 #else
             = new Random(DateTime.Now.GetHashCode());
 #endif
+        public virtual int AccountAvailablesCount => -1;
         public Hunght1890ComWrapper()
         {
             _hunght1890Com = new();

@@ -13,6 +13,10 @@ namespace TqkLibrary.Net.Mail.Wrapper
     public interface IMailWrapper
     {
         /// <summary>
+        /// -1 mean infinity
+        /// </summary>
+        int AccountAvailablesCount { get; }
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
