@@ -10,20 +10,30 @@ namespace TqkLibrary.Net.GoogleDocs
 {
     public abstract class BaseGoogleDocsHelper : BaseApi
     {
-        public BaseGoogleDocsHelper() : this(new CookieHandler(new HttpClientHandler() { AllowAutoRedirect = false, }))
+        public BaseGoogleDocsHelper() : this(
+#if NET5_0_OR_GREATER
+            new SocketsHttpHandler() { AllowAutoRedirect = false }.DisableFindIpV6()
+#else
+            new HttpClientHandler() { AllowAutoRedirect = false }
+#endif
+            )
+        {
+
+        }
+        public BaseGoogleDocsHelper(HttpMessageHandler httpMessageHandler) : this(new CookieHandler(httpMessageHandler))
         {
             this.httpClient.DefaultRequestHeaders.Referrer = new Uri("https://docs.google.com");
-            this.httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            this.httpClient.DefaultRequestHeaders.Add("Origin", "https://docs.google.com/");
         }
 
-        readonly CookieHandler cookieHandler;
+        readonly CookieHandler _cookieHandler;
         private BaseGoogleDocsHelper(CookieHandler cookieHandler) : base(".", cookieHandler)
         {
-            this.cookieHandler = cookieHandler;
+            this._cookieHandler = cookieHandler;
         }
 
 
-        protected async Task<Stream> HandlerRedirect(UrlBuilder urlBuilder,CancellationToken cancellationToken = default)
+        protected async Task<Stream> HandlerRedirect(UrlBuilder urlBuilder, CancellationToken cancellationToken = default)
         {
             using HttpResponseMessage res = await Build()
                 .WithUrlGet(urlBuilder)
@@ -33,11 +43,17 @@ namespace TqkLibrary.Net.GoogleDocs
                 res.EnsureSuccessStatusCode();
                 throw new InvalidOperationException($"Location was null and StatusCode: {res.StatusCode}");
             }
+            //string body = await res.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
 
             HttpResponseMessage res2 = await Build()
                 .WithUrlGet(res.Headers.Location!)
                 .ExecuteAsync(cancellationToken);
-
+#if DEBUG
+            if (!res2.IsSuccessStatusCode)
+            {
+                string body2 = await res2.Content.ReadAsStringAsync();
+            }
+#endif
             try
             {
                 var stream = await res2.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
