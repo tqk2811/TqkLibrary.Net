@@ -12,11 +12,11 @@
 		<readme>docs\README.MD</readme>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250602112209"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250702174630"/>
 				<dependency id="Google.Apis.Drive.v2" version="1.69.0.3699" />
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20250602112209"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20250702174630"/>
 				<dependency id="Google.Apis.Drive.v2" version="1.69.0.3699" />
 			</group>
 		</dependencies>
