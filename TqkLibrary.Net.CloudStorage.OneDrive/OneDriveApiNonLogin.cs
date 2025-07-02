@@ -28,11 +28,19 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// 
         /// </summary>
         public OneDriveApiNonLogin() : this(
+#if NET5_0_OR_GREATER
+            new SocketsHttpHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                AllowAutoRedirect = false,
+            }.DisableFindIpV6(),
+#else
             new HttpClientHandler()
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 AllowAutoRedirect = false,
             },
+#endif
             true
         )
         {
@@ -42,10 +50,8 @@ namespace TqkLibrary.Net.CloudStorage.OneDrive
         /// 
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        public OneDriveApiNonLogin(HttpClientHandler httpClientHandler, bool disposeHandler) : this(new HttpClient(httpClientHandler, disposeHandler))
+        public OneDriveApiNonLogin(HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(new HttpClient(httpMessageHandler, disposeHandler))
         {
-            if (httpClientHandler.AllowAutoRedirect)
-                throw new InvalidOperationException($"{nameof(httpClientHandler)}.{nameof(httpClientHandler.AllowAutoRedirect)} must be set to false");
         }
         /// <summary>
         /// 
