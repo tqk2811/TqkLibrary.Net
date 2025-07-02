@@ -31,10 +31,13 @@ namespace TqkLibrary.Net.GoogleDocs
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             string f = format.GetAttribute<ExportTypeAttribute>()?.TypeName ?? format.ToString();
 
-            return HandlerRedirect(new UrlBuilder("https://docs.google.com/spreadsheets/export")
+            //string url = $"https://docs.google.com/spreadsheets/d/{id}/export";
+            string url = "https://docs.google.com/spreadsheets/export";
+            UrlBuilder urlBuilder = new UrlBuilder(url)
                     .WithParam("format", f)
-                    .WithParam("id", id),
-                    cancellationToken);
+                    .WithParam("id", id)
+                    ;
+            return HandlerRedirect(urlBuilder, cancellationToken);
         }
     }
 }
