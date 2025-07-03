@@ -14,6 +14,9 @@ namespace TqkLibrary.Net
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = new MyContractResolver(),
+#if DEBUG
+                MissingMemberHandling = MissingMemberHandling.Error,
+#endif
             };
 
             HttpClientHandler = new WrapperHttpClientHandler()
