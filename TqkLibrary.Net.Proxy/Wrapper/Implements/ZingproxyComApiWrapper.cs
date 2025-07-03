@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TqkLibrary.Net.Proxy.Services;
@@ -19,52 +21,95 @@ namespace TqkLibrary.Net.Proxy.Wrapper.Implements
 
 
         readonly ZingproxyComApi _zingproxyComApi;
-        public ZingproxyComApiWrapper(ZingproxyComApi zingproxyComApi)
+        readonly ZingproxyComApi.ProxyFullInfo _proxyFullInfo;
+        public ZingproxyComApiWrapper(ZingproxyComApi zingproxyComApi, ZingproxyComApi.ProxyFullInfo proxyFullInfo)
         {
-            this._zingproxyComApi = zingproxyComApi;
-        }
-        public ZingproxyComApiWrapper(string apiKey) : this(new ZingproxyComApi(apiKey))
-        {
-
+            this._zingproxyComApi = zingproxyComApi ?? throw new ArgumentNullException(nameof(zingproxyComApi));
+            this._proxyFullInfo = proxyFullInfo ?? throw new ArgumentNullException(nameof(proxyFullInfo));
         }
 
 
+
+
+        ZingproxyComApi.ProxyFullInfo? _LastProxyFullInfo = null;
+        int? allowChangeInSecond = null;
+        static readonly Regex regex = new Regex("\\d+");
         public virtual async Task<IProxyApiResponseWrapper?> GetNewProxyAsync(CancellationToken cancellationToken)
         {
-            var res = await _zingproxyComApi.GetProxy(cancellationToken);
+            ZingproxyComApi.ProxyFullInfo? proxyFullInfo = null;
+            string? message = null;
+            try
+            {
+                var res = await _zingproxyComApi.DanCuVietNam.GetIpAsync(_proxyFullInfo, cancellationToken: cancellationToken);
+                proxyFullInfo = res.Proxy;
+                _LastProxyFullInfo = res.Proxy;
+                message = res.Message ?? res.Error;
+                allowChangeInSecond = null;
+            }
+            catch (ApiException<ZingproxyComApi.BaseResponse> apiex)//use old
+            {
+                Match match = regex.Match(apiex.Body?.Error ?? string.Empty);
+                if (match.Success)
+                {
+                    allowChangeInSecond = int.Parse(match.Value);
+                }
+            }
+            if (proxyFullInfo is null)
+            {
+                proxyFullInfo = _LastProxyFullInfo ?? _proxyFullInfo;
+            }
 
             ProxyApiResponseWrapper result = new ProxyApiResponseWrapper()
             {
-                IsSuccess = res.Status == ZingproxyComApi.ResponseStatus.Success,
-                Message = res.Error
+                IsSuccess = proxyFullInfo is not null,
             };
             if (result.IsSuccess)
             {
-                result.NextTime = DateTime.Now;
-                result.ExpiredTime = res.Proxy?.DateEnd;
-                if (ProxyType.HasFlag(ProxyType.Http) && !string.IsNullOrWhiteSpace(res.Proxy?.HttpProxy))
+                result.NextTime = proxyFullInfo.ObjectCreateTime.AddSeconds(allowChangeInSecond ?? proxyFullInfo.TimeChangeAllowInSeconds ?? 240);
+                result.ExpiredTime = proxyFullInfo.DateEnd;
+                if (ProxyType.HasFlag(ProxyType.Http) && (proxyFullInfo?.PortHttp).HasValue)
                 {
-                    result.Proxy = ProxyInfo.ParseHttpProxy(res.Proxy!.HttpProxy);
-                }
-                else if (ProxyType.HasFlag(ProxyType.Socks5) && !string.IsNullOrWhiteSpace(res.Proxy?.Socks5Proxy))
-                {
-                    result.Proxy = ProxyInfo.ParseHttpProxy(res.Proxy!.Socks5Proxy);
-                    if (result.Proxy is not null)
+                    result.Proxy = new ProxyInfo()
                     {
-                        result.Proxy.ProxyType = ProxyType.Socks5;
-                    }
+                        Address = proxyFullInfo.Ip,
+                        Port = proxyFullInfo.PortHttp.Value,
+                        ProxyType = ProxyType.Http,
+                        UserName = proxyFullInfo.Username,
+                        Password = proxyFullInfo.Password,
+                    };
                 }
-                else if (!string.IsNullOrWhiteSpace(res.Proxy?.HttpProxy))
+                else if (ProxyType.HasFlag(ProxyType.Socks5) && (proxyFullInfo?.PortSocks5).HasValue)
                 {
-                    result.Proxy = ProxyInfo.ParseHttpProxy(res.Proxy!.HttpProxy);
-                }
-                else if (!string.IsNullOrWhiteSpace(res.Proxy?.Socks5Proxy))
-                {
-                    result.Proxy = ProxyInfo.ParseHttpProxy(res.Proxy!.Socks5Proxy);
-                    if (result.Proxy is not null)
+                    result.Proxy = new ProxyInfo()
                     {
-                        result.Proxy.ProxyType = ProxyType.Socks5;
-                    }
+                        Address = proxyFullInfo.Ip,
+                        Port = proxyFullInfo.PortSocks5.Value,
+                        ProxyType = ProxyType.Socks5,
+                        UserName = proxyFullInfo.Username,
+                        Password = proxyFullInfo.Password,
+                    };
+                }
+                else if ((proxyFullInfo?.PortHttp).HasValue)
+                {
+                    result.Proxy = new ProxyInfo()
+                    {
+                        Address = proxyFullInfo.Ip,
+                        Port = proxyFullInfo.PortHttp.Value,
+                        ProxyType = ProxyType.Http,
+                        UserName = proxyFullInfo.Username,
+                        Password = proxyFullInfo.Password,
+                    };
+                }
+                else if ((proxyFullInfo?.PortSocks5).HasValue)
+                {
+                    result.Proxy = new ProxyInfo()
+                    {
+                        Address = proxyFullInfo.Ip,
+                        Port = proxyFullInfo.PortHttp.Value,
+                        ProxyType = ProxyType.Http,
+                        UserName = proxyFullInfo.Username,
+                        Password = proxyFullInfo.Password,
+                    };
                 }
 
                 result.IsSuccess = result.Proxy is not null;
