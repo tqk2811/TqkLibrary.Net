@@ -79,7 +79,7 @@ namespace TqkLibrary.Net.Proxy.Services
         public enum ResponseStatus
         {
             Success,
-            Error,
+            Failed,
         }
     }
 }
