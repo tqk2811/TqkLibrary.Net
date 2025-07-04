@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper
 {
-
     /// <summary>
     /// 
     /// </summary>
@@ -17,15 +17,11 @@ namespace TqkLibrary.Net.Proxy.Wrapper
     {
         readonly Dictionary<IProxyApiWrapper, ProxyApiItemData> _dicts = new Dictionary<IProxyApiWrapper, ProxyApiItemData>();
         readonly AsyncLock _asyncLock = new AsyncLock();
-
+        readonly ILogger? _logger;
         /// <summary>
         /// 
         /// </summary>
         public int Count => _dicts.Count;
-        /// <summary>
-        /// 
-        /// </summary>
-        public event Action<string>? LogCallback;
         /// <summary>
         /// 
         /// </summary>
@@ -41,6 +37,20 @@ namespace TqkLibrary.Net.Proxy.Wrapper
         /// </br>Default: TimeSpan.Zero
         /// </summary>
         public TimeSpan AllowTimeLeft { get; set; } = TimeSpan.Zero;
+
+
+        public ProxyWrapperManaged()
+        {
+            this._logger = null;
+        }
+        public ProxyWrapperManaged(ILogger logger)
+        {
+            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        public ProxyWrapperManaged(ILoggerFactory loggerFactory) : this(loggerFactory.CreateLogger<ProxyWrapperManaged>())
+        {
+
+        }
 
         /// <summary>
         /// 
@@ -102,7 +112,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                         (AllowTimeLeft == TimeSpan.Zero || currTime + AllowTimeLeft < x.Value.ExpiredTime));
                     if (pair.Key != null)
                     {
-                        ThreadPool.QueueUserWorkItem((o) => LogCallback?.Invoke("ProxyManaged.GetNewProxyAsync"));
+                        _logger?.LogInformation("ProxyManaged.GetNewProxyAsync");
                         IProxyApiResponseWrapper? proxyApiResponse = await pair.Key.GetNewProxyAsync(cancellationToken).ConfigureAwait(false);
                         if (proxyApiResponse == null) throw new InvalidOperationException(nameof(proxyApiResponse));
                         pair.Value.Reset(proxyApiResponse);
@@ -110,13 +120,13 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                         if (proxyApiResponse.IsSuccess == true)
                         {
                             string log = $"ProxyManaged Got New Proxy {pair.Value.CurrentProxy} for key {pair.Key}";
-                            ThreadPool.QueueUserWorkItem((o) => LogCallback?.Invoke(log));
+                            _logger?.LogInformation(log);
                             return new ProxyWrapper(pair.Value);
                         }
                         else
                         {
                             string log = $"ProxyManaged key {pair.Key} wait change at {proxyApiResponse.NextTime:HH:mm:ss} {proxyApiResponse?.Message}";
-                            ThreadPool.QueueUserWorkItem((o) => LogCallback?.Invoke(log));
+                            _logger?.LogInformation(log);
                         }
                     }
                     else
@@ -126,7 +136,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                         if (pair.Key != null)
                         {
                             string log = $"ProxyManaged key {pair.Key} re-use {pair.Value.CurrentProxy}";
-                            ThreadPool.QueueUserWorkItem((o) => LogCallback?.Invoke(log));
+                            _logger?.LogInformation(log);
                             return new ProxyWrapper(pair.Value);
                         }
                     }
