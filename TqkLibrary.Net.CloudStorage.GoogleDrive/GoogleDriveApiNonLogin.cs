@@ -42,10 +42,8 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
         /// 
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        public GoogleDriveApiNonLogin(HttpClientHandler httpClientHandler, bool disposeHandler) : this(new HttpClient(httpClientHandler, disposeHandler))
+        public GoogleDriveApiNonLogin(HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(new HttpClient(httpMessageHandler, disposeHandler))
         {
-            if (!httpClientHandler.AllowAutoRedirect)
-                throw new InvalidOperationException($"{nameof(httpClientHandler)}.{nameof(httpClientHandler.AllowAutoRedirect)} must be set to true");
         }
         /// <summary>
         /// 
@@ -113,7 +111,7 @@ namespace TqkLibrary.Net.CloudStorage.GoogleDrive
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             httpRequestMessage.Headers.Referrer = new Uri("https://drive.google.com/");
             httpRequestMessage.Headers.Add("Accept", "application/json");
-            if (!string.IsNullOrWhiteSpace(option.Resourcekey)) 
+            if (!string.IsNullOrWhiteSpace(option.Resourcekey))
                 httpRequestMessage.Headers.Add("x-goog-drive-resource-keys", $"{option.FolderId}/{option.Resourcekey}");
             using HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
             string json_text = await httpResponseMessage.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ConfigureAwait(false);
