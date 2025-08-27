@@ -1,4 +1,5 @@
-﻿using TqkLibrary.Net.Proxy.Wrapper.Enums;
+﻿using System;
+using TqkLibrary.Net.Proxy.Wrapper.Enums;
 using TqkLibrary.Net.Proxy.Wrapper.Interfaces;
 
 namespace TqkLibrary.Net.Proxy.Wrapper
@@ -15,6 +16,30 @@ namespace TqkLibrary.Net.Proxy.Wrapper
 
         public string? Password { get; set; }
 
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this))
+                return true;
+
+            if (obj is ProxyInfo other)
+            {
+                return this.Address.Equals(other.Address, StringComparison.OrdinalIgnoreCase)
+                    && this.Port == other.Port
+                    && this.ProxyType == other.ProxyType;
+            }
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hashCode = new();
+            hashCode.Add(Address);
+            hashCode.Add(Port);
+            hashCode.Add(ProxyType);
+            return hashCode.ToHashCode();
+        }
+
         public static ProxyInfo? ParseHttpProxy(string? httpProxy, char split = ':')
         {
             if (string.IsNullOrWhiteSpace(httpProxy))
@@ -28,7 +53,7 @@ namespace TqkLibrary.Net.Proxy.Wrapper
                     Port = port,
                     ProxyType = ProxyType.Http,
                 };
-                if(spliteds.Length >= 4)
+                if (spliteds.Length >= 4)
                 {
                     proxyInfo.UserName = spliteds[2];
                     proxyInfo.Password = spliteds[3];
