@@ -243,7 +243,17 @@ sec-ch-ua-form-factors:
         public async Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken = default)
         {
             if (_method == null || _uri == null) throw new InvalidOperationException($"method or uri is null");
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(_method, _uri);
+
+            Uri? uri = _uri;
+            if (!uri.IsAbsoluteUri)
+            {
+                if (_httpClient.BaseAddress == null)
+                    throw new InvalidOperationException("Relative URI requires HttpClient.BaseAddress.");
+                if (!Uri.TryCreate(_httpClient.BaseAddress, _uri, out uri))
+                    throw new UriFormatException($"Cannot combine BaseAddress '{_httpClient.BaseAddress}' with relative URI '{_uri}'.");
+            }
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(_method, uri);
 
             foreach (var header in _headers) httpRequestMessage.Headers.Add(header.Key, header.Value);
 
