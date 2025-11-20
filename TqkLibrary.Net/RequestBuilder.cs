@@ -22,7 +22,7 @@ namespace TqkLibrary.Net
             this._baseApi = baseApi;
             this._httpClient = baseApi.httpClient;
         }
-        HttpClient _httpClient { get; set; }
+        HttpClient _httpClient { get; }
         HttpContent? _httpContent = null;
         bool _httpContentDispose = true;
 
@@ -56,7 +56,7 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithUrlGet(string uri)
         {
-            return WithUrl(new Uri(uri), HttpMethod.Get);
+            return WithUrl(new Uri(uri, UriKind.RelativeOrAbsolute), HttpMethod.Get);
         }
         /// <summary>
         /// 
@@ -75,7 +75,7 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithUrl(string uri, HttpMethod method)
         {
-            return WithUrl(new Uri(uri), method);
+            return WithUrl(new Uri(uri, UriKind.RelativeOrAbsolute), method);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithUrlPost(string uri, HttpContent httpContent, bool dispose = true)
         {
-            return WithUrl(new Uri(uri), HttpMethod.Post).WithBody(httpContent, dispose);
+            return WithUrl(new Uri(uri, UriKind.RelativeOrAbsolute), HttpMethod.Post).WithBody(httpContent, dispose);
         }
         /// <summary>
         /// 
@@ -131,7 +131,7 @@ namespace TqkLibrary.Net
         /// <returns></returns>
         public RequestBuilder WithUrlPostJson(string uri, object obj)
         {
-            return WithUrl(new Uri(uri), HttpMethod.Post).WithJsonBody(obj);
+            return WithUrl(new Uri(uri, UriKind.RelativeOrAbsolute), HttpMethod.Post).WithJsonBody(obj);
         }
         /// <summary>
         /// 

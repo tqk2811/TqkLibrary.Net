@@ -168,7 +168,7 @@ namespace TqkLibrary.Net
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        public static explicit operator Uri(UrlBuilder builder) => new Uri(builder.ToString());
+        public static explicit operator Uri(UrlBuilder builder) => new Uri(builder.ToString(), UriKind.RelativeOrAbsolute);
 
     }
 }
