@@ -261,7 +261,7 @@ sec-ch-ua-form-factors:
                 httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             if (string.IsNullOrWhiteSpace(httpRequestMessage.Headers.Host) && string.IsNullOrWhiteSpace(_httpClient.DefaultRequestHeaders.Host))
-                httpRequestMessage.Headers.Host = _uri.Host;
+                httpRequestMessage.Headers.Host = uri.Host;
 
             if (_httpContent != null)
                 httpRequestMessage.Content = _httpContent;
