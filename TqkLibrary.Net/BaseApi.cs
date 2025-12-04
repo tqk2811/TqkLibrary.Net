@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 namespace TqkLibrary.Net
 {
-
     /// <summary>
     /// 
     /// </summary>
@@ -64,6 +63,16 @@ namespace TqkLibrary.Net
         protected BaseApi(HttpMessageHandler httpMessageHandler, bool disposeHandler = false)
         {
             this.httpClient = new HttpClient(httpMessageHandler ?? throw new ArgumentNullException(nameof(httpMessageHandler)), disposeHandler);
+        }
+
+        protected BaseApi(string apiKey, HttpClient httpClient)
+        {
+            this.ApiKey = apiKey;
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
+        protected BaseApi(HttpClient httpClient)
+        {
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
