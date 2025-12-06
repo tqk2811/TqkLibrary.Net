@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Runtime.InteropServices;
 using TqkLibrary.Net.HttpClientHandles;
 
 namespace TqkLibrary.Net
@@ -19,13 +21,29 @@ namespace TqkLibrary.Net
 #endif
             };
 
-            HttpClientHandler = new WrapperHttpClientHandler()
+            if (IsBrowserRuntime())
             {
-                AllowAutoRedirect = true,
-                AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
-            };
+                HttpClientHandler = new WrapperHttpClientHandler();
+            }
+            else
+            {
+                HttpClientHandler = new WrapperHttpClientHandler()
+                {
+                    AllowAutoRedirect = true,
+                    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
+                };
+            }
         }
 
+        internal static bool IsBrowserRuntime()
+        {
+#if NET5_0_OR_GREATER
+            return OperatingSystem.IsBrowser();
+#else
+            return RuntimeInformation.ProcessArchitecture.ToString().Equals("Wasm", StringComparison.OrdinalIgnoreCase);
+#endif
+
+        }
 
 
         /// <summary>
