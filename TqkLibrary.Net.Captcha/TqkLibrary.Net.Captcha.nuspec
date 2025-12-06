@@ -12,10 +12,10 @@
 		<readme>docs\README.MD</readme>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20251204110643"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20251206195002"/>
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20251204110643"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20251206195002"/>
 			</group>
 		</dependencies>
 	</metadata>

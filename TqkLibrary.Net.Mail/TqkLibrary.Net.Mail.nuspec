@@ -12,13 +12,13 @@
 		<readme>docs\README.MD</readme>
 		<dependencies>
 			<group targetFramework="netstandard2.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20251204110643"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20251206195002"/>
 				<dependency id="TqkLibrary.Net.Proxy" version="1.0.2-build20250619154412"/>
 				<dependency id="MailKit" version="4.11.0" />
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
 			</group>
 			<group targetFramework="net8.0">
-				<dependency id="TqkLibrary.Net" version="1.0.2-build20251204110643"/>
+				<dependency id="TqkLibrary.Net" version="1.0.2-build20251206195002"/>
 				<dependency id="TqkLibrary.Net.Proxy" version="1.0.2-build20250619154412"/>
 				<dependency id="MailKit" version="4.11.0" />
 				<dependency id="Nito.AsyncEx" version="5.1.2"/>
