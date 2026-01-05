@@ -285,6 +285,7 @@ sec-ch-ua-form-factors:
 
         static readonly Type typeString = typeof(string);
         static readonly Type typeBuffer = typeof(byte[]);
+        static readonly Type typeStream = typeof(Stream);
         /// <summary>
         /// 
         /// </summary>
@@ -306,6 +307,11 @@ sec-ch-ua-form-factors:
 #else
                     return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
 #endif
+                }
+                if (typeof(TResult).Equals(typeStream))
+                {
+                    Stream stream = await rep.Content.ReadAsStreamAsync();
+                    return new HttpResponseStreamWrapper(rep, stream) as TResult;
                 }
             }
 
