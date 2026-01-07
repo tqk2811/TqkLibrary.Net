@@ -307,7 +307,7 @@ sec-ch-ua-form-factors:
 #if NETFRAMEWORK || NETSTANDARD
                         return ((await rep.Content.ReadAsByteArrayAsync()) as TResult)!;
 #else
-                    return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
+                        return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
 #endif
                     }
                     finally
