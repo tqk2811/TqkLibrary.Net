@@ -297,64 +297,79 @@ sec-ch-ua-form-factors:
             where TResult : class
             where TException : class
         {
-            using HttpResponseMessage rep = await ExecuteAsync(cancellationToken);
+            HttpResponseMessage rep = await ExecuteAsync(cancellationToken);
             if (!isCheckStatusCode || rep.IsSuccessStatusCode)
             {
                 if (typeof(TResult).Equals(typeBuffer))
                 {
+                    try
+                    {
 #if NETFRAMEWORK || NETSTANDARD
-                    return ((await rep.Content.ReadAsByteArrayAsync()) as TResult)!;
+                        return ((await rep.Content.ReadAsByteArrayAsync()) as TResult)!;
 #else
                     return ((await rep.Content.ReadAsByteArrayAsync(cancellationToken)) as TResult)!;
 #endif
+                    }
+                    finally
+                    {
+                        rep.Dispose();
+                    }
                 }
-                if (typeof(TResult).Equals(typeStream))
+                if (typeof(TResult).Equals(typeStream))//not dispose rep
                 {
                     Stream stream = await rep.Content.ReadAsStreamAsync();
                     return new HttpResponseStreamWrapper(rep, stream) as TResult;
                 }
             }
 
-            string? content_res = await rep.Content
+
+            try
+            {
+                string? content_res = await rep.Content
 #if NETFRAMEWORK || NETSTANDARD
-                    .ReadAsStringAsync()
+                        .ReadAsStringAsync()
 #else
                     .ReadAsStringAsync(cancellationToken)
 #endif
-                    .ConfigureAwait(false);
+                        .ConfigureAwait(false);
 
-            if (!isCheckStatusCode || rep.IsSuccessStatusCode)
-            {
-                if (typeof(TResult).Equals(typeString))
+                if (!isCheckStatusCode || rep.IsSuccessStatusCode)
                 {
-                    return (content_res as TResult)!;
-                }
-                else
-                {
-                    try
+                    if (typeof(TResult).Equals(typeString))
                     {
-                        return JsonConvert.DeserializeObject<TResult>(content_res, _baseApi.DefaultJsonSerializerSettings)!;
+                        return (content_res as TResult)!;
                     }
-                    catch
+                    else
                     {
-                        //jump to error
+                        try
+                        {
+                            return JsonConvert.DeserializeObject<TResult>(content_res, _baseApi.DefaultJsonSerializerSettings)!;
+                        }
+                        catch
+                        {
+                            //jump to error
+                        }
                     }
                 }
-            }
 
-            if (typeof(TException).Equals(typeString))
-            {
-                throw new ApiException<string>()
+                if (typeof(TException).Equals(typeString))
                 {
-                    Body = content_res,
+                    throw new ApiException<string>()
+                    {
+                        Body = content_res,
+                        StatusCode = rep.StatusCode
+                    };
+                }
+                else throw new ApiException<TException>()
+                {
+                    Body = JsonConvert.DeserializeObject<TException>(content_res)!,
                     StatusCode = rep.StatusCode
                 };
             }
-            else throw new ApiException<TException>()
+            finally
             {
-                Body = JsonConvert.DeserializeObject<TException>(content_res)!,
-                StatusCode = rep.StatusCode
-            };
+                rep.Dispose();
+            }
         }
 
         /// <summary>
