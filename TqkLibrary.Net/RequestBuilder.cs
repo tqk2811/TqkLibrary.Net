@@ -267,7 +267,7 @@ sec-ch-ua-form-factors:
                 httpRequestMessage.Content = _httpContent;
             await _baseApi.OnBeforeRequestAsync(httpRequestMessage);
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+            HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
             if (_httpContentDispose) _httpContent?.Dispose();
 
