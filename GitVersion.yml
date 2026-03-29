@@ -1,3 +1,10 @@
-mode: ContinuousDelivery
+mode: ManualDeployment
 tag-prefix: 'v'
 assembly-versioning-scheme: MajorMinorPatchTag
+branches:
+  master:
+    regex: ^master$
+    increment: None
+  main:
+    regex: ^main$
+    increment: None
