@@ -9,9 +9,28 @@
 		<!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
-	
+
+	<!-- NuSpec support for dotnet pack -->
+	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).nuspec')">
+		<NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>
+	</PropertyGroup>
+
+	<!-- Set version after GitVersion runs -->
+	<Target Name="SetVersionFromGitVersion" AfterTargets="GetVersion">
+		<PropertyGroup>
+			<Version>$(GitVersion_MajorMinorPatch).$(GitVersion_CommitsSinceVersionSource)</Version>
+		</PropertyGroup>
+		<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).nuspec')">
+			<NuspecProperties>id=$(MSBuildProjectName);version=$(Version)</NuspecProperties>
+		</PropertyGroup>
+	</Target>
+
 	<ItemGroup>
+		<PackageReference Include="GitVersion.MsBuild" Version="6.5.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="TqkLibrary.CompilerServices" Version="1.0.0.2" />
 	</ItemGroup>
-	
+
 </Project>

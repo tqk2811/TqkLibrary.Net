@@ -1,0 +1,3 @@
+mode: ContinuousDelivery
+tag-prefix: 'v'
+assembly-versioning-scheme: MajorMinorPatchTag
