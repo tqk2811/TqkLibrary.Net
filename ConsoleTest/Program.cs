@@ -2,7 +2,7 @@
 
 using ConsoleTest.CloudStorage;
 using ConsoleTest.Mail;
-using TqkLibrary.Net;
+using TqkLibrary.Http;
 
 //await GoogleDriveTest.Test();
 //await TempMailOrgTest.Test();

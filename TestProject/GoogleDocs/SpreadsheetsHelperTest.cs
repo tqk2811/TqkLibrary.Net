@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TqkLibrary.Net.GoogleDocs;
+using TqkLibrary.Http.Api.GoogleDocs;
 
 namespace TestProject.GoogleDocs
 {

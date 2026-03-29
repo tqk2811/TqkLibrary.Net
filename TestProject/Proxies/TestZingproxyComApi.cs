@@ -1,6 +1,6 @@
 ﻿
-using TqkLibrary.Net;
-using TqkLibrary.Net.Proxy.Services;
+using TqkLibrary.Http;
+using TqkLibrary.Http.Api.Proxy.Services;
 
 namespace TestProject.Proxies
 {

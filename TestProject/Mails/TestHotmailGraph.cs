@@ -1,6 +1,6 @@
 ﻿using Microsoft.Graph;
-using TqkLibrary.Net.Mail.OutlookGraphApi;
-using TqkLibrary.Net.Mail.OutlookGraphApi.Classes;
+using TqkLibrary.Http.Api.Mail.OutlookGraphApi;
+using TqkLibrary.Http.Api.Mail.OutlookGraphApi.Classes;
 
 namespace TestProject.Mails
 {

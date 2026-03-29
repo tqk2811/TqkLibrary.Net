@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\ProjectBuildProperties.targets" />	
+	<PropertyGroup>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Google.Apis.Drive.v2" Version="1.69.0.3699" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\TqkLibrary.Http\TqkLibrary.Http.csproj" />
+	</ItemGroup>	
+	
+</Project>

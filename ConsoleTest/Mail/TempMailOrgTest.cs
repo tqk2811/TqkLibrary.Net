@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TqkLibrary.Net.Mail.Services.TempMails;
+using TqkLibrary.Http.Api.Mail.Services.TempMails;
 
 namespace ConsoleTest.Mail
 {
