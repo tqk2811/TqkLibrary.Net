@@ -19,6 +19,7 @@
 	<Target Name="SetVersionFromGitVersion" AfterTargets="GetVersion">
 		<PropertyGroup>
 			<Version>$(GitVersion_MajorMinorPatch).$(GitVersion_CommitsSinceVersionSource)</Version>
+			<PackageVersion>$(Version)</PackageVersion>
 		</PropertyGroup>
 		<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).nuspec')">
 			<NuspecProperties>id=$(MSBuildProjectName);version=$(Version)</NuspecProperties>
