@@ -6,8 +6,8 @@
 		<version>$version$</version>
 		<description>my private lib</description>
 		<authors>tqk2811</authors>
-		<projectUrl>https://github.com/tqk2811/TqkLibrary.Net</projectUrl>
-		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Net.git"/>
+		<projectUrl>https://github.com/tqk2811/TqkLibrary.Http</projectUrl>
+		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.Http.git"/>
 		<license type="expression">MIT</license>
 		<readme>docs\README.MD</readme>
 		<dependencies>
