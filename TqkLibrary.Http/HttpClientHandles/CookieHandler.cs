@@ -17,6 +17,11 @@ namespace TqkLibrary.Http.HttpClientHandles
         /// <summary>
         /// 
         /// </summary>
+        readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+        /// <summary>
+        ///
+        /// </summary>
         public CookieContainer CookieContainer { get; }
 
         /// <summary>
@@ -42,6 +47,15 @@ namespace TqkLibrary.Http.HttpClientHandles
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _semaphore.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
             string cookie = CookieContainer.GetCookieHeader(request.RequestUri);
@@ -51,10 +65,18 @@ namespace TqkLibrary.Http.HttpClientHandles
 
             if (response.Headers.TryGetValues("Set-Cookie", out var newCookies))
             {
-                foreach (var item in SetCookieHeaderValue.ParseList(newCookies.ToList()))
+                await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+                try
                 {
-                    var uri = new Uri(request.RequestUri, item.Path.Value);
-                    CookieContainer.Add(uri, new Cookie(item.Name.Value, item.Value.Value, item.Path.Value));
+                    foreach (var item in SetCookieHeaderValue.ParseList(newCookies.ToList()))
+                    {
+                        var uri = new Uri(request.RequestUri, item.Path.Value);
+                        CookieContainer.Add(uri, new Cookie(item.Name.Value, item.Value.Value, item.Path.Value));
+                    }
+                }
+                finally
+                {
+                    _semaphore.Release();
                 }
             }
 
