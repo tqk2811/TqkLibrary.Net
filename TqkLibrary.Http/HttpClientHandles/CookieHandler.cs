@@ -25,6 +25,11 @@ namespace TqkLibrary.Http.HttpClientHandles
         public CookieContainer CookieContainer { get; }
 
         /// <summary>
+        ///
+        /// </summary>
+        public event EventHandler<CookieContainer>? CookieChanged;
+
+        /// <summary>
         /// 
         /// </summary>
         public CookieHandler(HttpMessageHandler innerHandler) : base(innerHandler ?? throw new ArgumentNullException(nameof(innerHandler)))
@@ -78,6 +83,8 @@ namespace TqkLibrary.Http.HttpClientHandles
                 {
                     _semaphore.Release();
                 }
+
+                ThreadPool.QueueUserWorkItem(_ => CookieChanged?.Invoke(this, CookieContainer));
             }
 
             return response;
